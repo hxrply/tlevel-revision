@@ -953,6 +953,11 @@
     if (t.id === 'collapseAll') { $$('.area-card,.topic').forEach(function (c) { c.classList.remove('open'); }); return; }
 
     if (t.id === 'menuBtn') { document.body.classList.toggle('nav-open'); return; }
+    /* tapping the dimmed overlay closes the drawer */
+    if (document.body.classList.contains('nav-open') && !t.closest('.sidebar')) {
+      document.body.classList.remove('nav-open');
+      return;
+    }
     if (t.closest('#themeBtn')) {
       state.theme = state.theme === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', state.theme);
