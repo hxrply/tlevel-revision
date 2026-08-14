@@ -594,11 +594,19 @@
     var h = '<h1>Quiz</h1><p class="lede">' + D.quiz.length + ' multiple-choice questions across the whole qualification. Every answer explains itself, so a wrong answer is worth as much as a right one.</p>';
 
     h += '<section class="panel"><div class="grid three">' +
-      '<label class="field">Topic<select id="qArea"><option value="all">Everything</option>' +
-      '<optgroup label="Paper 1">' + AREAS.filter(function (a) { return a.paper === 1; }).map(areaOpt).join('') + '</optgroup>' +
-      '<optgroup label="Paper 2">' + AREAS.filter(function (a) { return a.paper === 2; }).map(areaOpt).join('') + '</optgroup>' +
+      '<label class="field">Topic<select id="qArea">' +
+      '<optgroup label="Papers only">' +
+      '<option value="paper1">All of Paper 1 (areas 1–4)</option>' +
+      '<option value="paper2">All of Paper 2 (areas 5–8)</option>' +
+      '<option value="weak">My weakest areas</option>' +
+      '</optgroup>' +
+      '<optgroup label="Paper 1 — single area">' + AREAS.filter(function (a) { return a.paper === 1; }).map(areaOpt).join('') + '</optgroup>' +
+      '<optgroup label="Paper 2 — single area">' + AREAS.filter(function (a) { return a.paper === 2; }).map(areaOpt).join('') + '</optgroup>' +
+      '<optgroup label="Projects">' +
       '<option value="esp">Employer Set Project</option><option value="os">Occupational Specialism</option>' +
-      '<option value="weak">My weakest areas</option></select></label>' +
+      '</optgroup>' +
+      '<option value="all">Everything (includes ESP and OS)</option>' +
+      '</select></label>' +
       '<label class="field">Questions<select id="qCount"><option>5</option><option selected>10</option><option>20</option><option>40</option></select></label>' +
       '<div style="display:flex;align-items:flex-end"><button class="btn btn-accent" id="startQuiz">Start quiz</button></div>' +
       '</div></section>';
@@ -654,18 +662,36 @@
     return h;
   }
 
+  /* The question bank was authored with the correct option written first.
+     Options are shuffled per attempt and the answer index remapped, so the
+     position of the correct answer is random every time. */
+  function shuffleOptions(q) {
+    var order = shuffle(q.o.map(function (_, i) { return i; }));
+    return {
+      area: q.area, t: q.t, q: q.q, why: q.why,
+      o: order.map(function (i) { return q.o[i]; }),
+      ans: order.indexOf(q.ans)
+    };
+  }
+
   function startQuiz() {
     var sel = $('#qArea') ? $('#qArea').value : 'all';
     var n = $('#qCount') ? parseInt($('#qCount').value, 10) : 10;
     var pool;
     if (sel === 'all') pool = D.quiz;
+    else if (sel === 'paper1' || sel === 'paper2') {
+      var wantPaper = sel === 'paper1' ? 1 : 2;
+      var ids = AREAS.filter(function (a) { return a.paper === wantPaper; })
+        .map(function (a) { return a.id; });
+      pool = D.quiz.filter(function (q) { return ids.indexOf(q.area) !== -1; });
+    }
     else if (sel === 'weak') {
       var weakAreas = AREAS.filter(function (a) { return areaProgress(a) < 60; }).map(function (a) { return a.id; });
       pool = D.quiz.filter(function (q) { return weakAreas.indexOf(q.area) !== -1; });
       if (!pool.length) pool = D.quiz;
     } else pool = D.quiz.filter(function (q) { return q.area === sel; });
 
-    quiz.qs = shuffle(pool).slice(0, Math.min(n, pool.length));
+    quiz.qs = shuffle(pool).slice(0, Math.min(n, pool.length)).map(shuffleOptions);
     quiz.i = 0; quiz.right = 0; quiz.wrong = []; quiz.answered = false; quiz.running = true;
     render();
   }
