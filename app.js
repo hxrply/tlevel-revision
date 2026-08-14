@@ -13,13 +13,21 @@
   var state = load();
 
   function load() {
-    var base = { conf: {}, chk: {}, box: {}, quiz: { asked: 0, right: 0, byArea: {} }, exams: {}, theme: 'dark', papers: [] };
+    var base = {
+      conf: {}, chk: {}, box: {}, quiz: { asked: 0, right: 0, byArea: {} },
+      exams: {}, theme: 'dark', papers: [],
+      written: { ans: {}, marks: {}, history: [] }
+    };
     try {
       var raw = localStorage.getItem(KEY);
       if (!raw) return base;
       var saved = JSON.parse(raw);
       for (var k in base) if (!(k in saved)) saved[k] = base[k];
       if (!saved.quiz.byArea) saved.quiz.byArea = {};
+      if (!saved.written) saved.written = base.written;
+      ['ans', 'marks', 'history'].forEach(function (k) {
+        if (!saved.written[k]) saved.written[k] = base.written[k];
+      });
       return saved;
     } catch (e) { return base; }
   }
@@ -40,6 +48,13 @@
     return out;
   }
   function confOf(id) { return state.conf[id] || 0; }
+  function areaOf(topicId) {
+    var found = '';
+    AREAS.forEach(function (a) {
+      a.topics.forEach(function (t) { if (t.id === topicId) found = a.id; });
+    });
+    return found;
+  }
   function areaProgress(area) {
     var total = area.topics.length * 3, got = 0;
     area.topics.forEach(function (t) { got += confOf(t.id); });
@@ -84,6 +99,7 @@
     { id: 'os', ico: '◆', label: 'Occupational Specialism' },
     { g: 'Practice' },
     { id: 'quiz', ico: '✓', label: 'Quiz' },
+    { id: 'written', ico: '✍', label: 'Written practice' },
     { id: 'cards', ico: '⧉', label: 'Flashcards' },
     { id: 'papers', ico: '⎘', label: 'My past papers' },
     { id: 'python', ico: '{}', label: 'Python & algorithms' },
@@ -261,10 +277,10 @@
     }
     if (t.exam && t.exam.length) {
       h += '<div class="sub-h">Exam-style questions</div>';
-      h += t.exam.map(function (q) {
-        return '<div class="qbox"><div class="qq">[' + q.marks + ' marks] ' + esc(q.q) +
-          ' <button class="btn btn-sm" data-reveal="1">Model answer</button></div>' +
-          '<div class="qa">' + esc(q.a) + '</div></div>';
+      h += t.exam.map(function (q, i) {
+        var qid = areaOf(t.id) + '|' + t.id + '|' + i;
+        return '<div class="qbox"><div class="qq">[' + q.marks + ' marks] ' + esc(q.q) + '</div>' +
+          markingPanelHTML(qid, { hideQuestion: true }) + '</div>';
       }).join('');
     }
     h += '</div></div>';
@@ -671,6 +687,206 @@
     render();
   }
 
+  /* ── Written answers and self-marking ──────────────────────────── */
+  var ALL_EXAMS = (function () {
+    var out = [];
+    AREAS.forEach(function (a) {
+      a.topics.forEach(function (t) {
+        (t.exam || []).forEach(function (e, i) {
+          out.push({ id: a.id + '|' + t.id + '|' + i, exam: e, area: a, topic: t });
+        });
+      });
+    });
+    return out;
+  })();
+  function examById(id) {
+    return ALL_EXAMS.filter(function (x) { return x.id === id; })[0];
+  }
+
+  var marked = {};    /* transient: qid -> analysis result */
+  var selfMark = {};  /* transient: qid -> { pointIndex: true } */
+
+  function runMarking(qid, text) {
+    var rec = examById(qid);
+    if (!rec) return;
+    var pts = TLMARK.derivePoints(rec.exam.a);
+    marked[qid] = {
+      analysis: TLMARK.analyse(text, rec.exam),
+      matches: TLMARK.matchPoints(text, pts),
+      points: pts
+    };
+    /* pre-tick the points the engine thinks you hit, for you to correct */
+    var pre = {};
+    marked[qid].matches.forEach(function (m, i) { if (m.hit === 'likely') pre[i] = true; });
+    selfMark[qid] = pre;
+  }
+
+  function suggestedMark(qid) {
+    var m = marked[qid];
+    if (!m) return 0;
+    var total = 0;
+    m.points.forEach(function (p, i) { if (selfMark[qid] && selfMark[qid][i]) total += (p.marks || 1); });
+    var rec = examById(qid);
+    return Math.min(total, rec ? rec.exam.marks : total);
+  }
+
+  function markingPanelHTML(qid, opts) {
+    opts = opts || {};
+    var rec = examById(qid);
+    if (!rec) return '';
+    var e = rec.exam;
+    var saved = state.written.ans[qid] || '';
+    var prev = state.written.marks[qid];
+    var res = marked[qid];
+
+    var h = '<div class="answer-box" data-abox="' + qid + '">';
+
+    if (!opts.hideQuestion) {
+      h += '<div class="qq" style="margin-bottom:10px">[' + e.marks + ' marks] ' + esc(e.q) + '</div>';
+    }
+
+    h += '<textarea data-ans="' + qid + '" rows="' + (e.marks >= 6 ? 10 : 5) +
+      '" placeholder="Write your answer here, as you would in the exam…">' + esc(saved) + '</textarea>';
+
+    h += '<div class="btn-row" style="margin-top:8px">' +
+      '<button class="btn btn-accent btn-sm" data-mark="' + qid + '">Mark my answer</button>' +
+      '<button class="btn btn-sm" data-reveal="1">Model answer</button>' +
+      '<button class="btn btn-sm" data-copyq="' + qid + '">Copy for tutor</button>' +
+      (prev ? '<span class="pill ok">last: ' + prev.mark + '/' + prev.of + '</span>' : '') +
+      '<span class="small muted">' + (TLMARK.isLevelsBased(e) ? 'levels-marked · aim for ~' + (e.marks * 28) + ' words' : e.marks + ' marking points') + '</span>' +
+      '</div>';
+
+    if (res) {
+      h += '<div class="mark-result">';
+
+      /* structural checks */
+      h += '<div class="sub-h">Structural check</div>';
+      res.analysis.checks.forEach(function (c) {
+        h += '<div class="chk-line ' + (c.ok ? 'ok' : 'bad') + '"><span class="ic">' + (c.ok ? '✓' : '✗') +
+          '</span><div><b>' + esc(c.k) + '</b> — ' + esc(c.msg) + '</div></div>';
+      });
+
+      if (res.analysis.estimate) {
+        var est = res.analysis.estimate;
+        h += '<div class="level-est l' + est.level + '">Structure suggests <b>Level ' + est.level +
+          '</b> — typically ' + est.band + ' marks. This is a structural estimate, not a mark: only the content decides it.</div>';
+      }
+
+      /* marking points */
+      h += '<div class="sub-h">Marking points — tick the ones you actually made</div>' +
+        '<p class="small muted" style="margin:0 0 8px">Pre-ticked where your wording looks like the mark scheme. The site cannot read meaning, so correct it honestly — deciding this yourself is how you learn the mark scheme.</p>';
+
+      res.matches.forEach(function (m, i) {
+        var on = selfMark[qid] && selfMark[qid][i];
+        h += '<label class="mpoint ' + m.hit + '"><input type="checkbox" data-mp="' + qid + '|' + i + '"' +
+          (on ? ' checked' : '') + '>' +
+          '<span class="tag">' + (m.hit === 'likely' ? 'likely hit' : m.hit === 'partial' ? 'partial' : 'not seen') + '</span>' +
+          '<span class="txt">' + esc(m.point.text) + (m.point.marks > 1 ? ' <b>(' + m.point.marks + ')</b>' : '') + '</span></label>';
+      });
+
+      /* your mark */
+      h += '<div class="mark-row"><b>Your mark:</b> ' +
+        '<input type="number" min="0" max="' + e.marks + '" value="' + suggestedMark(qid) + '" data-yourmark="' + qid + '"> / ' + e.marks +
+        ' <button class="btn btn-sm btn-accent" data-savemark="' + qid + '">Save mark</button></div>';
+
+      /* tips */
+      h += '<div class="sub-h">How to improve this answer</div>' + listOf(TLMARK.tips(res.analysis, res.matches));
+      h += '</div>';
+    }
+
+    h += '<div class="qa model-ans"><b>Model answer</b><br>' + esc(e.a) + '</div>';
+    h += '</div>';
+    return h;
+  }
+
+  /* Written practice — rolls questions at you */
+  var written = { current: null, scope: 'all' };
+
+  function pickQuestion() {
+    var pool = ALL_EXAMS.filter(function (x) {
+      if (written.scope === 'p1') return x.area.paper === 1;
+      if (written.scope === 'p2') return x.area.paper === 2;
+      if (written.scope === 'long') return x.exam.marks >= 6;
+      if (written.scope === 'short') return x.exam.marks < 6;
+      if (written.scope === 'weak') return confOf(x.topic.id) < 3;
+      return true;
+    });
+    if (!pool.length) pool = ALL_EXAMS;
+    /* prefer questions not attempted recently */
+    var fresh = pool.filter(function (x) { return !state.written.marks[x.id]; });
+    var from = fresh.length ? fresh : pool;
+    return from[Math.floor(Math.random() * from.length)].id;
+  }
+
+  views.written = function () {
+    var hist = state.written.history;
+    var totalGot = 0, totalOf = 0;
+    hist.forEach(function (r) { totalGot += r.mark; totalOf += r.of; });
+    var pct = totalOf ? Math.round(totalGot / totalOf * 100) : 0;
+
+    var h = '<h1>Written practice</h1>' +
+      '<p class="lede">Rolls exam-style questions at you, one at a time. Write your answer, then the site checks it against the model answer\'s marking points and against the structural criteria the levels-based mark schemes actually reward — then you award the mark yourself.</p>';
+
+    h += '<div class="grid four" style="margin-bottom:16px">' +
+      statCard(hist.length, 'Answers marked') +
+      statCard(totalOf ? pct + '%' : '—', 'Average score') +
+      statCard(totalGot + '/' + totalOf, 'Marks earned') +
+      statCard(ALL_EXAMS.length, 'Questions available') +
+      '</div>';
+
+    h += '<section class="panel"><div class="btn-row">' +
+      '<label class="field" style="flex-direction:row;align-items:center;gap:8px">Scope' +
+      '<select id="wScope">' +
+      [['all', 'Everything'], ['p1', 'Paper 1 only'], ['p2', 'Paper 2 only'],
+       ['long', 'Extended answers (6+ marks)'], ['short', 'Short answers'], ['weak', 'My weak topics']]
+        .map(function (o) {
+          return '<option value="' + o[0] + '"' + (written.scope === o[0] ? ' selected' : '') + '>' + o[1] + '</option>';
+        }).join('') + '</select></label>' +
+      '<button class="btn btn-accent" id="rollQ">' + (written.current ? 'Roll another question' : 'Roll a question') + '</button>' +
+      '</div></section>';
+
+    if (written.current) {
+      var rec = examById(written.current);
+      if (rec) {
+        var mins = Math.round(rec.exam.marks * 1.5);
+        h += '<section class="panel" style="margin-top:14px">' +
+          '<div class="task-head"><span class="pill p' + rec.area.paper + '">Paper ' + rec.area.paper + '</span>' +
+          '<span class="small muted">' + esc(rec.area.num + '. ' + rec.area.title + ' · ' + rec.topic.id + ' ' + rec.topic.title) + '</span>' +
+          '<span class="pill">' + rec.exam.marks + ' marks · ~' + mins + ' min</span></div>' +
+          markingPanelHTML(written.current) + '</section>';
+      }
+    }
+
+    if (hist.length) {
+      h += '<h2>Your record</h2><section class="panel">';
+      var byArea = {};
+      hist.forEach(function (r) {
+        var s = byArea[r.area] || { got: 0, of: 0, n: 0 };
+        s.got += r.mark; s.of += r.of; s.n++;
+        byArea[r.area] = s;
+      });
+      Object.keys(byArea).sort(function (a, b) {
+        return (byArea[a].got / byArea[a].of) - (byArea[b].got / byArea[b].of);
+      }).forEach(function (k) {
+        var s = byArea[k];
+        h += '<div class="progress-row"><div class="name">' + esc(labelFor(k)) +
+          ' <span class="small muted">· ' + s.n + ' answered</span></div>' +
+          bar(Math.round(s.got / s.of * 100)) + '</div>';
+      });
+
+      h += '<div class="sub-h">Recent attempts</div><table class="mtable"><tbody>' +
+        hist.slice(-12).reverse().map(function (r) {
+          var p = Math.round(r.mark / r.of * 100);
+          var col = p < 50 ? 'var(--red)' : p < 75 ? 'var(--amber)' : 'var(--green)';
+          return '<tr><td class="small">' + esc(r.q) + '</td>' +
+            '<td class="mono" style="white-space:nowrap;color:' + col + '">' + r.mark + '/' + r.of + '</td>' +
+            '<td class="small muted" style="white-space:nowrap">' + esc(r.date) + '</td></tr>';
+        }).join('') + '</tbody></table></section>';
+    }
+
+    return h;
+  };
+
   /* Past papers — your own question bank, stored on this device only.
      Nothing typed here is part of the published site or leaves the browser. */
   var papers = { open: null, practice: false };
@@ -939,7 +1155,11 @@
     if (t.closest('.topic-head')) { t.closest('.topic').classList.toggle('open'); return; }
     if (t.closest('.area-head')) { t.closest('.area-card').classList.toggle('open'); return; }
 
-    if (t.matches('[data-reveal]')) { t.closest('.qbox').classList.toggle('open'); return; }
+    if (t.matches('[data-reveal]')) {
+      var host = t.closest('.qbox') || t.closest('.answer-box');
+      if (host) host.classList.toggle('open');
+      return;
+    }
 
     if (t.matches('[data-chk]')) {
       var k = t.getAttribute('data-chk');
@@ -1044,6 +1264,56 @@
       return;
     }
     if (t.id === 'exportPapers') { exportPapers(); return; }
+
+    /* written answers */
+    var markBtn = t.closest('[data-mark]');
+    if (markBtn) {
+      var mid = markBtn.getAttribute('data-mark');
+      var ta = $('textarea[data-ans="' + mid + '"]');
+      var txt = ta ? ta.value : '';
+      if (!txt.trim()) { if (ta) ta.focus(); return; }
+      state.written.ans[mid] = txt;
+      save();
+      runMarking(mid, txt);
+      render();
+      var box = $('[data-abox="' + mid + '"]');
+      if (box) setTimeout(function () { box.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 40);
+      return;
+    }
+    var saveBtn = t.closest('[data-savemark]');
+    if (saveBtn) {
+      var sid = saveBtn.getAttribute('data-savemark');
+      var rec = examById(sid);
+      var inp = $('input[data-yourmark="' + sid + '"]');
+      if (!rec || !inp) return;
+      var got = Math.max(0, Math.min(rec.exam.marks, parseInt(inp.value, 10) || 0));
+      state.written.marks[sid] = { mark: got, of: rec.exam.marks, date: new Date().toISOString().slice(0, 10) };
+      state.written.history.push({
+        qid: sid, q: rec.exam.q.slice(0, 90), mark: got, of: rec.exam.marks,
+        area: rec.area.id, date: new Date().toISOString().slice(0, 10)
+      });
+      save();
+      render();
+      return;
+    }
+    var copyBtn = t.closest('[data-copyq]');
+    if (copyBtn) {
+      var cid = copyBtn.getAttribute('data-copyq');
+      var crec = examById(cid);
+      var cta = $('textarea[data-ans="' + cid + '"]');
+      if (!crec) return;
+      var payload = 'Mark this against the T Level DSD mark scheme. State the Level and what would move it up.\n\n' +
+        'QUESTION [' + crec.exam.marks + ' marks]: ' + crec.exam.q + '\n\n' +
+        'MY ANSWER:\n' + (cta ? cta.value : '');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(payload).then(function () {
+          copyBtn.textContent = 'Copied ✓';
+          setTimeout(function () { copyBtn.textContent = 'Copy for tutor'; }, 1600);
+        });
+      }
+      return;
+    }
+    if (t.id === 'rollQ') { written.current = pickQuestion(); render(); return; }
   });
 
   document.addEventListener('change', function (e) {
@@ -1059,6 +1329,27 @@
       }
     }
     if (t.id === 'importPapers' && t.files && t.files[0]) importPapers(t.files[0]);
+    if (t.id === 'wScope') { written.scope = t.value; render(); }
+    /* ticking a marking point updates the suggested mark live, without a redraw */
+    if (t.matches('[data-mp]')) {
+      var parts3 = t.getAttribute('data-mp').split('|');
+      var mqid = parts3[0] + '|' + parts3[1] + '|' + parts3[2];
+      var pi = parseInt(parts3[3], 10);
+      selfMark[mqid] = selfMark[mqid] || {};
+      selfMark[mqid][pi] = t.checked;
+      var box = $('input[data-yourmark="' + mqid + '"]');
+      if (box) box.value = suggestedMark(mqid);
+    }
+  });
+
+  var ansTimer;
+  document.addEventListener('input', function (e) {
+    if (e.target.matches && e.target.matches('textarea[data-ans]')) {
+      var aid = e.target.getAttribute('data-ans');
+      var val = e.target.value;
+      clearTimeout(ansTimer);
+      ansTimer = setTimeout(function () { state.written.ans[aid] = val; save(); }, 400);
+    }
   });
 
   var searchTimer;

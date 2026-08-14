@@ -244,6 +244,60 @@ ul.tight li { margin-bottom: 7px; }
 .qbox .qa { display: none; margin-top: 8px; color: var(--dim); }
 .qbox.open .qa { display: block; }
 
+/* ── Written answers and self-marking ─────────────────────────────── */
+.answer-box { margin-top: 10px; }
+.answer-box textarea {
+  width: 100%; min-height: 90px; font-size: 14.5px; line-height: 1.55;
+}
+.model-ans {
+  display: none; margin-top: 12px; padding: 12px 14px;
+  border-radius: 9px; background: var(--panel-2); border: 1px solid var(--border);
+}
+.qbox.open .model-ans, .answer-box.open .model-ans { display: block; }
+
+.mark-result {
+  margin-top: 14px; padding: 14px 16px; border-radius: 11px;
+  background: var(--panel-2); border: 1px solid var(--border);
+}
+
+.chk-line { display: flex; gap: 9px; align-items: flex-start; padding: 5px 0; font-size: 14px; }
+.chk-line .ic { flex: 0 0 16px; font-weight: 700; }
+.chk-line.ok .ic { color: var(--green); }
+.chk-line.bad .ic { color: var(--red); }
+.chk-line.bad div { color: var(--text); }
+
+.level-est {
+  margin: 12px 0; padding: 10px 13px; border-radius: 9px;
+  border-left: 3px solid var(--amber); background: color-mix(in srgb, var(--amber) 10%, transparent);
+  font-size: 14px;
+}
+.level-est.l1 { border-left-color: var(--red); background: color-mix(in srgb, var(--red) 10%, transparent); }
+.level-est.l3 { border-left-color: var(--green); background: color-mix(in srgb, var(--green) 10%, transparent); }
+
+.mpoint {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 8px 10px; border-radius: 9px; margin-bottom: 6px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--panel);
+}
+.mpoint:hover { border-color: var(--border-strong); }
+.mpoint input { margin-top: 4px; flex: 0 0 auto; }
+.mpoint .tag {
+  flex: 0 0 68px; font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em;
+  padding-top: 3px; color: var(--dim);
+}
+.mpoint.likely { border-color: color-mix(in srgb, var(--green) 45%, transparent); }
+.mpoint.likely .tag { color: var(--green); }
+.mpoint.partial { border-color: color-mix(in srgb, var(--amber) 45%, transparent); }
+.mpoint.partial .tag { color: var(--amber); }
+.mpoint.missing .tag { color: var(--red); }
+.mpoint .txt { flex: 1; font-size: 14px; }
+
+.mark-row {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  margin: 14px 0 4px; padding-top: 12px; border-top: 1px solid var(--border);
+}
+.mark-row input { width: 74px; }
+
 /* ── ESP / OS ─────────────────────────────────────────────────────── */
 .task-card { margin-bottom: 16px; }
 .task-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
