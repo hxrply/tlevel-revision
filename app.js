@@ -580,14 +580,82 @@
       }).join('');
 
     if (quiz.answered) {
-      h += '<div class="explain"><b>' + (quiz.picked === q.ans ? 'Correct.' : 'Not quite.') + '</b> ' + esc(q.why) + '</div>' +
-        '<div class="btn-row" style="margin-top:14px"><button class="btn btn-accent" id="nextQ">' +
+      h += '<div class="explain"><b>' + (quiz.picked === q.ans ? 'Correct.' : 'Not quite.') + '</b> ' + esc(q.why) + '</div>';
+      if (quiz.picked !== q.ans) h += tutorPanelHTML(q);
+      h += '<div class="btn-row" style="margin-top:14px"><button class="btn btn-accent" id="nextQ">' +
         (quiz.i + 1 >= quiz.qs.length ? 'See results' : 'Next question') + '</button>' +
         '<button class="btn" id="endQ">End quiz</button></div>';
     }
     h += '</section>';
     return h;
   };
+
+  /* ── Tutor: understand a question you got wrong ─────────────────── */
+  var tutor = { open: false, history: [], busy: false, err: '', keyForm: false };
+
+  function tutorCtx(q) {
+    return { q: q.q, options: q.o, picked: quiz.picked, answer: q.ans, why: q.why, topic: labelFor(q.area) + ' · ' + q.t };
+  }
+  function resetTutor() {
+    tutor = { open: false, history: [], busy: false, err: '', keyForm: false };
+  }
+  /* Light formatting for the reply — bold and paragraphs, nothing more. */
+  function fmtReply(text) {
+    return esc(text)
+      .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+      .split(/\n\s*\n/).map(function (p) { return '<p>' + p.replace(/\n/g, '<br>') + '</p>'; }).join('');
+  }
+
+  function tutorPanelHTML(q) {
+    var h = '<div class="tutor">';
+
+    if (!tutor.open) {
+      return h + '<div class="btn-row">' +
+        '<button class="btn btn-sm" id="askTutor">Help me understand this</button>' +
+        '<button class="btn btn-sm" id="copyTutor">Copy for my 5pm tutor</button>' +
+        '</div></div>';
+    }
+
+    h += '<div class="tutor-head"><b>Tutor</b><button class="btn btn-sm" id="closeTutor">Close</button></div>';
+
+    if (tutor.keyForm || !TLTUTOR.hasKey()) {
+      h += '<p class="small muted">In-page chat needs your own Anthropic API key. It is saved in this browser only — never in the site, never uploaded — and is sent only to Anthropic. Each reply costs you a small amount. On a shared or unlocked device, use the copy button instead.</p>' +
+        '<div class="btn-row"><input type="password" id="keyInput" placeholder="sk-ant-…" style="flex:1;min-width:200px" value="">' +
+        '<button class="btn btn-accent btn-sm" id="saveKey">Save key</button></div>' +
+        (TLTUTOR.hasKey() ? '<p class="small muted" style="margin-top:8px">Saved: <span class="mono">' + esc(TLTUTOR.maskKey()) + '</span> · <button class="btn btn-sm" id="forgetKey">Forget it</button></p>' : '') +
+        '<p class="small muted" style="margin-bottom:0"><a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Get a key</a> · model: ' + esc(TLTUTOR.model) + '</p>';
+      return h + '</div>';
+    }
+
+    tutor.history.forEach(function (m) {
+      h += '<div class="tmsg ' + m.role + '">' +
+        (m.role === 'user' ? esc(m.content) : fmtReply(m.content)) + '</div>';
+    });
+
+    if (tutor.busy) h += '<div class="tmsg assistant busy">Thinking…</div>';
+    if (tutor.err) h += '<div class="tmsg err">' + esc(tutor.err) + '</div>';
+
+    h += '<div class="btn-row" style="margin-top:10px">' +
+      '<input type="text" id="tutorInput" placeholder="Ask a follow-up…" style="flex:1;min-width:200px">' +
+      '<button class="btn btn-accent btn-sm" id="tutorSend"' + (tutor.busy ? ' disabled' : '') + '>Send</button>' +
+      '<button class="btn btn-sm" id="tutorKeyBtn">Key</button></div>';
+
+    return h + '</div>';
+  }
+
+  function tutorSend(q, text) {
+    tutor.history.push({ role: 'user', content: text });
+    tutor.busy = true; tutor.err = '';
+    render();
+    TLTUTOR.ask(tutorCtx(q), tutor.history, function (reply) {
+      tutor.history.push({ role: 'assistant', content: reply });
+      tutor.busy = false;
+      render();
+    }, function (msg) {
+      tutor.busy = false; tutor.err = msg;
+      render();
+    });
+  }
 
   function quizSetup() {
     var acc = state.quiz.asked ? Math.round(state.quiz.right / state.quiz.asked * 100) : 0;
@@ -1242,9 +1310,48 @@
     if (t.id === 'startQuiz') { startQuiz(); return; }
     var opt = t.closest('[data-opt]');
     if (opt && quiz.running) { answer(parseInt(opt.getAttribute('data-opt'), 10)); return; }
-    if (t.id === 'nextQ') { quiz.i++; quiz.answered = false; quiz.picked = -1; render(); return; }
+    /* tutor */
+    if (t.id === 'askTutor') {
+      tutor.open = true;
+      if (!TLTUTOR.hasKey()) { tutor.keyForm = true; render(); return; }
+      tutorSend(quiz.qs[quiz.i], 'Why is my answer wrong, and why is the correct one right?');
+      return;
+    }
+    if (t.id === 'closeTutor') { resetTutor(); render(); return; }
+    if (t.id === 'tutorKeyBtn') { tutor.keyForm = true; render(); return; }
+    if (t.id === 'forgetKey') { TLTUTOR.setKey(''); tutor.keyForm = true; render(); return; }
+    if (t.id === 'saveKey') {
+      var kin = $('#keyInput');
+      var val = kin ? kin.value.trim() : '';
+      if (!val) { if (kin) kin.focus(); return; }
+      TLTUTOR.setKey(val);
+      tutor.keyForm = false;
+      if (!tutor.history.length) {
+        tutorSend(quiz.qs[quiz.i], 'Why is my answer wrong, and why is the correct one right?');
+      } else render();
+      return;
+    }
+    if (t.id === 'tutorSend') {
+      var tin = $('#tutorInput');
+      var msg = tin ? tin.value.trim() : '';
+      if (!msg || tutor.busy) return;
+      tutorSend(quiz.qs[quiz.i], msg);
+      return;
+    }
+    if (t.id === 'copyTutor') {
+      var qq = quiz.qs[quiz.i];
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(TLTUTOR.clipboardText(tutorCtx(qq))).then(function () {
+          t.textContent = 'Copied ✓';
+          setTimeout(function () { t.textContent = 'Copy for my 5pm tutor'; }, 1600);
+        });
+      }
+      return;
+    }
+
+    if (t.id === 'nextQ') { quiz.i++; quiz.answered = false; quiz.picked = -1; resetTutor(); render(); return; }
     if (t.id === 'endQ') { quiz.qs = quiz.qs.slice(0, quiz.i + 1); quiz.i = quiz.qs.length; render(); return; }
-    if (t.id === 'againQ') { quiz.running = false; render(); return; }
+    if (t.id === 'againQ') { quiz.running = false; resetTutor(); render(); return; }
 
     /* past papers */
     if (t.id === 'addPaper') {

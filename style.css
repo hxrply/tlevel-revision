@@ -341,6 +341,29 @@ ul.tight li { margin-bottom: 7px; }
 .qmeta { display: flex; justify-content: space-between; color: var(--dim); font-size: 13px; margin-bottom: 10px; }
 .explain { margin-top: 12px; padding: 11px 14px; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--border); }
 
+/* ── Tutor ────────────────────────────────────────────────────────── */
+.tutor {
+  margin-top: 14px; padding: 14px 16px; border-radius: 11px;
+  border: 1px solid var(--border); background: var(--panel-2);
+  border-left: 3px solid var(--accent-2);
+}
+.tutor-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+
+.tmsg { padding: 10px 13px; border-radius: 10px; margin-bottom: 9px; font-size: 14.5px; }
+.tmsg p { margin: 0 0 9px; }
+.tmsg p:last-child { margin-bottom: 0; }
+.tmsg.user {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  margin-left: 12%;
+}
+.tmsg.assistant { background: var(--panel); border: 1px solid var(--border); }
+.tmsg.busy { color: var(--dim); font-style: italic; }
+.tmsg.err {
+  background: color-mix(in srgb, var(--red) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--red) 40%, transparent);
+}
+
 /* ── Search results ───────────────────────────────────────────────── */
 .result { padding: 11px 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; background: var(--panel); cursor: pointer; }
 .result:hover { border-color: var(--accent); }
