@@ -315,11 +315,12 @@
     var flatIdx = 0;
 
     var h = '<h1>Revision plan</h1><p class="lede">' + esc(PLAN.intro) + '</p>';
+    if (PLAN.legend) h += '<p class="small muted" style="margin:-14px 0 18px"><span class="rtag">recap</span> ' + esc(PLAN.legend) + '</p>';
 
     h += '<div class="grid four" style="margin-bottom:16px">' +
       statCard(tot.pct + '%', 'Plan complete') +
       statCard(tot.done + '/' + tot.total, 'Tasks ticked') +
-      statCard(PLAN_DAYS.length, 'Days in plan') +
+      statCard(PLAN_DAYS.length, 'Days to go') +
       statCard(cur === null ? '—' : (cur < 0 ? 'soon' : (cur + 1 > PLAN_DAYS.length ? 'done' : 'Day ' + (cur + 1))), 'You are on') +
       '</div>';
 
@@ -370,9 +371,9 @@
         day.tasks.forEach(function (task, ti) {
           var k = taskKey(w.n, di, ti);
           var on = !!state.plan.done[k];
-          h += '<label class="plantask' + (on ? ' done' : '') + '">' +
+          h += '<label class="plantask' + (on ? ' done' : '') + (task.r ? ' recap' : '') + '">' +
             '<input type="checkbox" data-plan="' + k + '"' + (on ? ' checked' : '') + '>' +
-            '<span class="txt">' + esc(task.t) + '</span>' +
+            '<span class="txt">' + (task.r ? '<span class="rtag">recap</span>' : '') + esc(task.t) + '</span>' +
             '<span class="mins">' + task.m + 'm</span>' +
             (task.go ? '<button class="btn btn-sm" data-go="' + task.go + '"' +
               (task.open ? ' data-open="' + task.open + '"' : '') + '>Open</button>' : '') +
