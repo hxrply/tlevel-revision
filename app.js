@@ -16,7 +16,8 @@
     var base = {
       conf: {}, chk: {}, box: {}, quiz: { asked: 0, right: 0, byArea: {} },
       exams: {}, theme: 'dark', papers: [],
-      written: { ans: {}, marks: {}, history: [] }
+      written: { ans: {}, marks: {}, history: [] },
+      plan: { done: {}, start: '' }
     };
     try {
       var raw = localStorage.getItem(KEY);
@@ -25,6 +26,8 @@
       for (var k in base) if (!(k in saved)) saved[k] = base[k];
       if (!saved.quiz.byArea) saved.quiz.byArea = {};
       if (!saved.written) saved.written = base.written;
+      if (!saved.plan) saved.plan = base.plan;
+      if (!saved.plan.done) saved.plan.done = {};
       ['ans', 'marks', 'history'].forEach(function (k) {
         if (!saved.written[k]) saved.written[k] = base.written[k];
       });
@@ -91,6 +94,7 @@
   var NAV = [
     { g: 'Overview' },
     { id: 'dash', ico: '◈', label: 'Dashboard' },
+    { id: 'plan', ico: '✓̲', label: 'Revision plan' },
     { g: 'Core exams' },
     { id: 'p1', ico: '①', label: 'Paper 1' },
     { id: 'p2', ico: '②', label: 'Paper 2' },
@@ -223,6 +227,133 @@
     return '<label class="field">' + esc(label) +
       '<input type="date" data-exam="' + k + '" value="' + (state.exams[k] || '') + '"></label>';
   }
+
+
+  /* ── Revision plan ─────────────────────────────────────────────── */
+  var PLAN = D.plan;
+
+  function planFlatDays() {
+    var out = [];
+    PLAN.weeks.forEach(function (w) {
+      w.days.forEach(function (day, di) { out.push({ w: w, day: day, di: di }); });
+    });
+    return out;
+  }
+  var PLAN_DAYS = planFlatDays();
+
+  function taskKey(wn, di, ti) { return 'w' + wn + 'd' + di + 't' + ti; }
+  function dayDone(wn, di, day) {
+    return day.tasks.every(function (_, ti) { return state.plan.done[taskKey(wn, di, ti)]; });
+  }
+  function planTotals() {
+    var total = 0, done = 0;
+    PLAN.weeks.forEach(function (w) {
+      w.days.forEach(function (day, di) {
+        day.tasks.forEach(function (_, ti) {
+          total++;
+          if (state.plan.done[taskKey(w.n, di, ti)]) done++;
+        });
+      });
+    });
+    return { total: total, done: done, pct: total ? Math.round(done / total * 100) : 0 };
+  }
+  /* Which numbered day of the plan today is, from the start date. */
+  function planDayIndex() {
+    if (!state.plan.start) return null;
+    var start = new Date(state.plan.start + 'T00:00:00');
+    if (isNaN(start)) return null;
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var n = Math.floor((today - start) / 86400000);
+    if (n < 0) return -1;
+    return n;
+  }
+  function dateForDay(i) {
+    if (!state.plan.start) return '';
+    var dt = new Date(state.plan.start + 'T00:00:00');
+    if (isNaN(dt)) return '';
+    dt.setDate(dt.getDate() + i);
+    return dt.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  }
+
+  views.plan = function () {
+    var tot = planTotals();
+    var cur = planDayIndex();
+    var flatIdx = 0;
+
+    var h = '<h1>Revision plan</h1><p class="lede">' + esc(PLAN.intro) + '</p>';
+
+    h += '<div class="grid four" style="margin-bottom:16px">' +
+      statCard(tot.pct + '%', 'Plan complete') +
+      statCard(tot.done + '/' + tot.total, 'Tasks ticked') +
+      statCard(PLAN_DAYS.length, 'Days in plan') +
+      statCard(cur === null ? '—' : (cur < 0 ? 'soon' : (cur + 1 > PLAN_DAYS.length ? 'done' : 'Day ' + (cur + 1))), 'You are on') +
+      '</div>';
+
+    h += '<section class="panel"><div class="btn-row">' +
+      '<label class="field" style="flex-direction:row;align-items:center;gap:8px">Start date' +
+      '<input type="date" id="planStart" value="' + (state.plan.start || '') + '"></label>' +
+      (state.plan.start ? '' : '<button class="btn btn-sm" id="planToday">Start today</button>') +
+      '<span class="small muted">Set a start date and each day gets a calendar date, with today highlighted. Behind or ahead? Just carry on from the next unticked day — the order matters more than the dates.</span>' +
+      '</div></section>';
+
+    PLAN.weeks.forEach(function (w) {
+      var wStart = flatIdx;
+      var wTasks = 0, wDone = 0;
+      w.days.forEach(function (day, di) {
+        day.tasks.forEach(function (_, ti) {
+          wTasks++;
+          if (state.plan.done[taskKey(w.n, di, ti)]) wDone++;
+        });
+      });
+      var wPct = wTasks ? Math.round(wDone / wTasks * 100) : 0;
+      var isCurrent = cur !== null && cur >= wStart && cur < wStart + w.days.length;
+
+      h += '<section class="panel area-card' + (isCurrent || wPct < 100 && cur === null && w.n === 1 ? ' open' : '') +
+        '" data-area="week' + w.n + '">' +
+        '<div class="area-head"><div class="n">' + w.n + '</div>' +
+        '<div style="flex:1"><h3>' + esc(w.title) + '</h3>' +
+        '<div class="small muted">' + esc(w.aim) + '</div></div>' +
+        '<div class="pct" style="width:auto;margin-right:10px">' + wPct + '%</div>' +
+        '<div class="chev">›</div></div>' +
+        '<div class="area-body">';
+
+      w.days.forEach(function (day, di) {
+        var mine = flatIdx;
+        flatIdx++;
+        var complete = dayDone(w.n, di, day);
+        var isToday = cur === mine;
+        var mins = day.tasks.reduce(function (a, x) { return a + (x.m || 0); }, 0);
+
+        h += '<div class="planday' + (complete ? ' done' : '') + (isToday ? ' today' : '') + '">' +
+          '<div class="planday-head">' +
+          '<span class="dnum">Day ' + (mine + 1) + '</span>' +
+          '<b>' + esc(day.title) + '</b>' +
+          (isToday ? '<span class="pill warn">today</span>' : '') +
+          (complete ? '<span class="pill ok">done</span>' : '') +
+          '<span class="small muted" style="margin-left:auto">' + mins + ' min' +
+          (state.plan.start ? ' · ' + esc(dateForDay(mine)) : '') + '</span></div>';
+
+        day.tasks.forEach(function (task, ti) {
+          var k = taskKey(w.n, di, ti);
+          var on = !!state.plan.done[k];
+          h += '<label class="plantask' + (on ? ' done' : '') + '">' +
+            '<input type="checkbox" data-plan="' + k + '"' + (on ? ' checked' : '') + '>' +
+            '<span class="txt">' + esc(task.t) + '</span>' +
+            '<span class="mins">' + task.m + 'm</span>' +
+            (task.go ? '<button class="btn btn-sm" data-go="' + task.go + '"' +
+              (task.open ? ' data-open="' + task.open + '"' : '') + '>Open</button>' : '') +
+            '</label>';
+        });
+
+        h += '</div>';
+      });
+
+      h += '</div></section>';
+    });
+
+    return h;
+  };
 
   /* Paper views */
   views.p1 = function () { return paperView(1); };
@@ -1447,6 +1578,10 @@
       return;
     }
     if (t.id === 'rollQ') { written.current = pickQuestion(); render(); return; }
+    if (t.id === 'planToday') {
+      state.plan.start = new Date().toISOString().slice(0, 10);
+      save(); render(); return;
+    }
   });
 
   document.addEventListener('change', function (e) {
@@ -1463,6 +1598,12 @@
     }
     if (t.id === 'importPapers' && t.files && t.files[0]) importPapers(t.files[0]);
     if (t.id === 'wScope') { written.scope = t.value; render(); }
+    if (t.matches('[data-plan]')) {
+      state.plan.done[t.getAttribute('data-plan')] = t.checked;
+      save();
+      render();
+    }
+    if (t.id === 'planStart') { state.plan.start = t.value; save(); render(); }
     /* ticking a marking point updates the suggested mark live, without a redraw */
     if (t.matches('[data-mp]')) {
       var parts3 = t.getAttribute('data-mp').split('|');
