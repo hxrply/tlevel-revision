@@ -276,6 +276,39 @@
     return dt.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
   }
 
+  /* Repaint just the parts of the plan a single tick affects. */
+  function updatePlanCounters(box) {
+    var label = box.closest('.plantask');
+    if (label) label.classList.toggle('done', box.checked);
+
+    var dayEl = box.closest('.planday');
+    if (dayEl) {
+      var boxes = $$('[data-plan]', dayEl);
+      var all = boxes.length && boxes.every(function (b) { return b.checked; });
+      dayEl.classList.toggle('done', all);
+      var badge = $('.pill.ok', dayEl.querySelector('.planday-head'));
+      if (all && !badge) {
+        var span = document.createElement('span');
+        span.className = 'pill ok';
+        span.textContent = 'done';
+        dayEl.querySelector('.planday-head b').insertAdjacentElement('afterend', span);
+      } else if (!all && badge) badge.remove();
+    }
+
+    var weekEl = box.closest('.area-card');
+    if (weekEl) {
+      var wb = $$('[data-plan]', weekEl);
+      var wd = wb.filter(function (b) { return b.checked; }).length;
+      var pctEl = $('.area-head .pct', weekEl);
+      if (pctEl) pctEl.textContent = (wb.length ? Math.round(wd / wb.length * 100) : 0) + '%';
+    }
+
+    var tot = planTotals();
+    var nums = $$('.stat .num');
+    if (nums[0]) nums[0].textContent = tot.pct + '%';
+    if (nums[1]) nums[1].textContent = tot.done + '/' + tot.total;
+  }
+
   views.plan = function () {
     var tot = planTotals();
     var cur = planDayIndex();
@@ -1335,6 +1368,9 @@
 
     var goBtn = t.closest('[data-go]');
     if (goBtn) {
+      /* The plan's Open buttons sit inside a <label>, whose default action
+         would also tick the checkbox. */
+      if (goBtn.closest('.plantask')) e.preventDefault();
       var openTarget = goBtn.getAttribute('data-open');
       if (openTarget) pendingOpen = openTarget;
       searchTerm = ''; $('#search').value = '';
@@ -1601,7 +1637,7 @@
     if (t.matches('[data-plan]')) {
       state.plan.done[t.getAttribute('data-plan')] = t.checked;
       save();
-      render();
+      updatePlanCounters(t);
     }
     if (t.id === 'planStart') { state.plan.start = t.value; save(); render(); }
     /* ticking a marking point updates the suggested mark live, without a redraw */
