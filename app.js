@@ -408,8 +408,7 @@
         out.push('  ' + q.q);
         if (q.code) {
           out.push('');
-          q.code.split('
-').forEach(function (line) { out.push('      ' + line); });
+          q.code.split(String.fromCharCode(10)).forEach(function (line) { out.push('      ' + line); });
         }
         out.push('');
         out.push('  HOW TO ANSWER: ' + q.how);
@@ -422,8 +421,7 @@
         out.push('  ' + new Array(60).join('-'));
       });
     });
-    return out.join('
-');
+    return out.join(String.fromCharCode(10));
   }
 
   var NOTES = D.tutorNotes;
