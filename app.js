@@ -95,6 +95,7 @@
     { g: 'Overview' },
     { id: 'dash', ico: '◈', label: 'Dashboard' },
     { id: 'plan', ico: '✓̲', label: 'Revision plan' },
+    { id: 'notes', ico: '✎', label: 'Tutor notes' },
     { g: 'Core exams' },
     { id: 'p1', ico: '①', label: 'Paper 1' },
     { id: 'p2', ico: '②', label: 'Paper 2' },
@@ -381,6 +382,97 @@
         });
 
         h += '</div>';
+      });
+
+      h += '</div></section>';
+    });
+
+    return h;
+  };
+
+
+  /* ── Tutor notes ───────────────────────────────────────────────── */
+  function notesToText() {
+    var out = ['T LEVEL DSD - TUTOR NOTES', '=========================', '',
+      NOTES.intro, '', 'Attempt a question before reading its answer.', ''];
+    NOTES.sessions.forEach(function (ses) {
+      out.push('');
+      out.push('DAY ' + ses.day + ' - ' + ses.topic.toUpperCase());
+      out.push(new Array(ses.topic.length + 10).join('-'));
+      out.push(ses.date + ' | scored ' + ses.score);
+      ses.questions.forEach(function (q) {
+        out.push('');
+        out.push('Q' + q.n + '. [' + q.cmd + ', ' + q.marks + ' marks] ' +
+          (q.got ? 'you scored ' + q.got : 'not attempted'));
+        out.push('');
+        out.push('  ' + q.q);
+        if (q.code) {
+          out.push('');
+          q.code.split('
+').forEach(function (line) { out.push('      ' + line); });
+        }
+        out.push('');
+        out.push('  HOW TO ANSWER: ' + q.how);
+        out.push('');
+        out.push('  MODEL ANSWER: ' + q.answer);
+        if (q.cost) {
+          out.push('');
+          out.push('  WHAT IT COST YOU: ' + q.cost);
+        }
+        out.push('  ' + new Array(60).join('-'));
+      });
+    });
+    return out.join('
+');
+  }
+
+  var NOTES = D.tutorNotes;
+
+  views.notes = function () {
+    var qTotal = 0, attempted = 0;
+    NOTES.sessions.forEach(function (ses) {
+      ses.questions.forEach(function (q) { qTotal++; if (q.got) attempted++; });
+    });
+
+    var h = '<h1>Tutor notes</h1><p class="lede">' + esc(NOTES.intro) + '</p>';
+
+    h += '<div class="grid four" style="margin-bottom:16px">' +
+      statCard(qTotal, 'Questions set') +
+      statCard(attempted, 'Attempted') +
+      statCard(qTotal - attempted, 'Still to do') +
+      statCard(NOTES.sessions.length, 'Sessions') +
+      '</div>';
+
+    h += '<section class="panel" style="margin-bottom:16px"><div class="btn-row">' +
+      '<button class="btn btn-sm" id="exportNotes">Download as text file</button>' +
+      '<span class="small muted">Generated from this page, so the file and the site can never drift apart. ' +
+      'Plain text — print it, or read it on a phone with no signal.</span></div></section>';
+
+    NOTES.sessions.forEach(function (ses, si) {
+      h += '<section class="panel area-card' + (si === NOTES.sessions.length - 1 ? ' open' : '') +
+        '" data-area="ses' + si + '">' +
+        '<div class="area-head"><div class="n">' + ses.day + '</div>' +
+        '<div style="flex:1"><h3>' + esc(ses.topic) + '</h3>' +
+        '<div class="small muted">Day ' + ses.day + ' · ' + esc(ses.date) + ' · scored ' + esc(ses.score) + '</div></div>' +
+        '<div class="chev">›</div></div><div class="area-body">';
+
+      ses.questions.forEach(function (q) {
+        h += '<div class="tnote qbox">' +
+          '<div class="tnote-head"><span class="qn">Q' + q.n + '</span>' +
+          '<span class="pill">' + esc(q.cmd) + '</span>' +
+          '<span class="small muted">' + q.marks + ' marks</span>' +
+          (q.got ? '<span class="pill ' + (parseInt(q.got, 10) / q.marks >= 0.6 ? 'ok' : 'warn') +
+            '" style="margin-left:auto">you scored ' + esc(q.got) + '</span>'
+                 : '<span class="pill" style="margin-left:auto">not attempted</span>') +
+          '</div>' +
+          '<div class="qq">' + esc(q.q) + '</div>' +
+          (q.code ? '<pre>' + esc(q.code) + '</pre>' : '') +
+          '<div class="tnote-how"><b>How to answer</b><br>' + esc(q.how) + '</div>' +
+          '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">Model answer</button></div>' +
+          '<div class="qa">' +
+          '<b>Model answer</b><p>' + esc(q.answer) + '</p>' +
+          (q.cost ? '<div class="tnote-cost"><b>What it cost you</b><br>' + esc(q.cost) + '</div>' : '') +
+          '</div></div>';
       });
 
       h += '</div></section>';
@@ -1565,6 +1657,16 @@
       return;
     }
     if (t.id === 'exportPapers') { exportPapers(); return; }
+    if (t.id === 'exportNotes') {
+      var blob = new Blob([notesToText()], { type: 'text/plain' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'tlevel-tutor-notes.txt';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+      return;
+    }
 
     /* written answers */
     var markBtn = t.closest('[data-mark]');
