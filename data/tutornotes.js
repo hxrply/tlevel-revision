@@ -146,6 +146,82 @@ window.TLDATA.tutorNotes = {
           answer: 'In favour: with eight developers, modularisation is what makes concurrent work possible at all — without it the team queues on the same files and eight people deliver little more than two. Modules can be tested in isolation, so defects are found early rather than during a late integration phase the deadline cannot absorb. Existing modules can be reused, which directly buys time. Against: defining the module boundaries and interfaces takes analysis time before any code is written, which is painful when the deadline is tight. If those interfaces are specified poorly the modules will not integrate, and integration failure late in a compressed schedule is exactly the risk that sinks the delivery date. Managing eight parallel workstreams also adds coordination overhead. Overall, modularisation is still the right choice, because the alternative does not scale to eight developers at all — but the interface definitions must be agreed and frozen at the very start, since it is interface drift rather than the approach itself that would cost the deadline.',
           got: null, cost: null }
       ]
+    },
+
+    {
+      day: 9, date: '30 Aug', topic: 'Content area 2.11 - Searching and sorting',
+      score: '6/17',
+      questions: [
+
+        { n: 18, marks: 3, cmd: 'State',
+          q: 'State the three metrics used to compare algorithms.',
+          how: 'Pure recall. Three separate measurable things - not one umbrella word.',
+          answer: 'Use of memory space; execution time; number of comparisons.',
+          got: '1/3',
+          cost: 'Time was correct. Efficiency is the umbrella term covering all three, so it cannot itself be one of them, and workload is not a metric in the specification.' },
+
+        { n: 19, marks: 6, cmd: 'Justify',
+          q: 'A system holds 2 million product codes. They are searched constantly throughout the day but only updated once, overnight. Justify the most suitable search algorithm.',
+          how: 'Four moves, and the fourth is what makes it a six-marker: name it, say why it fits using numbers, name its drawback yourself, then show why this scenario cancels that drawback out. Examiners build the scenario so the drawback does not apply - spotting that is the test.',
+          answer: 'Binary search (1). Halving the remaining data at every comparison means 2 million records are searched in about 21 comparisons, whereas a linear search would average one million (2), and with searches running constantly all day that difference dominates performance (1). Binary search requires the data to be sorted, which is normally its main drawback (1), but here the data is only updated overnight, so it can be sorted in the nightly batch and stays sorted all day - the sort cost is paid once rather than per search (1).',
+          got: '0/6',
+          cost: 'Left blank. This exact scenario was covered in the lesson immediately above the question, which points to reading rather than encoding. Use the close-it-and-write-from-memory checkpoint after each section.' },
+
+        { n: 20, marks: 4, cmd: 'Trace',
+          q: 'Show each pass of a bubble sort on the list [5, 2, 8, 1].',
+          how: 'One block per pass, not one line per swap. A pass is a full sweep through the list. Examiner guidance is explicit that every individual pass must be shown to earn all the marks.',
+          answer: 'Pass 1: compare 5 and 2, swap, giving 2 5 8 1; compare 5 and 8, no swap; compare 8 and 1, swap, giving 2 5 1 8. Pass 2: compare 2 and 5, no swap; compare 5 and 1, swap, giving 2 1 5 8. Pass 3: compare 2 and 1, swap, giving 1 2 5 8. Sorted list: 1 2 5 8.',
+          got: '3/4',
+          cost: 'Every swap was correct and in the right order, and the final list was right. The marks are organised by pass and the answer was organised by individual swap, so the pass structure was not visible.' },
+
+        { n: 21, marks: 4, cmd: 'Explain',
+          q: 'Explain one benefit and one drawback of merge sort compared with bubble sort.',
+          how: 'Two marks each side. The drawback of merge sort is about memory, which is why memory space is one of the three comparison metrics.',
+          answer: 'Benefit: merge sort splits the data and merges sorted halves, so the number of comparisons grows far more slowly as the list grows, and on a large dataset it finishes in a fraction of the time bubble sort takes (2). Drawback: it creates temporary sub-lists while merging, so it uses considerably more memory, and it is harder to implement and debug than bubble sort, which needs only a nested loop and a swap (2).',
+          got: '2/4',
+          cost: 'The benefit was fine but the drawback contradicted it - merge sort was described as fast because it divides, then slow because it divides. Divide and conquer is the reason it is quick. The real drawback is memory use.' }
+      ]
+    },
+
+    {
+      day: 10, date: '30 Aug', topic: 'Content area 2.12 - Testing',
+      score: '5/14 attempted',
+      questions: [
+
+        { n: 22, marks: 4, cmd: 'Give',
+          q: 'A field accepts an integer between 18 and 65. Give one example each of valid, boundary, invalid and erroneous test data, and say what should happen to each.',
+          how: 'Label each example with its type. If the order slips, or the examiner reads quickly, the labels prove you know which is which.',
+          answer: 'Valid: 20 - inside the range, should be accepted. Boundary: 65 - the exact upper limit, should be accepted. Invalid: 70 - correct data type but outside the range, should be rejected with a message. Erroneous: the word seventy - wrong data type entirely, should be rejected without crashing.',
+          got: '4/4',
+          cost: 'All four correct with the correct outcomes, including 65 as the boundary. The only improvement is labelling each example with its type.' },
+
+        { n: 23, marks: 4, cmd: 'Explain',
+          q: 'Explain why regression testing is carried out, and the risk of omitting it.',
+          how: 'Two developed points. The name is misleading - regression testing is not about going back to an old version.',
+          answer: 'Regression testing re-runs tests that have already passed, after a change has been made, to confirm existing functionality still works (1). It is carried out because a fix or a new feature can have unintended side effects: shared functions, changed data structures or altered validation can break behaviour elsewhere that was previously working (1). Without it, only the new change is tested, so a defect introduced in an untouched area reaches the client (1), costing far more to fix in live use than during development and damaging client confidence (1).',
+          got: '0/4',
+          cost: 'Described rollback - reverting to the old system when the new one fails. That is change management from content area 5.4, a different topic. Memory hook: you are not going back, you are checking the software has not slipped back.' },
+
+        { n: 24, marks: 3, cmd: 'Explain',
+          q: 'Explain the difference between closed box and open box testing.',
+          how: 'Both are software testing terms. The same idea exists in security as black box and white box penetration testing, but this question comes from content area 2.12 and wants the software testing framing.',
+          answer: 'In closed box testing the tester sees only the inputs and the outputs and has no access to the source code, so the software is tested against the requirements (1). In open box testing the tester can see the code and designs tests to exercise specific internal paths and logic (1). Closed box therefore checks what the software does, while open box checks how it does it (1).',
+          got: '1/3',
+          cost: 'The without-knowledge versus with-knowledge distinction was right, but it was framed as hacking into an organisation. That is penetration testing from content area 8. Right idea, wrong topic.' },
+
+        { n: 25, marks: 3, cmd: 'State',
+          q: 'State the six things a test plan should record.',
+          how: 'Straight recall of six items. This is the structure ESP Task 2 marks your test documentation against.',
+          answer: 'The test to be carried out; the purpose of the test; the test data used; the expected result; the actual result; any further action required.',
+          got: '0/3',
+          cost: 'Answered the following question by mistake, giving usernames instead of the six columns. A retrieval checkpoint sat directly above these six items in the lesson and would have caught it.' },
+
+        { n: 26, marks: 6, cmd: 'Write',
+          q: 'A login form accepts a username of 5 to 12 characters. Write three rows of a test table, using a different type of test data in each row.',
+          how: 'Six columns per row: test, purpose, test data, expected result, actual result, further action. This is the exact skill ESP Task 2 marks, and the documentation carries marks separately from whether the code works.',
+          answer: 'Row 1, valid - Test: username length. Purpose: check a username of acceptable length is accepted. Test data: JackHH, 6 characters. Expected: accepted, account created. Row 2, boundary - Test: username length at the lower limit. Purpose: check the shortest permitted username is accepted. Test data: Jacks, 5 characters. Expected: accepted, account created. Row 3, erroneous - Test: username below the minimum length. Purpose: check a too-short username is rejected. Test data: Jack, 4 characters. Expected: rejected, with a message stating the username must be 5 to 12 characters. The actual result and further action columns are completed when the test is run.',
+          got: null, cost: null }
+      ]
     }
   ]
 };
