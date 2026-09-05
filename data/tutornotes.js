@@ -226,7 +226,7 @@ window.TLDATA.tutorNotes = {
 
     {
       day: 11, date: '5 Sep', topic: 'Content area 3 - Emerging issues and impact',
-      score: '9/15 attempted',
+      score: '16/24',
       questions: [
 
         { n: 27, marks: 2, cmd: 'State',
@@ -256,6 +256,14 @@ window.TLDATA.tutorNotes = {
           answer: 'Benefit 1: sensors report vibration, temperature and cycle count in real time, so a component degrading is detected before it fails (1), letting the manufacturer schedule maintenance in a planned shutdown rather than losing days of production to an unplanned breakdown mid-run (1). Benefit 2: live throughput data identifies which machine is the bottleneck (1), so the line can be rebalanced to raise output without buying more machinery (1). Drawback 1: significant upfront cost for sensors, installation and network, plus downtime during fitting (1), with a long payback period if the machinery is near end of life (1). Drawback 2: every connected sensor widens the attack surface, and IoT firmware often goes unpatched (1), so a compromise on the production network could halt manufacturing entirely (1). Judgement: on balance the investment is justified, because avoided unplanned downtime typically outweighs the hardware cost within the first major failure prevented, provided the sensors sit on a segregated network with a firmware update policy.',
           got: '3/6',
           cost: 'Level 2. Two benefits were named but neither was developed, so each scored one mark rather than two. Predictive maintenance, the headline benefit on machinery, was missed. The judgement was circular - worth it if it is worth it - with no because and no provided that, so it scored nothing.' }
+,
+
+        { n: 31, marks: 9, cmd: 'Evaluate',
+          q: 'A GP surgery is replacing its telephone appointment line with an online booking app. Evaluate the impact of this on its patients.',
+          how: 'Nine marks means 3-3-J: three developed benefits, three developed drawbacks, one judgement with a because and a provided that. The Level 3 move on any digital inclusion question is to notice who the service actually serves - here the groups least able to use an app are the surgery heaviest users.',
+          answer: 'Benefit 1: bookings can be made at any hour rather than only when the line is staffed, so shift workers, carers and people who cannot make a personal call during working hours are no longer forced to choose between an appointment and their job. Benefit 2: the app processes many patients concurrently and allocates slots first come first served, removing the 8am scramble in which patients redial for twenty minutes and are told the day is full. Benefit 3: the booking is confirmed in writing by email or in the app, so the patient has a record of the date, time and clinician, which reduces missed appointments caused by mishearing or forgetting details given verbally. Drawback 1: patients without a smartphone, broadband or the digital skills to use one are excluded, and those groups correlate strongly with old age, disability and low income - which is precisely the patient group that uses a GP surgery most, so the change hits the heaviest users hardest. Drawback 2: an app takes a booking but cannot triage. A receptionist hears distress in a voice, asks a clarifying question and escalates an urgent case to a same-day slot, whereas a form gives an unwell patient a routine appointment in eleven days. Drawback 3: appointment reasons are health data, which is special category data under the UK GDPR and carries stricter protection. A breach exposes not just contact details but what is wrong with people, which is far harder to remediate than a leaked password and can deter patients from seeking care at all. Judgement: on balance the move is justified, because the removal of the 8am queue improves access for the majority and frees reception staff for the patients who need them, provided that the telephone route is retained rather than replaced, the app is tested with older and disabled patients against WCAG, and an urgent-symptom path bypasses the booking form entirely.',
+          got: '7/9',
+          cost: 'Level 3, and the first extended answer with a complete structure - three benefits, three drawbacks and a judgement carrying two real mitigations. Benefit 1 named the point but not who it helps. Drawback 1 identified older patients but stopped short of the sharpest sentence available, that the excluded groups are the surgery heaviest users. Drawback 2 was framed as the app showing less information, where the real gap is triage and judgement. Drawback 3 needed the words special category data. The judgement had a provided that but no because.' }
       ]
     }
 
