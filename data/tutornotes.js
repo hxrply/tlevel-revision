@@ -222,6 +222,42 @@ window.TLDATA.tutorNotes = {
           answer: 'Row 1, valid - Test: username length. Purpose: check a username of acceptable length is accepted. Test data: JackHH, 6 characters. Expected: accepted, account created. Row 2, boundary - Test: username length at the lower limit. Purpose: check the shortest permitted username is accepted. Test data: Jacks, 5 characters. Expected: accepted, account created. Row 3, erroneous - Test: username below the minimum length. Purpose: check a too-short username is rejected. Test data: Jack, 4 characters. Expected: rejected, with a message stating the username must be 5 to 12 characters. The actual result and further action columns are completed when the test is run.',
           got: null, cost: null }
       ]
+    },
+
+    {
+      day: 11, date: '5 Sep', topic: 'Content area 3 - Emerging issues and impact',
+      score: '9/15 attempted',
+      questions: [
+
+        { n: 27, marks: 2, cmd: 'State',
+          q: 'State two things a public sector organisation must do to comply with the website and mobile applications accessibility regulations.',
+          how: 'Learn these two as a pair. The second one is the half of the mark scheme nobody remembers.',
+          answer: 'Meet the accessibility standard, WCAG 2.1 level AA (1). Publish an accessibility statement on the site setting out how compliant it is and which parts are not (1).',
+          got: '1/2',
+          cost: 'Described accessibility features - colour blind modes, zoom, text size - rather than the two compliance duties. The features come from WCAG, so the answer was one step away, but the accessibility statement was missing entirely.' },
+
+        { n: 28, marks: 3, cmd: 'Explain',
+          q: 'A company introduces staff monitoring software after moving to hybrid working. Explain one benefit and one drawback for the organisation.',
+          how: 'The question says for the organisation. How staff feel is the mechanism; the cost to the business is the mark. Land every point on turnover, cost, output or legal risk.',
+          answer: 'Benefit: monitoring gives visibility of activity and output across a hybrid workforce, so managers can spot under-performance or workload imbalance that would have been visible in an office (1), and redistribute work before deadlines slip (1). Drawback: staff may see it as surveillance and a breach of privacy, damaging trust and morale, which raises staff turnover and recruitment cost (1). The monitoring data is also personal data, so it must be justified and documented under the UK GDPR or the organisation risks enforcement action.',
+          got: '2/3',
+          cost: 'The drawback was properly developed - privacy concern leading to an uncomfortable working environment. The benefit stopped at the point with no consequence attached, so it scored one mark instead of two.' },
+
+        { n: 29, marks: 4, cmd: 'Explain',
+          q: 'Explain two ways bias can enter an AI system used to shortlist job applicants, and the consequence of each.',
+          how: 'Bias questions want the data, not the algorithm. Ask where the training data came from and who is under-represented in it.',
+          answer: 'Historic training data: the model is trained on past CVs and who was hired, so it learns the pattern of previous hiring decisions including the biases in them (1). If most successful applicants were a narrow age group, the system systematically down-ranks older applicants, which is unlawful age discrimination under the Equality Act 2010 and means qualified candidates are missed (1). Proxy variables: grades act as a stand-in for ability, but attainment correlates with school quality and household income, so screening on grades indirectly disadvantages applicants from lower-income backgrounds even though income never appears in the data (1). That is indirect discrimination and is harder to detect, because the protected characteristic is never in the dataset (1).',
+          got: '3/4',
+          cost: 'The historic training data point was strong and well exemplified. The second point described the AI being unable to judge communication skills, which is a limitation of the measure rather than bias. One sentence about grades correlating with background would have converted it.' },
+
+        { n: 30, marks: 6, cmd: 'Discuss',
+          q: 'A manufacturer is considering fitting IoT sensors to its production line machinery. Discuss the benefits and drawbacks.',
+          how: 'Six marks means 2-2-J: two developed benefits, two developed drawbacks, one judgement sentence. The judgement has a fixed skeleton - On balance X, because Y, provided that Z. On machinery the headline benefit is predictive maintenance.',
+          answer: 'Benefit 1: sensors report vibration, temperature and cycle count in real time, so a component degrading is detected before it fails (1), letting the manufacturer schedule maintenance in a planned shutdown rather than losing days of production to an unplanned breakdown mid-run (1). Benefit 2: live throughput data identifies which machine is the bottleneck (1), so the line can be rebalanced to raise output without buying more machinery (1). Drawback 1: significant upfront cost for sensors, installation and network, plus downtime during fitting (1), with a long payback period if the machinery is near end of life (1). Drawback 2: every connected sensor widens the attack surface, and IoT firmware often goes unpatched (1), so a compromise on the production network could halt manufacturing entirely (1). Judgement: on balance the investment is justified, because avoided unplanned downtime typically outweighs the hardware cost within the first major failure prevented, provided the sensors sit on a segregated network with a firmware update policy.',
+          got: '3/6',
+          cost: 'Level 2. Two benefits were named but neither was developed, so each scored one mark rather than two. Predictive maintenance, the headline benefit on machinery, was missed. The judgement was circular - worth it if it is worth it - with no because and no provided that, so it scored nothing.' }
+      ]
     }
+
   ]
 };
