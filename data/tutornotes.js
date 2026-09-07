@@ -264,6 +264,68 @@ window.TLDATA.tutorNotes = {
           answer: 'Benefit 1: bookings can be made at any hour rather than only when the line is staffed, so shift workers, carers and people who cannot make a personal call during working hours are no longer forced to choose between an appointment and their job. Benefit 2: the app processes many patients concurrently and allocates slots first come first served, removing the 8am scramble in which patients redial for twenty minutes and are told the day is full. Benefit 3: the booking is confirmed in writing by email or in the app, so the patient has a record of the date, time and clinician, which reduces missed appointments caused by mishearing or forgetting details given verbally. Drawback 1: patients without a smartphone, broadband or the digital skills to use one are excluded, and those groups correlate strongly with old age, disability and low income - which is precisely the patient group that uses a GP surgery most, so the change hits the heaviest users hardest. Drawback 2: an app takes a booking but cannot triage. A receptionist hears distress in a voice, asks a clarifying question and escalates an urgent case to a same-day slot, whereas a form gives an unwell patient a routine appointment in eleven days. Drawback 3: appointment reasons are health data, which is special category data under the UK GDPR and carries stricter protection. A breach exposes not just contact details but what is wrong with people, which is far harder to remediate than a leaked password and can deter patients from seeking care at all. Judgement: on balance the move is justified, because the removal of the 8am queue improves access for the majority and frees reception staff for the patients who need them, provided that the telephone route is retained rather than replaced, the app is tested with older and disabled patients against WCAG, and an urgent-symptom path bypasses the booking form entirely.',
           got: '7/9',
           cost: 'Level 3, and the first extended answer with a complete structure - three benefits, three drawbacks and a judgement carrying two real mitigations. Benefit 1 named the point but not who it helps. Drawback 1 identified older patients but stopped short of the sharpest sentence available, that the excluded groups are the surgery heaviest users. Drawback 2 was framed as the app showing less information, where the real gap is triage and judgement. Drawback 3 needed the words special category data. The judgement had a provided that but no because.' }
+,
+
+    {
+      day: '12 + 13', date: '7 Sep', topic: 'Content area 4 - Legislation, codes of conduct and standards',
+      score: '11/20 attempted',
+      questions: [
+
+        { n: 32, marks: 3, cmd: 'State',
+          q: 'State the three main offences under the Computer Misuse Act 1990.',
+          how: 'On a State question the term is the mark. Write the legal term first and your own description second, in brackets - then a wobbly description still scores. Remember the three as an escalating ladder: look at it, get in meaning to do something worse, change it.',
+          answer: 'Unauthorised access to computer material. Unauthorised access with intent to commit a further offence. Unauthorised modification of computer material. Later provisions also cover making or supplying hacking tools and causing serious damage.',
+          got: '2/3',
+          cost: 'The offences were described correctly in plain words but never named, so the second offence - access with intent - was missed entirely, twice in the same session. Naming the term is what the examiner scans for.' },
+
+        { n: 33, marks: 2, cmd: 'State',
+          q: 'State the four types of discrimination under the Equality Act 2010.',
+          how: 'Protected characteristics answer WHO. Types of discrimination answer HOW. Mixing the two is the single most common error on this question.',
+          answer: 'Direct - treated worse because of the characteristic. Indirect - a rule applied to everyone that disadvantages one group. Harassment - unwanted conduct creating a hostile or degrading environment. Victimisation - treated badly because you complained about discrimination.',
+          got: '0/2',
+          cost: 'Answered racism, homophobia, disability and age - those are protected characteristics, the who, not the types, the how. The same error appeared in the warm-up ten minutes earlier, so it is a wiring problem rather than a slip. Hook: direct is to your face, indirect is through a rule, harassment is how you are treated, victimisation is being punished for speaking up. Indirect discrimination is the same mechanism as proxy bias in AI - see question 29.' },
+
+        { n: 34, marks: 4, cmd: 'Explain',
+          q: 'Explain two ways a software company can protect its intellectual property.',
+          how: 'Split the four IP types by automatic versus applied for. Copyright and unregistered design are automatic; patent, registered design and trade mark must be applied for.',
+          answer: 'Source code is automatically protected by copyright as soon as it is written, so the company can take civil action against anyone copying or distributing it without a licence, and adding a licence file and copyright notice makes ownership clear (2). A genuinely novel technical process within the software can be protected by applying for a patent, which prevents competitors implementing the same invention for the patent term, although it is costly and requires the invention to be published (2).',
+          got: null, cost: 'Read as a worked model rather than attempted, to fit two days into one hour.' },
+
+        { n: 35, marks: 3, cmd: 'Explain',
+          q: 'A company suffers a data breach exposing 4,000 customer records. Explain three things it must do.',
+          how: 'Every breach-response answer has the same shape: regulator, individuals, record.',
+          answer: 'Report it to the ICO within 72 hours, as it involves a large volume of personal data (1). Inform the affected individuals without undue delay where there is a high risk to their rights, so they can take protective action such as changing passwords (1). Investigate, contain and document the breach, recording what happened and what was done, since accountability requires the organisation to demonstrate its response (1).',
+          got: null, cost: 'Read as a worked model rather than attempted, to fit two days into one hour.' },
+
+        { n: 36, marks: 6, cmd: 'Explain',
+          q: 'An employee uses a colleague login to read the payroll file out of curiosity and then changes their own recorded overtime. Explain which legislation applies and the possible consequences.',
+          how: 'Two laws, not one. Checking rule: does the scenario contain personal data? If yes, data protection legislation always applies as a second law. Then give consequences for the employee AND for the organisation.',
+          answer: 'The Computer Misuse Act 1990 applies. Using another person credentials to read the payroll file is unauthorised access to computer material (1), and altering the overtime record is unauthorised modification of computer material, a more serious offence (1). Data protection legislation is also engaged, because payroll contains personal data being processed without a lawful basis, so the organisation may have to report a breach to the ICO (1). Consequences for the employee: dismissal for gross misconduct, and because the CMA is criminal law, prosecution, a fine and possible imprisonment (1). Consequences for the organisation: regulatory action and fines for inadequate access controls, reputational damage and loss of staff trust (1), and it would be expected to show it had an acceptable use policy and training in place to demonstrate employee awareness (1).',
+          got: '4/6',
+          cost: 'The Computer Misuse Act was identified and two different offences were correctly applied to two different actions, which is the hard part. Data protection was never considered, despite payroll being personal data. The organisational consequence given - that an employee now knows everyone pay - describes the harm rather than a consequence to the organisation, and dismissal was given without the criminal consequences.' },
+
+        { n: 37, marks: 2, cmd: 'State',
+          q: 'State the four WCAG principles.',
+          how: 'POUR. Learn one example against each so a two-mark State question can be expanded if the command word is Explain instead.',
+          answer: 'Perceivable - text alternatives for images, captions on video, sufficient colour contrast. Operable - full keyboard access, no seizure-inducing flashing, enough time to complete tasks. Understandable - readable language, predictable navigation, helpful error messages. Robust - works with assistive technologies such as screen readers, using valid semantic markup. Conformance levels are A, AA and AAA; public sector sites must meet AA.',
+          got: '2/2',
+          cost: 'All four correct, cold, hours after first learning them. This was the worst-answered question on the real paper - cohort mean 0.12 out of 2.' },
+
+        { n: 38, marks: 3, cmd: 'Explain',
+          q: 'Explain the difference between an organisational code of conduct and a professional code of conduct, and name one professional body.',
+          how: 'Neither code is law. An organisational code is set by your employer and applies while you work there; a professional code is set by a body you have joined and follows you between jobs.',
+          answer: 'An organisational code of conduct is set by the employer and governs conduct at that organisation - for example which websites may be accessed on work devices - and breaching it leads to disciplinary action (1). A professional code of conduct is set by a professional body the individual has chosen to join, sets standards of competence, integrity and confidentiality across the profession, and follows the individual between employers (1); breaching it can mean loss of membership or chartered status. One professional body is the BCS, the British Computer Society (1). Others are the IAP and CIISec. The third source of codes is governmental.',
+          got: '1/3',
+          cost: 'The organisational half was right, with a good example. The professional half named British Standards, which is an industry standard in the same family as ISO, WCAG and PCI SSC - not a professional code of conduct - and described codes of conduct as legal. Neither type of code is law.' },
+
+        { n: 39, marks: 4, cmd: 'Explain',
+          q: 'Explain why an organisation would introduce an acceptable use policy in addition to relying on the law.',
+          how: 'Two developed points. The second one is the real reason organisations bother: an AUP is a legal defence.',
+          answer: 'The law sets out only what is criminal, whereas an AUP defines the organisation own expectations - what personal use of email is permitted, which sites may be accessed, how staff must represent the company online (2). It also makes staff aware of what is prohibited and states the sanctions, so the organisation can take disciplinary action and can demonstrate it took reasonable steps to prevent misuse if an incident occurs (2). An AUP typically covers permitted activities, prohibited activities, working practices including confidentiality, communication etiquette, and penalties.',
+          got: '2/4',
+          cost: 'The first point was properly developed with a relevant example. The awareness and sanctions point was missing, which is the half examiners most want - without an AUP the organisation cannot show it took reasonable steps to prevent the misuse.' }
+      ]
+    }
       ]
     }
 
