@@ -326,6 +326,63 @@ window.TLDATA.tutorNotes = {
           cost: 'The first point was properly developed with a relevant example. The awareness and sanctions point was missing, which is the half examiners most want - without an AUP the organisation cannot show it took reasonable steps to prevent the misuse.' }
       ]
     }
+,
+
+    {
+      day: 14, date: '7 Sep', topic: 'Paper 1 review - timed mini-mock, content areas 1 to 4',
+      score: '15/28',
+      questions: [
+
+        { n: 41, marks: 2, cmd: 'State',
+          q: 'State two characteristics of robust code.',
+          how: 'Three to choose from, so any two score.',
+          answer: 'It handles unexpected inputs; it handles unexpected terminations; it produces specific and meaningful error messages.',
+          got: '2/2',
+          cost: 'Correct. Note the exact wording is specific and meaningful error messages - the two adjectives are usually where the mark sits.' },
+
+        { n: 42, marks: 2, cmd: 'State',
+          q: 'State the four types of test data.',
+          how: 'Recall. Attach one example to each so the same knowledge works on an Explain or a test table question.',
+          answer: 'Valid, boundary, invalid, erroneous.',
+          got: '2/2',
+          cost: 'Correct, and correct on Day 10 as well. This one is secure.' },
+
+        { n: 43, marks: 3, cmd: 'State',
+          q: 'State the six steps of the high-level problem-solving strategy.',
+          how: 'Learn it as a causal chain - you cannot gather until you have defined, cannot analyse until you have gathered, cannot plan until you have analysed.',
+          answer: 'Define the problem; gather information; analyse the information; make a plan of action; implement a solution; review the solution.',
+          got: '3/3',
+          cost: 'All six, in order. This was 0 out of 2 on Day 2, so it is the clearest example so far of a list moving from nothing to secure.' },
+
+        { n: 44, marks: 3, cmd: 'Explain',
+          q: 'Explain the difference between a local and a global variable.',
+          how: 'Two axes: scope - where it can be seen; and lifetime - how long it exists. Most answers get scope and stop.',
+          answer: 'A local variable is declared inside a function and can only be accessed within that function (1). A global variable is declared outside any function and can be accessed anywhere in the program (1). A local variable is destroyed when the function ends, freeing its memory, whereas a global persists for the lifetime of the program; keeping variables local avoids unintended changes from elsewhere in the code and avoids name clashes (1).',
+          got: '2/3',
+          cost: 'Scope was correct on both sides. The third mark went on the claim that a global is always being checked while the code is running - a global is not checked, it simply persists in memory for the whole program. The distinction is scope and lifetime, not checking.' },
+
+        { n: 45, marks: 2, cmd: 'State',
+          q: 'State the three metrics used to compare algorithms.',
+          how: 'Recall. Efficiency is the umbrella term, not one of the three.',
+          answer: 'Use of memory space; execution time; number of comparisons.',
+          got: '2/2',
+          cost: 'Correct. This was 1 out of 3 on Day 9, so it has moved.' },
+
+        { n: 46, marks: 4, cmd: 'Trace',
+          q: 'Trace the loop that starts total at 0, runs for i in range(1, 8), adds i to total when i is even and subtracts 1 from total when i is odd, then prints total.',
+          how: 'Two mechanical steps before tracing. First write the i values in a row - range(a, b) gives first value a, last value b minus 1, count b minus a - so range(1, 8) is 1 2 3 4 5 6 7, seven passes. Second, write the words Output colon on the last line of your answer before you start, then fill it in at the end.',
+          answer: 'i=1 odd, total = -1. i=2 even, total = 1. i=3 odd, total = 0. i=4 even, total = 4. i=5 odd, total = 3. i=6 even, total = 9. i=7 odd, total = 8. Output: 8',
+          got: '0/4',
+          cost: 'Three separate errors. Eight passes were shown where range(1, 8) gives seven - the same miscount as Day 1. The else branch was never applied, so nothing was ever subtracted. And no output line was written, which is the third trace in a row where the printed value was missing. The output line is now a rule, not a reminder: write Output colon on the page before tracing.' },
+
+        { n: 47, marks: 12, cmd: 'Evaluate',
+          q: 'A secondary school is replacing its paper homework-tracking system with a web application. Staff will record assignments; students and parents will log in to view them. Evaluate the factors the school should consider before adopting the system.',
+          how: 'Twelve marks means three developed benefits, three developed drawbacks, mitigations and a judgement. AO2 is double-weighted, so name students, parents and teaching staff rather than users. Write the six headings on the page before writing any prose - an Evaluate answer that gives only one side cannot get past Level 1 however good the points are.',
+          answer: 'Benefits: assignments are visible to parents as well as students, so a missed deadline is spotted at home rather than at the next parents evening, which raises completion rates. Staff record an assignment once and it reaches every student in the class, removing lost planners and disputes about what was set. Deadlines, submission dates and completion can be reported on, letting the school identify a struggling student in weeks rather than at the end of term. Drawbacks: students without a device or broadband at home cannot see their homework, and that correlates with low income, so the system risks widening the gap between exactly the students it is meant to help. The data is about children, which is special category-adjacent and attracts heightened protection under the UK GDPR - parental access must be controlled so a parent sees only their own child, and a breach exposing pupil records is far more serious than a leaked shopping account. Practical use matters: if worksheets are provided as documents, a student working on a phone with no printer cannot realistically complete them. Mitigations: retain a paper route for any student who needs it, open a school library with computers before and after school, test the site against WCAG with real students including those using assistive technology, and pilot with one year group before whole-school rollout. Judgement: on balance the school should adopt it, because visibility to parents and reliable records address the single biggest weakness of the paper system, provided that a non-digital route is retained and device access is checked per student rather than assumed.',
+          got: '4/12',
+          cost: 'Level 1. The two drawbacks given were genuine and well applied to a school - printers, phones, the library - and the mitigation about retaining paper was exactly right. But the answer gave no benefits at all, and an Evaluate with only one side is capped at Level 1 regardless of quality. Data protection was not mentioned despite the data being about children, and parents were never discussed despite appearing in the question. The judgement had no because. The 3-3-J structure that scored 7 out of 9 on question 31 was abandoned here.' }
+      ]
+    }
       ]
     }
 
