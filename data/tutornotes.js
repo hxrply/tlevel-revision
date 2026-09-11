@@ -383,6 +383,42 @@ window.TLDATA.tutorNotes = {
           cost: 'Level 1. The two drawbacks given were genuine and well applied to a school - printers, phones, the library - and the mitigation about retaining paper was exactly right. But the answer gave no benefits at all, and an Evaluate with only one side is capped at Level 1 regardless of quality. Data protection was not mentioned despite the data being about children, and parents were never discussed despite appearing in the question. The judgement had no because. The 3-3-J structure that scored 7 out of 9 on question 31 was abandoned here.' }
       ]
     }
+,
+
+    {
+      day: 15, date: '11 Sep', topic: 'Content area 5.1 and 5.2 - Business environment and digital value',
+      score: '8/13',
+      questions: [
+
+        { n: 54, marks: 2, cmd: 'State',
+          q: 'State the three business sectors.',
+          how: 'Learn each sector with the thing it optimises for, because that is what scenario questions actually test - a council scenario means accessibility regulations, a charity scenario means a tight budget, a company scenario means return on investment.',
+          answer: 'Private sector - owned by private individuals or shareholders, normally profit-making; includes SMEs, large enterprises and NGOs. Public sector - funded and run by government, such as the NHS, councils, schools and police; prioritises service delivery, accountability and value for money, and must meet the public sector accessibility regulations. Voluntary or charity sector - not for profit, with any surplus reinvested into the cause; relies on volunteers and donations, so digital budgets are tight.',
+          got: '0/2',
+          cost: 'Answered leisure, business and budget. This table had been read about twenty minutes earlier in the same session, which is the read-it-but-never-retrieved-it pattern. The written checkpoint in the lesson exists to catch exactly this and was skipped.' },
+
+        { n: 55, marks: 3, cmd: 'Explain',
+          q: 'Explain the difference between an internal and an external stakeholder, giving one example of each.',
+          how: 'Definition of each, then one example each. Take examples from the specification list rather than inventing one, so the example is never the thing that costs the mark.',
+          answer: 'An internal stakeholder is someone inside the organisation with an interest in it (1) - owners, directors and employees. An external stakeholder is someone or some body outside the organisation with an interest in it (1) - customers and clients, suppliers, shareholders, outsourced services, investors and funders, and government (1). The distinction matters because each group has different requirements from a digital project, and requirements gathering has to cover all of them.',
+          got: '3/3',
+          cost: 'Both definitions correct and both examples accepted. Local residents is a defensible external stakeholder, particularly for a public sector scenario where residents are the customers, but the specification list is the safer source.' },
+
+        { n: 56, marks: 4, cmd: 'Explain',
+          q: 'A manufacturer wants to reduce costs. Explain two ways digital technology could help, naming the business area each time.',
+          how: 'Three moves per point: name the business area, name the digital system, state the measurable benefit. The benefit has to answer the question actually asked - this one said reduce costs, so a benefit about speed does not land.',
+          answer: 'Logistics: automated stock control means reorder points trigger automatically, so the manufacturer holds less capital in excess stock and wastes less through over-ordering, while avoiding the cost of a halted line caused by a stock-out (2). Operations: automated manufacturing replaces repetitive manual assembly, reducing labour cost per unit and running without breaks or shift premiums, while also cutting the cost of rework caused by human error (2).',
+          got: '3/4',
+          cost: 'Both systems were correctly identified. The first point named its business area, the second did not, despite the question asking for it explicitly. Both benefits were framed around speed and accuracy when the question asked about cost - the same drift as the chatbot answer, where the question named customers and the answer discussed the business.' },
+
+        { n: 57, marks: 4, cmd: 'Explain',
+          q: 'A charity and a large private retailer both want a new website. Explain two ways their priorities would differ.',
+          how: 'Priorities come from the sector, not from page design. Go back to what each sector optimises for: the charity has donations and volunteers, the retailer has shareholders and profit.',
+          answer: 'Budget: the charity is funded by donations with any surplus going to the cause, so it will prioritise low build and running costs, likely using open source software and volunteer effort, and will resist expensive custom features (2). Purpose and measure of success: the retailer measures the site on sales and return on investment, so it invests in checkout, product search and personalisation, whereas the charity measures success on donations raised and awareness, so it prioritises telling the cause story and making donating frictionless (2). Accessibility can also differ, since a charity may serve vulnerable or older users directly.',
+          got: '2/4',
+          cost: 'The answer described what each website would contain rather than what each organisation would prioritise. The point that the charity communicates its cause while the retailer sells products is a real difference and scored, but budget - the headline difference between the sectors and the one taught in 5.1 - was never mentioned.' }
+      ]
+    }
       ]
     }
 
