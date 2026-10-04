@@ -465,21 +465,40 @@
         out.push(q.q);
       });
       out.push('');
-      out.push('-- MODEL ANSWERS --');
+      out.push('-- MODEL ANSWERS AND FEEDBACK --');
       d.qs.forEach(function (q) {
+        var mk = markedQ(q.n);
         out.push('');
-        out.push('Q' + q.n + ': ' + q.a);
+        out.push('Q' + q.n + ': ' + (mk ? mk.q.answer : q.a));
+        if (mk && mk.q.got) out.push('  YOU SCORED: ' + mk.q.got);
+        if (mk && mk.q.cost) out.push('  FEEDBACK: ' + mk.q.cost);
       });
     });
     return out.join(L);
   }
 
+  /* A catch-up question and a tutor-notes question are the same question seen
+     from two sides: the catch-up card is the material, the notes entry is the
+     marking record. Match on the question number so a mark only ever lives in
+     one place and the two can never drift apart. */
+  function markedQ(n) {
+    var notes = D.tutorNotes;
+    for (var i = 0; i < notes.sessions.length; i++) {
+      var qs = notes.sessions[i].questions;
+      for (var j = 0; j < qs.length; j++) {
+        if (qs[j].n === n) return { q: qs[j], day: notes.sessions[i].day };
+      }
+    }
+    return null;
+  }
+
   views.catchup = function () {
-    var totalQ = 0, totalDays = CATCH.days.length, doneDays = 0, totalMins = 0;
+    var totalQ = 0, totalDays = CATCH.days.length, doneDays = 0, totalMins = 0, markedQs = 0;
     CATCH.days.forEach(function (d) {
       totalQ += d.qs.length;
       totalMins += d.mins;
       if (state.catchup.done['d' + d.day]) doneDays++;
+      d.qs.forEach(function (q) { if (markedQ(q.n)) markedQs++; });
     });
 
     var h = '<h1>Catch-up</h1><p class="lede">' + esc(CATCH.intro) + '</p>';
@@ -487,7 +506,7 @@
     h += '<div class="grid four" style="margin-bottom:16px">' +
       statCard(totalDays - doneDays, 'Days to recover') +
       statCard(doneDays, 'Done') +
-      statCard(totalQ, 'Questions') +
+      statCard(markedQs + '/' + totalQ, 'Marked') +
       statCard(Math.round(totalMins / 60) + 'h', 'Total time') +
       '</div>';
 
@@ -499,11 +518,21 @@
 
     CATCH.days.forEach(function (d, di) {
       var done = !!state.catchup.done['d' + d.day];
+      var dayGot = 0, dayPoss = 0, dayMarked = 0;
+      d.qs.forEach(function (q) {
+        var mk = markedQ(q.n);
+        if (mk && mk.q.got) {
+          dayMarked++;
+          dayGot += parseInt(mk.q.got, 10) || 0;
+          dayPoss += mk.q.marks;
+        }
+      });
       h += '<section class="panel area-card' + (!done && di === 0 ? ' open' : '') + '" data-area="cu' + d.day + '">' +
         '<div class="area-head"><div class="n">' + d.day + '</div>' +
         '<div style="flex:1"><h3>' + esc(d.title) + (done ? ' <span class="pill ok">done</span>' : '') + '</h3>' +
         '<div class="small muted">' + esc(d.plan) + ' · content area ' + esc(d.area) +
-        ' · about ' + d.mins + ' min · ' + d.qs.length + ' questions</div></div>' +
+        ' · about ' + d.mins + ' min · ' + d.qs.length + ' questions' +
+        (dayMarked ? ' · marked ' + dayGot + '/' + dayPoss : '') + '</div></div>' +
         '<div class="chev">›</div></div><div class="area-body">';
 
       h += '<p class="small"><b>Why this one matters.</b> ' + esc(d.why) + '</p>';
@@ -523,14 +552,32 @@
 
       h += '<h4 style="margin:14px 0 6px">Questions</h4>';
       d.qs.forEach(function (q) {
+        var mk = markedQ(q.n);
+        var scored = mk && mk.q.got;
+
         h += '<div class="tnote qbox">' +
           '<div class="tnote-head"><span class="qn">Q' + q.n + '</span>' +
           '<span class="pill">' + esc(q.cmd) + '</span>' +
-          '<span class="small muted">' + q.marks + ' marks</span></div>' +
-          '<div class="qq">' + esc(q.q) + '</div>' +
-          '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">Model answer</button></div>' +
-          '<div class="qa"><b>Model answer</b><p>' + esc(q.a) + '</p></div>' +
-          '</div>';
+          '<span class="small muted">' + q.marks + ' marks</span>' +
+          (scored
+            ? '<span class="pill ' + (parseInt(mk.q.got, 10) / q.marks >= 0.6 ? 'ok' : 'warn') +
+              '" style="margin-left:auto">you scored ' + esc(mk.q.got) + '</span>'
+            : (mk ? '<span class="pill warn" style="margin-left:auto">not attempted</span>'
+                  : '<span class="pill" style="margin-left:auto">not marked yet</span>')) +
+          '</div>' +
+          '<div class="qq">' + esc(q.q) + '</div>';
+
+        if (mk && mk.q.how) {
+          h += '<div class="tnote-how"><b>How to answer</b><br>' + esc(mk.q.how) + '</div>';
+        }
+
+        h += '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">' +
+          (mk ? 'Model answer and feedback' : 'Model answer') + '</button></div>' +
+          '<div class="qa"><b>Model answer</b><p>' + esc(mk ? mk.q.answer : q.a) + '</p>' +
+          (mk && mk.q.cost
+            ? '<div class="tnote-cost"><b>Feedback — what it cost you</b><br>' + esc(mk.q.cost) + '</div>'
+            : '') +
+          '</div></div>';
       });
 
       h += '<div class="btn-row" style="margin-top:12px">' +

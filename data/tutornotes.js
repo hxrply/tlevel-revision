@@ -419,6 +419,84 @@ window.TLDATA.tutorNotes = {
           cost: 'The answer described what each website would contain rather than what each organisation would prioritise. The point that the charity communicates its cause while the retailer sells products is a real difference and scored, but budget - the headline difference between the sectors and the one taught in 5.1 - was never mentioned.' }
       ]
     }
+,
+
+    {
+      day: 16, date: '11 Sep', topic: 'Content area 5.3 and 5.4 - Risk and triggers for change',
+      score: '8/15',
+      questions: [
+
+        { n: 58, marks: 2, cmd: 'State',
+          q: 'State two internal triggers for change.',
+          how: 'Internal triggers are things the organisation does to itself. Four to choose from, so any two score.',
+          answer: 'Organisational restructuring; expansion; downsizing; new strategic objectives such as diversification, rebranding or adding features and services.',
+          got: '2/2',
+          cost: 'Change in hierarchy is restructuring and reduction of employees is downsizing. Both correct.' },
+
+        { n: 59, marks: 3, cmd: 'State',
+          q: 'State what each letter of PESTLE stands for.',
+          how: 'Six letters. Learn one example against each, because scenario questions ask you to classify a trigger rather than recite the word.',
+          answer: 'Political - a change of government shifting priorities. Economic - recession, inflation, interest rates, consumer trends, new competitors. Social - demographics, social trends, remote working, cultural expectations. Technological - new technologies, retirement of obsolete technology, system failure, zero-day vulnerabilities. Legal - new or changed legislation. Environmental - sustainability, pandemics, natural disasters.',
+          got: '3/3',
+          cost: 'All six letters correct. Two of the examples were off: Economic was given as employee wages when it means the wider economy, and Technological was given as devices working to standard when it means the technology landscape shifting.' },
+
+        { n: 60, marks: 4, cmd: 'Explain',
+          q: 'Explain two risks to an organisation of using digital systems, and the impact of each.',
+          how: 'Pick both risks from the 5.3 list of six rather than inventing one, then land each impact on the business using the five named impacts.',
+          answer: 'Over-reliance on a system: the organisation has no manual alternative, so an outage stops trading entirely (1), costing lost revenue for the duration and reputational damage if customers cannot order (1). Regulatory non-compliance: failing data protection or accessibility requirements (1) exposes the organisation to legal action, fines and in regulated sectors withdrawal of licence to practise (1).',
+          got: '2/4',
+          cost: 'Over-reliance was correctly named from the list, but the impact stopped at helpless rather than naming lost revenue or reputational damage. The second point - that digital systems reduce headcount and make a company less human - is impact on society from content area 3, not a risk to the organisation from 5.3.' },
+
+        { n: 61, marks: 6, cmd: 'Analyse',
+          q: 'An online retailer suffers a security breach exposing 40,000 customer records. Analyse the impact on the organisation.',
+          how: 'Use the impact ladder and write the five rungs down the page before any prose: operational, financial, legal, reputational, long-term. One line each. The structure generates the content - every fact needed here had already been answered correctly in earlier sessions.',
+          answer: 'Operationally, systems may be taken offline for investigation, halting sales, and staff time is diverted to handling enquiries. Financially there is forensic investigation, remediation, credit monitoring for customers and lost trading. Legally the breach involves personal data, so it must be reported to the ICO within 72 hours and affected customers informed; the ICO can impose a substantial fine and individuals may bring claims. Reputationally customers lose confidence in the retailer holding card and address data, so retention falls and acquisition becomes more expensive. Long term, if card data was involved PCI DSS status and the ability to take card payments could be withdrawn, which threatens the business itself; the long-term cost usually exceeds the immediate fine.',
+          got: '1/6',
+          cost: 'One line written, identifying regulatory non-compliance, which is the legal rung and did score. The reason given for stopping was not knowing enough about the subject, but the 72-hour ICO rule, PCI DSS and reputational damage had all been answered correctly in previous sessions. What was missing was the scaffold, not the knowledge.' }
+      ]
+    },
+
+    {
+      day: 17, date: '4 Oct', topic: 'Content area 5.4 - Change management',
+      score: '7/22',
+      questions: [
+
+        { n: 62, marks: 2, cmd: 'State',
+          q: 'State what each letter of SMARTER stands for.',
+          how: 'Seven letters, two marks, so near-perfect recall is needed. The one people lose is R for Realistic.',
+          answer: 'Specific, Measurable, Achievable, Realistic, Time-bound, Evaluated, Reviewed.',
+          got: '1/2',
+          cost: 'Six of seven correct. Reasonable was given for Realistic.' },
+
+        { n: 63, marks: 4, cmd: 'Explain',
+          q: 'Explain one advantage and one disadvantage of parallel implementation.',
+          how: 'Two marks each side, so point plus consequence twice. The advantage has two separate strands - fallback and verification - so there is a spare mark available if one is weak.',
+          answer: 'Advantage: both systems run at the same time, so outputs can be compared to prove the new system produces the same results, and the old system remains available as a fallback if the new one fails (2). Disadvantage: every transaction must be entered into both systems, which doubles workload and staffing cost for the duration, and the two sets of data can drift apart if an entry is missed from one (2).',
+          got: '4/4',
+          cost: 'Full marks, both sides developed. The only thing missing was the second strand of the advantage - that outputs can be compared to verify the new system is correct, not just that the old one is a fallback.' },
+
+        { n: 64, marks: 3, cmd: 'State',
+          q: 'State three things a rollback plan must cover.',
+          how: 'A specific three-item list, not a stakeholder question. The logic: to go back you need copies, somewhere safe to keep them, and a tested procedure.',
+          answer: 'The backup methodology - how backups are taken and how often. The backup location - where copies are held, including offsite. The recovery plan - the procedure for reverting to the previous system without data loss.',
+          got: '0/3',
+          cost: 'Answered customers, budget and employees, which are stakeholders and constraints rather than the contents of a rollback plan.' },
+
+        { n: 65, marks: 4, cmd: 'Explain',
+          q: 'Explain two risks when implementing a new digital system, and how each can be reduced.',
+          how: 'Four named risks in the specification: workforce resistance, misuse of new systems, inadequate support or knowledge, and disruption during implementation. Pick from the list rather than inventing one.',
+          answer: 'Workforce resistance: staff may fear job losses or resent extra workload during transition, so they work around the new system or enter data poorly, which undermines data quality and the whole benefits case (1). Reduce it by communicating the reasons and benefits early, involving staff in requirements gathering, and providing training matched to identified needs (1). Disruption during implementation: service degrades while systems are switched over, costing sales or capacity (1). Reduce it with a phased or pilot approach, a change window outside peak hours, and a tested rollback plan (1).',
+          got: '2/4',
+          cost: 'The first risk was closest to disruption during implementation and the parallel-running mitigation was well chosen, so it scored. The second risk was left blank. Naming the risk from the specification list would have made the first point unambiguous.' },
+
+        { n: 66, marks: 9, cmd: 'Evaluate',
+          q: 'A hospital is replacing its patient records system. Evaluate the most appropriate implementation method.',
+          how: 'Not 3-3-J. For a choose-the-method question the headings are the four method names plus Judgement - write those five down the page first. Then ask one question per method: what happens to patients if this goes wrong? The scenario is a hospital, so patient safety is the measure that decides it.',
+          answer: 'Direct changeover is cheapest and quickest but unacceptable here: if the new system fails there is no fallback and clinicians cannot access patient records, a direct risk to patient safety. Parallel running keeps the old system available and lets outputs be compared for accuracy, a strong safeguard for critical data, but every record must be entered twice, doubling clinical admin workload in an already pressured environment and risking divergence between the two systems. Phased implementation introduces appointments first, then prescribing, then records; problems stay contained to one module and staff learn gradually, but the old and new systems must exchange data across a long transition, which is technically complex. Pilot implementation runs the full system in one ward, giving real-world evidence at limited risk and creating trained super-users to support the wider rollout, though one ward may not represent the whole hospital. Judgement: a pilot followed by a phased rollout is most appropriate, because it limits risk to patients while still proving the complete system before the hospital depends on it, provided a tested rollback plan and full backups are in place.',
+          got: null,
+          cost: 'Not attempted. Every fact needed had been taught in the same session twenty minutes earlier, in the four-method table. The blocker was the absence of a scaffold rather than the content - the same pattern as question 61.' }
+      ]
+    }
       ]
     }
 
