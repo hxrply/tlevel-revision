@@ -17,7 +17,8 @@
       conf: {}, chk: {}, box: {}, quiz: { asked: 0, right: 0, byArea: {} },
       exams: {}, theme: 'dark', papers: [],
       written: { ans: {}, marks: {}, history: [] },
-      plan: { done: {}, start: '' }
+      plan: { done: {}, start: '' },
+      catchup: { done: {} }
     };
     try {
       var raw = localStorage.getItem(KEY);
@@ -28,6 +29,8 @@
       if (!saved.written) saved.written = base.written;
       if (!saved.plan) saved.plan = base.plan;
       if (!saved.plan.done) saved.plan.done = {};
+      if (!saved.catchup) saved.catchup = { done: {} };
+      if (!saved.catchup.done) saved.catchup.done = {};
       ['ans', 'marks', 'history'].forEach(function (k) {
         if (!saved.written[k]) saved.written[k] = base.written[k];
       });
@@ -95,6 +98,7 @@
     { g: 'Overview' },
     { id: 'dash', ico: '◈', label: 'Dashboard' },
     { id: 'plan', ico: '✓̲', label: 'Revision plan' },
+    { id: 'catchup', ico: '↻', label: 'Catch-up' },
     { id: 'notes', ico: '✎', label: 'Tutor notes' },
     { g: 'Core exams' },
     { id: 'p1', ico: '①', label: 'Paper 1' },
@@ -425,6 +429,116 @@
   }
 
   var NOTES = D.tutorNotes;
+
+  /* Catch-up — condensed recovery for missed plan days */
+  var CATCH = D.catchup;
+
+  function catchupToText() {
+    var L = String.fromCharCode(10);
+    var out = ['T LEVEL DIGITAL — CATCH-UP', '', CATCH.intro, '', CATCH.howto, ''];
+    CATCH.days.forEach(function (d) {
+      out.push('');
+      out.push('==================================================');
+      out.push('DAY ' + d.day + ' — ' + d.title + '  (' + d.plan + ', area ' + d.area + ', ~' + d.mins + ' min)');
+      out.push('==================================================');
+      out.push('');
+      out.push('WHY IT MATTERS: ' + d.why);
+      d.core.forEach(function (c) {
+        out.push('');
+        out.push('-- ' + c.h + ' --');
+        c.b.forEach(function (b) { out.push('  * ' + b); });
+      });
+      out.push('');
+      out.push('-- TRAPS --');
+      d.traps.forEach(function (t) { out.push('  ! ' + t); });
+      out.push('');
+      out.push('-- CHECKPOINT (from memory, no notes) --');
+      out.push('  ' + d.check);
+      out.push('');
+      out.push('-- QUESTIONS --');
+      d.qs.forEach(function (q) {
+        out.push('');
+        out.push('Q' + q.n + ' (' + q.marks + ' marks) ' + q.cmd);
+        out.push(q.q);
+      });
+      out.push('');
+      out.push('-- MODEL ANSWERS --');
+      d.qs.forEach(function (q) {
+        out.push('');
+        out.push('Q' + q.n + ': ' + q.a);
+      });
+    });
+    return out.join(L);
+  }
+
+  views.catchup = function () {
+    var totalQ = 0, totalDays = CATCH.days.length, doneDays = 0, totalMins = 0;
+    CATCH.days.forEach(function (d) {
+      totalQ += d.qs.length;
+      totalMins += d.mins;
+      if (state.catchup.done['d' + d.day]) doneDays++;
+    });
+
+    var h = '<h1>Catch-up</h1><p class="lede">' + esc(CATCH.intro) + '</p>';
+
+    h += '<div class="grid four" style="margin-bottom:16px">' +
+      statCard(totalDays - doneDays, 'Days to recover') +
+      statCard(doneDays, 'Done') +
+      statCard(totalQ, 'Questions') +
+      statCard(Math.round(totalMins / 60) + 'h', 'Total time') +
+      '</div>';
+
+    h += '<section class="panel" style="margin-bottom:16px">' +
+      '<h3>How to use this</h3><p class="small">' + esc(CATCH.howto) + '</p>' +
+      '<div class="btn-row"><button class="btn btn-sm" id="exportCatchup">Download as text file</button>' +
+      '<span class="small muted">Everything below, questions and model answers, as plain text — ' +
+      'for working somewhere with no signal.</span></div></section>';
+
+    CATCH.days.forEach(function (d, di) {
+      var done = !!state.catchup.done['d' + d.day];
+      h += '<section class="panel area-card' + (!done && di === 0 ? ' open' : '') + '" data-area="cu' + d.day + '">' +
+        '<div class="area-head"><div class="n">' + d.day + '</div>' +
+        '<div style="flex:1"><h3>' + esc(d.title) + (done ? ' <span class="pill ok">done</span>' : '') + '</h3>' +
+        '<div class="small muted">' + esc(d.plan) + ' · content area ' + esc(d.area) +
+        ' · about ' + d.mins + ' min · ' + d.qs.length + ' questions</div></div>' +
+        '<div class="chev">›</div></div><div class="area-body">';
+
+      h += '<p class="small"><b>Why this one matters.</b> ' + esc(d.why) + '</p>';
+
+      d.core.forEach(function (c) {
+        h += '<div class="qbox"><b>' + esc(c.h) + '</b><ul class="tight">';
+        c.b.forEach(function (b) { h += '<li>' + esc(b) + '</li>'; });
+        h += '</ul></div>';
+      });
+
+      h += '<div class="tnote-cost"><b>Traps</b><ul class="tight">';
+      d.traps.forEach(function (t) { h += '<li>' + esc(t) + '</li>'; });
+      h += '</ul></div>';
+
+      h += '<div class="tnote-how"><b>Checkpoint — close the page and write this from memory</b><br>' +
+        esc(d.check) + '</div>';
+
+      h += '<h4 style="margin:14px 0 6px">Questions</h4>';
+      d.qs.forEach(function (q) {
+        h += '<div class="tnote qbox">' +
+          '<div class="tnote-head"><span class="qn">Q' + q.n + '</span>' +
+          '<span class="pill">' + esc(q.cmd) + '</span>' +
+          '<span class="small muted">' + q.marks + ' marks</span></div>' +
+          '<div class="qq">' + esc(q.q) + '</div>' +
+          '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">Model answer</button></div>' +
+          '<div class="qa"><b>Model answer</b><p>' + esc(q.a) + '</p></div>' +
+          '</div>';
+      });
+
+      h += '<div class="btn-row" style="margin-top:12px">' +
+        '<label class="chk"><input type="checkbox" data-cudone="d' + d.day + '"' +
+        (done ? ' checked' : '') + '> Mark day ' + d.day + ' as done</label></div>';
+
+      h += '</div></section>';
+    });
+
+    return h;
+  };
 
   views.notes = function () {
     var qTotal = 0, attempted = 0;
@@ -1655,6 +1769,16 @@
       return;
     }
     if (t.id === 'exportPapers') { exportPapers(); return; }
+    if (t.id === 'exportCatchup') {
+      var cblob = new Blob([catchupToText()], { type: 'text/plain' });
+      var ca = document.createElement('a');
+      ca.href = URL.createObjectURL(cblob);
+      ca.download = 'tlevel-catchup.txt';
+      document.body.appendChild(ca);
+      ca.click();
+      setTimeout(function () { URL.revokeObjectURL(ca.href); ca.remove(); }, 500);
+      return;
+    }
     if (t.id === 'exportNotes') {
       var blob = new Blob([notesToText()], { type: 'text/plain' });
       var a = document.createElement('a');
@@ -1739,6 +1863,11 @@
       state.plan.done[t.getAttribute('data-plan')] = t.checked;
       save();
       updatePlanCounters(t);
+    }
+    if (t.matches('[data-cudone]')) {
+      state.catchup.done[t.getAttribute('data-cudone')] = t.checked;
+      save();
+      render();
     }
     if (t.id === 'planStart') { state.plan.start = t.value; save(); render(); }
     /* ticking a marking point updates the suggested mark live, without a redraw */
