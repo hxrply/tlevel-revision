@@ -106,6 +106,7 @@
     { g: 'Projects' },
     { id: 'esp', ico: '▤', label: 'Employer Set Project' },
     { id: 'os', ico: '◆', label: 'Occupational Specialism' },
+    { id: 'webdev', ico: '</>', label: 'HTML, CSS, JS & SQL' },
     { g: 'Practice' },
     { id: 'quiz', ico: '✓', label: 'Quiz' },
     { id: 'written', ico: '✍', label: 'Written practice' },
@@ -432,6 +433,8 @@
 
   /* Catch-up — condensed recovery for missed plan days */
   var CATCH = D.catchup;
+  var WEB = D.webdev;
+  var webTrack = WEB.tracks[0].id;
 
   function catchupToText() {
     var L = String.fromCharCode(10);
@@ -536,6 +539,44 @@
 
       h += '</div></section>';
     });
+
+    return h;
+  };
+
+  views.webdev = function () {
+    var tr = WEB.tracks.filter(function (t) { return t.id === webTrack; })[0] || WEB.tracks[0];
+
+    var h = '<h1>HTML, CSS, JavaScript &amp; SQL</h1>' +
+      '<p class="lede">' + esc(WEB.intro) + '</p>';
+
+    h += '<section class="panel" style="margin-bottom:16px">' +
+      '<p class="small"><b>How to use this.</b> ' + esc(WEB.howto) + '</p></section>';
+
+    h += '<div class="btn-row" style="margin-bottom:16px">';
+    WEB.tracks.forEach(function (t) {
+      h += '<button class="btn' + (t.id === webTrack ? '' : ' btn-sm') + '" data-webtrack="' + t.id + '"' +
+        (t.id === webTrack ? ' style="font-weight:700"' : '') + '>' + esc(t.name) + '</button>';
+    });
+    h += '</div>';
+
+    h += '<section class="panel" style="margin-bottom:16px">' +
+      '<h3>' + esc(tr.name) + ' — ' + esc(tr.blurb) + '</h3>' +
+      '<p class="small"><b>Why it is assessed.</b> ' + esc(tr.why) + '</p></section>';
+
+    tr.lessons.forEach(function (l, li) {
+      h += '<section class="panel area-card' + (li === 0 ? ' open' : '') +
+        '" data-area="web' + tr.id + li + '">' +
+        '<div class="area-head"><div class="n">' + (li + 1) + '</div>' +
+        '<div style="flex:1"><h3>' + esc(l.t) + '</h3></div>' +
+        '<div class="chev">›</div></div><div class="area-body">';
+      h += '<p class="small">' + esc(l.b) + '</p>';
+      h += '<pre><code>' + esc(l.code.join(String.fromCharCode(10))) + '</code></pre>';
+      h += '<div class="tnote-cost"><b>The mistake that costs marks</b><br>' + esc(l.note) + '</div>';
+      h += '</div></section>';
+    });
+
+    h += '<section class="panel"><h3>Build this</h3><p>' + esc(tr.task) + '</p>' +
+      '<p class="small muted">Type it, run it, break it. A track is not done until something works in a browser.</p></section>';
 
     return h;
   };
@@ -1769,6 +1810,8 @@
       return;
     }
     if (t.id === 'exportPapers') { exportPapers(); return; }
+    var wt = t.closest('[data-webtrack]');
+    if (wt) { webTrack = wt.getAttribute('data-webtrack'); render(); return; }
     if (t.id === 'exportCatchup') {
       var cblob = new Blob([catchupToText()], { type: 'text/plain' });
       var ca = document.createElement('a');
