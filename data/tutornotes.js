@@ -497,7 +497,50 @@ window.TLDATA.tutorNotes = {
           got: null,
           cost: 'Not attempted. Every fact needed had been taught in the same session twenty minutes earlier, in the four-method table. The blocker was the absence of a scaffold rather than the content - the same pattern as question 61.' }
       ]
+    },
+
+    {
+      day: 18, date: '5 Oct', topic: 'Content area 6.1 and 6.2 - Data, information and data types',
+      score: '4/15',
+      questions: [
+
+        { n: 67, marks: 3, cmd: 'Explain',
+          q: 'Explain the difference between data, information and knowledge, using one example that runs through all three.',
+          how: 'Three rungs, and each adds one named ingredient: context turns data into information, experience turns information into knowledge. Carry a single example up all three rungs - that is what proves you understand the difference rather than reciting it.',
+          answer: 'Data is raw unprocessed fact with no context, such as the number 37 (1). Information is that data processed and given context so it means something, such as 37 orders were placed on Tuesday (1). Knowledge is information combined with experience and understanding so a decision can be made, such as recognising that Tuesday spikes follow the weekly marketing email and therefore moving the email to Monday (1).',
+          got: '1/3',
+          cost: 'Data as information without context carried the right idea and knowledge as understanding of a circumstance was close, so one mark. Information itself was left blank, and no example was carried through, which is the part that distinguishes the three rungs rather than just naming them.' },
+
+        { n: 68, marks: 2, cmd: 'State',
+          q: 'State the four metrics used to judge the value of data.',
+          how: 'Veracity appears in two different lists - here as a value metric and again as one of the six Vs of big data. Velocity appears only in the six Vs. That overlap is what the distractors are built from.',
+          answer: 'Quantity, timeframe, source, veracity.',
+          got: '1/2',
+          cost: 'Quantity and timeframe were correct, and accuracy is veracity in plain words. Quality is not one of the four, and source - how trustworthy the origin is - was missing.' },
+
+        { n: 69, marks: 4, cmd: 'Explain',
+          q: 'Explain the difference between structured and unstructured data, giving one example of each and one consequence of the difference.',
+          how: 'Three separate demands in one question: the difference, an example each, and a consequence. Number them 1, 2, 3 on the page before writing - marks are routinely lost by answering the first part well and forgetting the other two.',
+          answer: 'Structured data has a defined format and fields, such as a table of customer records with name, date of birth and order total (1), so it can be searched, sorted and queried directly with SQL (1). Unstructured data has no predefined model - free-text customer feedback, images, audio (1) - so it must be stored as whole objects and needs processing such as text or image analysis before it can be queried, which costs more time and storage (1).',
+          got: '1/4',
+          cost: 'The has a frame versus has no frame distinction was the right idea and scored. No example was given for either type and no consequence was stated, so three of the four marks were unreachable. Unstructured is also not the same as unordered - it means there is no predefined data model, not that the items are in no particular sequence.' },
+
+        { n: 70, marks: 3, cmd: 'Explain',
+          q: 'A system stores dates of birth as strings. Explain two problems this causes.',
+          how: 'The three consequences of a wrong data type are always the same: storage size, whether arithmetic and sorting work, and what validation is possible. Dates as strings fail on the second and third.',
+          answer: 'Dates held as strings sort alphabetically rather than chronologically, so 01/12/2001 sorts before 02/01/1990 and any ordered report or age calculation is wrong (2). Arithmetic and comparison are also impossible without conversion, so the system cannot calculate an age or select everyone born before a given date, and no date-specific validation can be applied, letting impossible values such as 31/02 be stored (1).',
+          got: '1/3',
+          cost: 'The sorting problem was correctly identified and scored. The second problem given was storage size, which is not the issue - a date string is not materially larger. The two marks available were for arithmetic and comparison being impossible, so no age can be calculated, and for validation being impossible, so a date such as 31/02 is accepted.' },
+
+        { n: 71, marks: 3, cmd: 'State',
+          q: 'State the three representations of quantitative data and give one example of each.',
+          how: 'Quantitative means numeric and measurable, not large in amount. The three representations divide by how the number arises: counted, measured, or grouped.',
+          answer: 'Discrete - whole countable values, such as the number of orders placed. Continuous - any value within a range, obtained by measurement, such as a temperature of 21.35 degrees. Categorical - values falling into named groups, such as garment sizes small, medium and large.',
+          got: '0/3',
+          cost: 'Quantitative was read as high amounts of data. It means numeric and measurable - the quantity in the word refers to the data being a quantity, not to there being a lot of it. The three representations were not given.' }
+      ]
     }
+
 
   ]
 };
