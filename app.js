@@ -184,7 +184,7 @@
      with a row of chips to jump between parts. */
   function docBody(parts) {
     var idx = '<nav class="topic-index" aria-label="On this page">' + parts.map(function (p, i) {
-      return '<button class="chip" data-jump-part="' + i + '">' + esc(p.h) + '</button>';
+      return '<button class="chip" data-jump-part="' + i + '" title="' + esc(p.h) + '"><span class="ctext">' + esc(p.h) + '</span></button>';
     }).join('') + '</nav>';
     return idx + '<article class="topic-card doc">' + parts.map(function (p, i) {
       return '<section class="part" id="part-' + i + '"><h2 class="doc-h">' +
@@ -220,6 +220,12 @@
     if (!area) { pendingOpen = null; return fallback || 'dash'; }
     pendingOpen = bits[1] || null;
     return 'p' + area.paper + '/' + area.id;
+  }
+
+  function scrollToEl(el, block) {
+    if (!el) return;
+    var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: block || 'start' });
   }
 
   function copyText(text, btn) {
@@ -854,8 +860,8 @@
       '<span class="fact"><b data-area-conf="' + a.id + '">' + areaProgress(a) + '%</b> confident</span></div></header>';
 
     h += '<nav class="topic-index" aria-label="Topics in this area">' + a.topics.map(function (t) {
-      return '<button class="chip" data-jump="' + t.id + '"><span class="dot c' + confOf(t.id) + '"></span>' +
-        '<span class="cid">' + t.id + '</span> ' + esc(t.title) + '</button>';
+      return '<button class="chip" data-jump="' + t.id + '" title="' + esc(t.title) + '"><span class="dot c' + confOf(t.id) + '"></span>' +
+        '<span class="cid">' + t.id + '</span><span class="ctext">' + esc(t.title) + '</span></button>';
     }).join('') + '</nav>';
 
     h += a.topics.map(topicCard).join('');
@@ -1758,7 +1764,7 @@
     var id = pendingOpen;
     pendingOpen = null;
     var el = $('[data-topic="' + id + '"]');
-    if (el) setTimeout(function () { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 30);
+    if (el) setTimeout(function () { scrollToEl(el); }, 30);
   }
 
   /* ── Events ────────────────────────────────────────────────────── */
@@ -1791,13 +1797,13 @@
     var jump = t.closest('[data-jump]');
     if (jump) {
       var target = $('[data-topic="' + jump.getAttribute('data-jump') + '"]');
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      scrollToEl(target);
       return;
     }
     var jumpPart = t.closest('[data-jump-part]');
     if (jumpPart) {
       var sec = $('#part-' + jumpPart.getAttribute('data-jump-part'));
-      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      scrollToEl(sec);
       return;
     }
 
@@ -1858,6 +1864,7 @@
     if (t.id === 'expandAll') { $$('.area-card').forEach(function (c) { c.classList.add('open'); }); return; }
     if (t.id === 'collapseAll') { $$('.area-card,.topic').forEach(function (c) { c.classList.remove('open'); }); return; }
 
+    if (t.id === 'toTop') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
     if (t.id === 'menuBtn') { document.body.classList.toggle('nav-open'); return; }
     /* tapping the dimmed overlay closes the drawer */
     if (document.body.classList.contains('nav-open') && !t.closest('.sidebar')) {
@@ -2140,6 +2147,13 @@
     if (currentView() !== 'papers') { papers.open = null; papers.practice = false; }
     render();
   });
+
+  /* The back-to-top button appears once a page has been scrolled a long way. */
+  var toTopShown = false;
+  window.addEventListener('scroll', function () {
+    var show = window.scrollY > 900;
+    if (show !== toTopShown) { toTopShown = show; var b = $('#toTop'); if (b) b.hidden = !show; }
+  }, { passive: true });
 
   /* ── Boot ──────────────────────────────────────────────────────── */
   document.documentElement.setAttribute('data-theme', state.theme || 'light');
