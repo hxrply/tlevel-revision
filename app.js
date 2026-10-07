@@ -329,7 +329,7 @@
 
     /* catch-up */
     var cuWaiting = cuPending().length, cuMarked = 0, cuTotal = 0;
-    CATCH.days.forEach(function (d) { d.qs.forEach(function (q) { cuTotal++; if (markedQ(q.n)) cuMarked++; }); });
+    CATCH.days.forEach(function (d) { d.qs.forEach(function (q) { cuTotal++; if (isScored(q.n)) cuMarked++; }); });
     h += '<section class="panel"><h3>Catch-up</h3>' +
       '<p class="small muted">Days 17 to 28 condensed, with an answer box under every question.</p>' +
       '<div class="progress-row"><div class="name"><b>' + cuMarked + ' of ' + cuTotal + '</b> questions marked</div>' +
@@ -640,6 +640,7 @@
      into the chat. Once a question is marked in the tutor notes, the score
      and feedback appear here automatically, matched on question number. */
   function cuAns(n) { return state.catchup.ans[n] || ''; }
+  function isScored(n) { var mk = markedQ(n); return !!(mk && mk.q.got); }
   function hasAns(n) { return !!cuAns(n).trim(); }
   function cuFind(n) {
     var hit = null;
@@ -649,7 +650,7 @@
   function cuPending() {
     var out = [];
     CATCH.days.forEach(function (d) {
-      d.qs.forEach(function (q) { if (!markedQ(q.n) && hasAns(q.n)) out.push({ d: d, q: q }); });
+      d.qs.forEach(function (q) { if (!isScored(q.n) && hasAns(q.n)) out.push({ d: d, q: q }); });
     });
     return out;
   }
@@ -658,16 +659,16 @@
     if (mk && mk.q.got) {
       return '<span class="pill ' + (parseInt(mk.q.got, 10) / q.marks >= 0.6 ? 'ok' : 'warn') + '">you scored ' + esc(mk.q.got) + '</span>';
     }
-    if (mk) return '<span class="pill warn">marked · not attempted</span>';
     if (hasAns(q.n)) {
       return state.catchup.sent[q.n] ? '<span class="pill p1">sent · waiting to be marked</span>'
                                      : '<span class="pill p1">answered · ready to send</span>';
     }
+    if (mk) return '<span class="pill warn">not attempted yet · answer it now</span>';
     return '<span class="pill">not answered yet</span>';
   }
   function cuDayCount(d) {
     var n = 0;
-    d.qs.forEach(function (q) { if (hasAns(q.n) || markedQ(q.n)) n++; });
+    d.qs.forEach(function (q) { if (hasAns(q.n) || isScored(q.n)) n++; });
     return 'answered ' + n + '/' + d.qs.length;
   }
 
@@ -714,7 +715,7 @@
       if (state.catchup.done['d' + d.day]) doneDays++;
       d.qs.forEach(function (q) {
         totalQ++;
-        if (markedQ(q.n)) markedQs++;
+        if (isScored(q.n)) markedQs++;
         else if (hasAns(q.n)) answered++;
       });
     });
@@ -748,8 +749,9 @@
         var mk = markedQ(q.n);
         if (mk && mk.q.got) { dayMarked++; dayGot += parseInt(mk.q.got, 10) || 0; dayPoss += mk.q.marks; }
       });
-      var firstOpen = !done && dayMarked < d.qs.length &&
-        CATCH.days.slice(0, di).every(function (x) { return state.catchup.done['d' + x.day] || x.qs.every(function (q) { return markedQ(q.n); }); });
+      /* open the first day that still has work in it */
+      var settled = function (x) { return state.catchup.done['d' + x.day] || x.qs.every(function (q) { return markedQ(q.n); }); };
+      var firstOpen = !settled(d) && CATCH.days.slice(0, di).every(settled);
 
       h += '<section class="panel area-card' + (firstOpen ? ' open' : '') + '" data-area="cu' + d.day + '">' +
         '<div class="area-head"><div class="n">' + d.day + '</div>' +
@@ -778,8 +780,8 @@
           '<span style="margin-left:auto" data-custatus="' + q.n + '">' + cuStatus(q) + '</span></div>' +
           '<div class="qq">' + esc(q.q) + '</div>';
 
-        if (mk) {
-          if (mk.q.how) h += '<div class="tnote-how"><b>How to answer</b><br>' + esc(mk.q.how) + '</div>';
+        if (mk && mk.q.how) h += '<div class="tnote-how"><b>How to answer</b><br>' + esc(mk.q.how) + '</div>';
+        if (mk && mk.q.got) {
           if (mine.trim()) h += '<div class="cu-mine"><b>Your answer</b><div>' + esc(mine) + '</div></div>';
           h += '<div class="qbox bare open">' +
             '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">Model answer and feedback</button></div>' +
@@ -795,7 +797,8 @@
             '<div class="qbox bare">' +
             '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">Show the model answer</button>' +
             '<span class="small muted">Answer first — reading it before you write teaches you nothing.</span></div>' +
-            '<div class="qa"><b>Model answer</b><p>' + esc(q.a) + '</p></div></div>';
+            '<div class="qa"><b>Model answer</b><p>' + esc(mk ? mk.q.answer : q.a) + '</p>' +
+            (mk && mk.q.cost ? '<div class="tnote-cost"><b>Feedback</b><br>' + esc(mk.q.cost) + '</div>' : '') + '</div></div>';
         }
         h += '</div>';
       });
