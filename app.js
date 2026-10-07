@@ -15,7 +15,7 @@
   function load() {
     var base = {
       conf: {}, chk: {}, box: {}, quiz: { asked: 0, right: 0, byArea: {} },
-      exams: {}, theme: 'dark', papers: [],
+      exams: {}, theme: 'light', themeV: 2, papers: [],
       written: { ans: {}, marks: {}, history: [] },
       plan: { done: {}, start: '' },
       catchup: { done: {} }
@@ -31,6 +31,9 @@
       if (!saved.plan.done) saved.plan.done = {};
       if (!saved.catchup) saved.catchup = { done: {} };
       if (!saved.catchup.done) saved.catchup.done = {};
+      /* The redesign made the beige theme the default. Anyone still on the
+         old dark default is moved to it once; choosing dark again sticks. */
+      if (saved.themeV !== 2) { saved.theme = 'light'; saved.themeV = 2; }
       ['ans', 'marks', 'history'].forEach(function (k) {
         if (!saved.written[k]) saved.written[k] = base.written[k];
       });
@@ -93,27 +96,176 @@
       items.map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') + '</ul>';
   }
 
+  /* ── Content rendering ─────────────────────────────────────────── */
+
+  /* Authored content may use **bold** and `code`. Escaping happens first,
+     so nothing in the content can ever inject markup. */
+  function fmt(s) {
+    return esc(s)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+  }
+
+  /* The part of the hash after the view, e.g. "ca2" in #p1/ca2. */
+  function subPath() { return (location.hash || '').slice(1).split('/')[1] || ''; }
+
+  function crumbs(items) {
+    return '<nav class="crumbs" aria-label="Breadcrumb">' + items.map(function (it, i) {
+      var label = it[1] ? '<button data-go="' + it[1] + '">' + esc(it[0]) + '</button>' : '<span>' + esc(it[0]) + '</span>';
+      return (i ? '<span class="sep" aria-hidden="true">›</span>' : '') + label;
+    }).join('') + '</nav>';
+  }
+
+  function factsHTML(facts) {
+    if (!facts || !facts.length) return '';
+    return '<div class="facts">' + facts.map(function (f) {
+      return '<span class="fact"><b>' + esc(f[0]) + '</b>' + (f[1] ? ' ' + esc(f[1]) : '') + '</span>';
+    }).join('') + '</div>';
+  }
+
+  function pageHead(title, lede, facts) {
+    return '<header class="page-head"><h1>' + esc(title) + '</h1>' +
+      (lede ? '<p class="lede">' + fmt(lede) + '</p>' : '') + factsHTML(facts) + '</header>';
+  }
+
+  /* Code shown on the current page, kept so the copy buttons copy the
+     original text rather than whatever the browser rendered. Reset per render. */
+  var codeStore = [];
+  function codeFig(c) {
+    var i = codeStore.push(c.src) - 1;
+    return '<figure class="codefig"><figcaption><span>' + esc(c.title || '') +
+      (c.lang ? '<span class="lang">' + esc(c.lang) + '</span>' : '') + '</span>' +
+      '<button class="copy" data-copy="' + i + '" type="button">Copy</button></figcaption>' +
+      '<pre><code>' + esc(c.src) + '</code></pre></figure>' +
+      (c.note ? '<p class="note">' + fmt(c.note) + '</p>' : '');
+  }
+
+  function tableHTML(t) {
+    var num = t.num || [];
+    function cells(row, tag) {
+      return row.map(function (v, i) {
+        return '<' + tag + (tag === 'td' && num.indexOf(i) !== -1 ? ' class="num"' : '') + '>' + fmt(v) + '</' + tag + '>';
+      }).join('');
+    }
+    return '<table class="mtable"><thead><tr>' + t.cols.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') +
+      '</tr></thead><tbody>' + t.rows.map(function (r) { return '<tr>' + cells(r, 'td') + '</tr>'; }).join('') + '</tbody>' +
+      (t.foot ? '<tfoot><tr>' + cells(t.foot, 'td') + '</tr></tfoot>' : '') + '</table>';
+  }
+
+  function blockHTML(b) {
+    if (b.p) return '<p>' + fmt(b.p) + '</p>';
+    if (b.ul) return '<ul class="clean">' + b.ul.map(function (x) { return '<li>' + fmt(x) + '</li>'; }).join('') + '</ul>';
+    if (b.ol) return '<ol class="clean">' + b.ol.map(function (x) { return '<li>' + fmt(x) + '</li>'; }).join('') + '</ol>';
+    if (b.table) return tableHTML(b.table);
+    if (b.code) return codeFig(b.code);
+    if (b.kw) {
+      return '<div class="kw-grid">' + b.kw.map(function (k) {
+        return '<div class="kw"><b>' + esc(k.t) + '</b><span>' + fmt(k.d) + '</span></div>';
+      }).join('') + '</div>';
+    }
+    if (b.callout) {
+      var c = b.callout;
+      return '<div class="callout ' + esc(c.kind || '') + '">' +
+        (c.title ? '<b>' + esc(c.title) + '</b><br>' : '') + (c.text ? fmt(c.text) : '') +
+        (c.list ? '<ul>' + c.list.map(function (x) { return '<li>' + fmt(x) + '</li>'; }).join('') + '</ul>' : '') + '</div>';
+    }
+    if (b.check) {
+      return '<ul class="chk">' + b.check.items.map(function (item, i) {
+        var k = b.check.key + '-' + i;
+        return '<li class="' + (state.chk[k] ? 'done' : '') + '">' +
+          '<input type="checkbox" id="chk-' + k + '" data-chk="' + k + '"' + (state.chk[k] ? ' checked' : '') + '>' +
+          '<label for="chk-' + k + '"><span>' + fmt(item) + '</span></label></li>';
+      }).join('') + '</ul>';
+    }
+    return '';
+  }
+
+  /* A document page: every part in one card, separated by clean dividers,
+     with a row of chips to jump between parts. */
+  function docBody(parts) {
+    var idx = '<nav class="topic-index" aria-label="On this page">' + parts.map(function (p, i) {
+      return '<button class="chip" data-jump-part="' + i + '">' + esc(p.h) + '</button>';
+    }).join('') + '</nav>';
+    return idx + '<article class="topic-card doc">' + parts.map(function (p, i) {
+      return '<section class="part" id="part-' + i + '"><h2 class="doc-h">' +
+        (p.ic ? '<span class="ic" aria-hidden="true">' + esc(p.ic) + '</span>' : '') + esc(p.h) + '</h2>' +
+        p.blocks.map(blockHTML).join('') + '</section>';
+    }).join('') + '</article>';
+  }
+
+  function hubCard(route, page) {
+    return '<button class="hub-card" data-go="' + route + '/' + page.id + '">' +
+      '<span class="hub-top"><span class="hub-num">' + esc(page.code) + '</span></span>' +
+      '<h3>' + esc(page.title) + '</h3><p>' + fmt(page.summary) + '</p>' +
+      '<span class="hub-meta">' + (page.facts || []).slice(0, 2).map(function (f) {
+        return '<span class="pill">' + esc(f[0]) + (f[1] ? ' ' + esc(f[1]) : '') + '</span>';
+      }).join('') + '</span></button>';
+  }
+
+  function pager(route, pages, current) {
+    var i = -1;
+    pages.forEach(function (p, n) { if (p.id === current) i = n; });
+    var prev = pages[i - 1], next = pages[i + 1];
+    return '<div class="pager">' +
+      (prev ? '<button class="btn" data-go="' + route + '/' + prev.id + '">‹ ' + esc(prev.code) + ' · ' + esc(prev.title) + '</button>' : '<span></span>') +
+      (next ? '<button class="btn" data-go="' + route + '/' + next.id + '">' + esc(next.code) + ' · ' + esc(next.title) + ' ›</button>' : '<span></span>') +
+      '</div>';
+  }
+
+  /* Turns an old-style "area/topic" link (from the plan, dashboard and
+     search) into the area page route, remembering which topic to scroll to. */
+  function routeForOpen(open, fallback) {
+    var bits = String(open).split('/');
+    var area = AREAS.filter(function (a) { return a.id === bits[0]; })[0];
+    if (!area) { pendingOpen = null; return fallback || 'dash'; }
+    pendingOpen = bits[1] || null;
+    return 'p' + area.paper + '/' + area.id;
+  }
+
+  function copyText(text, btn) {
+    function done(ok) {
+      if (!btn) return;
+      var was = btn.textContent;
+      btn.textContent = ok ? 'Copied' : 'Select and copy';
+      setTimeout(function () { btn.textContent = was; }, 1400);
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      return;
+    }
+    /* Older browsers and file:// pages: fall back to a hidden textarea. */
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (err) {}
+    ta.remove();
+    done(ok);
+  }
+
   /* ── Navigation ────────────────────────────────────────────────── */
   var NAV = [
     { g: 'Overview' },
     { id: 'dash', ico: '◈', label: 'Dashboard' },
-    { id: 'plan', ico: '✓̲', label: 'Revision plan' },
+    { id: 'plan', ico: '✓', label: 'Revision plan' },
     { id: 'catchup', ico: '↻', label: 'Catch-up' },
     { id: 'notes', ico: '✎', label: 'Tutor notes' },
     { g: 'Core exams' },
-    { id: 'p1', ico: '①', label: 'Paper 1' },
-    { id: 'p2', ico: '②', label: 'Paper 2' },
+    { id: 'p1', ico: '①', label: 'Core Paper 1' },
+    { id: 'p2', ico: '②', label: 'Core Paper 2' },
     { g: 'Projects' },
     { id: 'esp', ico: '▤', label: 'Employer Set Project' },
     { id: 'os', ico: '◆', label: 'Occupational Specialism' },
-    { id: 'webdev', ico: '</>', label: 'HTML, CSS, JS & SQL' },
     { g: 'Practice' },
-    { id: 'quiz', ico: '✓', label: 'Quiz' },
+    { id: 'quiz', ico: '?', label: 'Quiz' },
     { id: 'written', ico: '✍', label: 'Written practice' },
     { id: 'cards', ico: '⧉', label: 'Flashcards' },
     { id: 'papers', ico: '⎘', label: 'My past papers' },
     { id: 'python', ico: '{}', label: 'Python & algorithms' },
-    { id: 'technique', ico: '✎', label: 'Exam technique' }
+    { id: 'technique', ico: '★', label: 'Exam technique' }
   ];
 
   function renderNav() {
@@ -433,8 +585,6 @@
 
   /* Catch-up — condensed recovery for missed plan days */
   var CATCH = D.catchup;
-  var WEB = D.webdev;
-  var webTrack = WEB.tracks[0].id;
 
   function catchupToText() {
     var L = String.fromCharCode(10);
@@ -590,44 +740,6 @@
     return h;
   };
 
-  views.webdev = function () {
-    var tr = WEB.tracks.filter(function (t) { return t.id === webTrack; })[0] || WEB.tracks[0];
-
-    var h = '<h1>HTML, CSS, JavaScript &amp; SQL</h1>' +
-      '<p class="lede">' + esc(WEB.intro) + '</p>';
-
-    h += '<section class="panel" style="margin-bottom:16px">' +
-      '<p class="small"><b>How to use this.</b> ' + esc(WEB.howto) + '</p></section>';
-
-    h += '<div class="btn-row" style="margin-bottom:16px">';
-    WEB.tracks.forEach(function (t) {
-      h += '<button class="btn' + (t.id === webTrack ? '' : ' btn-sm') + '" data-webtrack="' + t.id + '"' +
-        (t.id === webTrack ? ' style="font-weight:700"' : '') + '>' + esc(t.name) + '</button>';
-    });
-    h += '</div>';
-
-    h += '<section class="panel" style="margin-bottom:16px">' +
-      '<h3>' + esc(tr.name) + ' — ' + esc(tr.blurb) + '</h3>' +
-      '<p class="small"><b>Why it is assessed.</b> ' + esc(tr.why) + '</p></section>';
-
-    tr.lessons.forEach(function (l, li) {
-      h += '<section class="panel area-card' + (li === 0 ? ' open' : '') +
-        '" data-area="web' + tr.id + li + '">' +
-        '<div class="area-head"><div class="n">' + (li + 1) + '</div>' +
-        '<div style="flex:1"><h3>' + esc(l.t) + '</h3></div>' +
-        '<div class="chev">›</div></div><div class="area-body">';
-      h += '<p class="small">' + esc(l.b) + '</p>';
-      h += '<pre><code>' + esc(l.code.join(String.fromCharCode(10))) + '</code></pre>';
-      h += '<div class="tnote-cost"><b>The mistake that costs marks</b><br>' + esc(l.note) + '</div>';
-      h += '</div></section>';
-    });
-
-    h += '<section class="panel"><h3>Build this</h3><p>' + esc(tr.task) + '</p>' +
-      '<p class="small muted">Type it, run it, break it. A track is not done until something works in a browser.</p></section>';
-
-    return h;
-  };
-
   views.notes = function () {
     var qTotal = 0, attempted = 0;
     NOTES.sessions.forEach(function (ses) {
@@ -685,164 +797,153 @@
   views.p1 = function () { return paperView(1); };
   views.p2 = function () { return paperView(2); };
 
+  var PAPER_INFO = {
+    1: { title: 'Core Paper 1', code: '19536',
+         lede: 'Content areas 1 to 4: problem solving, programming, emerging issues and the impact of digital, and legislation. ' +
+               'Section A is short-answer questions; Section B is five longer scenario questions that build in difficulty.' },
+    2: { title: 'Core Paper 2', code: '19537',
+         lede: 'Content areas 5 to 8: business context, data, digital environments, and security. ' +
+               'Section A is short-answer questions; Section B is five longer scenario questions that build in difficulty.' }
+  };
+
   function paperView(p) {
     var areas = AREAS.filter(function (a) { return a.paper === p; });
-    var intro = p === 1
-      ? 'Paper 1 covers content areas 1–4: problem solving, programming, emerging issues, and legislation. 2 hours 15 minutes, 90 marks, 30% of the core. Sections A and B, both ramping up in difficulty.'
-      : 'Paper 2 covers content areas 5–8: business context, data, digital environments, and security. 2 hours 15 minutes, 90 marks, 30% of the core. Sections A and B, both ramping up in difficulty.';
+    var area = areas.filter(function (a) { return a.id === subPath(); })[0];
+    return area ? areaPage(p, area, areas) : paperHub(p, areas);
+  }
 
-    var h = '<h1>Core Paper ' + p + '</h1><p class="lede">' + intro + '</p>';
-    h += '<div class="btn-row" style="margin-bottom:16px">' +
-      '<button class="btn btn-sm" id="expandAll">Expand all</button>' +
-      '<button class="btn btn-sm" id="collapseAll">Collapse all</button>' +
-      '<span class="small muted">Rate each topic: <span style="color:var(--red)">R</span> not secure · ' +
-      '<span style="color:var(--amber)">A</span> getting there · <span style="color:var(--green)">G</span> confident</span></div>';
+  function termCount(a) {
+    return a.topics.reduce(function (n, t) { return n + (t.terms ? t.terms.length : 0); }, 0);
+  }
 
+  function paperHub(p, areas) {
+    var info = PAPER_INFO[p];
+    var topics = areas.reduce(function (n, a) { return n + a.topics.length; }, 0);
+    var words = areas.reduce(function (n, a) { return n + termCount(a); }, 0);
+
+    var h = crumbs([['Home', 'dash'], [info.title, null]]) +
+      pageHead(info.title + ' · ' + info.code, info.lede, [
+        ['2h 15m', 'exam'], ['90', 'marks'], ['30%', 'of the core grade'],
+        [topics + '', 'topics'], [words + '', 'key words']
+      ]);
+
+    h += '<div class="section-label">Content areas</div><div class="hub-grid">';
     areas.forEach(function (a) {
-      h += '<section class="panel area-card" id="area-' + a.id + '" data-area="' + a.id + '">' +
-        '<div class="area-head"><div class="n">' + a.num + '</div>' +
-        '<div><h3>' + esc(a.title) + '</h3><div class="small muted">' + esc(a.blurb) + '</div></div>' +
-        '<div class="chev">›</div></div>' +
-        '<div class="area-body">' + areaProgressLine(a) +
-        a.topics.map(topicHTML).join('') + '</div></section>';
+      var pct = areaProgress(a);
+      h += '<button class="hub-card" data-go="p' + p + '/' + a.id + '">' +
+        '<span class="hub-top"><span class="hub-num">' + a.num + '</span><h3>' + esc(a.title) + '</h3></span>' +
+        '<p>' + esc(a.blurb) + '</p>' +
+        '<span class="hub-meta"><span class="pill">' + a.topics.length + ' topics</span>' +
+        '<span class="pill">' + termCount(a) + ' key words</span>' + bar(pct) + '</span></button>';
     });
+    h += '</div>';
+
+    h += '<div class="callout" style="margin-top:22px"><b>Rate as you go</b><br>' +
+      'Each topic has <b>R</b> · <b>A</b> · <b>G</b> buttons — red not secure, amber getting there, green confident. ' +
+      'The bars above, the dashboard and your weak-topic list all come from those ratings.</div>';
     return h;
   }
-  function areaProgressLine(a) {
-    return '<div class="progress-row" style="margin-bottom:14px"><div class="name small muted">Confidence across this area</div>' + bar(areaProgress(a)) + '</div>';
-  }
-  function topicHTML(t) {
-    var c = confOf(t.id);
-    var h = '<div class="topic" id="topic-' + t.id.replace('.', '-') + '" data-topic="' + t.id + '">' +
-      '<div class="topic-head"><span class="tid">' + t.id + '</span>' +
-      '<span class="ttitle">' + esc(t.title) + '</span>' +
-      '<span class="conf" data-conf="' + t.id + '">' +
-      [1, 2, 3].map(function (v) {
-        return '<button data-v="' + v + '" class="' + (c === v ? 'on' : '') + '" title="' +
-          (v === 1 ? 'Not secure' : v === 2 ? 'Getting there' : 'Confident') + '">' +
-          (v === 1 ? 'R' : v === 2 ? 'A' : 'G') + '</button>';
-      }).join('') + '</span></div>';
 
-    h += '<div class="topic-body">';
-    h += '<div class="sub-h">What you must know</div>' + listOf(t.must);
+  function areaPage(p, a, areas) {
+    var info = PAPER_INFO[p];
+    var h = crumbs([['Home', 'dash'], [info.title, 'p' + p], [a.num + '. ' + a.title, null]]) +
+      '<header class="page-head"><h1>' + a.num + '. ' + esc(a.title) + '</h1>' +
+      '<p class="lede">' + esc(a.blurb) + '</p>' +
+      '<div class="facts"><span class="fact"><b>' + a.topics.length + '</b> topics</span>' +
+      '<span class="fact"><b>' + termCount(a) + '</b> key words</span>' +
+      '<span class="fact"><b data-area-conf="' + a.id + '">' + areaProgress(a) + '%</b> confident</span></div></header>';
+
+    h += '<nav class="topic-index" aria-label="Topics in this area">' + a.topics.map(function (t) {
+      return '<button class="chip" data-jump="' + t.id + '"><span class="dot c' + confOf(t.id) + '"></span>' +
+        '<span class="cid">' + t.id + '</span> ' + esc(t.title) + '</button>';
+    }).join('') + '</nav>';
+
+    h += a.topics.map(topicCard).join('');
+
+    var i = areas.indexOf(a), prev = areas[i - 1], next = areas[i + 1];
+    var other = p === 1 ? 2 : 1;
+    h += '<div class="pager">' +
+      (prev ? '<button class="btn" data-go="p' + p + '/' + prev.id + '">‹ ' + prev.num + '. ' + esc(prev.title) + '</button>'
+            : '<button class="btn" data-go="p' + p + '">‹ ' + info.title + '</button>') +
+      (next ? '<button class="btn" data-go="p' + p + '/' + next.id + '">' + next.num + '. ' + esc(next.title) + ' ›</button>'
+            : '<button class="btn" data-go="p' + other + '">' + PAPER_INFO[other].title + ' ›</button>') +
+      '</div>';
+    return h;
+  }
+
+  function confButtons(id) {
+    var c = confOf(id);
+    return '<span class="conf" data-conf="' + id + '" role="group" aria-label="How confident are you?">' +
+      [1, 2, 3].map(function (v) {
+        var name = v === 1 ? 'Not secure' : v === 2 ? 'Getting there' : 'Confident';
+        return '<button data-v="' + v + '" class="' + (c === v ? 'on' : '') + '" title="' + name + '" aria-label="' + name + '"' +
+          ' aria-pressed="' + (c === v) + '">' + (v === 1 ? 'R' : v === 2 ? 'A' : 'G') + '</button>';
+      }).join('') + '</span>';
+  }
+
+  function topicCard(t) {
+    var h = '<article class="topic-card" id="topic-' + t.id.replace('.', '-') + '" data-topic="' + t.id + '">' +
+      '<header class="topic-card-head"><span class="tid">' + t.id + '</span><h2>' + esc(t.title) + '</h2>' +
+      confButtons(t.id) + '</header>';
+
+    h += '<section class="part"><h3 class="part-h"><span class="ic" aria-hidden="true">✓</span>What you must know</h3>' +
+      '<ul class="clean">' + t.must.map(function (m) { return '<li>' + fmt(m) + '</li>'; }).join('') + '</ul></section>';
 
     if (t.terms && t.terms.length) {
-      h += '<div class="sub-h">Key terms</div>';
-      h += t.terms.map(function (x) {
-        return '<div class="term"><b>' + esc(x.t) + '</b><span>' + esc(x.d) + '</span></div>';
-      }).join('');
+      h += '<section class="part"><h3 class="part-h"><span class="ic" aria-hidden="true">◆</span>Key words</h3>' +
+        blockHTML({ kw: t.terms }) + '</section>';
     }
     if (t.exam && t.exam.length) {
-      h += '<div class="sub-h">Exam-style questions</div>';
-      h += t.exam.map(function (q, i) {
-        var qid = areaOf(t.id) + '|' + t.id + '|' + i;
-        return '<div class="qbox"><div class="qq">[' + q.marks + ' marks] ' + esc(q.q) + '</div>' +
-          markingPanelHTML(qid, { hideQuestion: true }) + '</div>';
-      }).join('');
+      h += '<section class="part"><h3 class="part-h"><span class="ic" aria-hidden="true">✎</span>Exam-style questions</h3>' +
+        t.exam.map(function (q, i) {
+          var qid = areaOf(t.id) + '|' + t.id + '|' + i;
+          return '<div class="qbox"><div class="qq"><span class="pill p1">' + q.marks + ' marks</span> ' + esc(q.q) + '</div>' +
+            markingPanelHTML(qid, { hideQuestion: true }) + '</div>';
+        }).join('') + '</section>';
     }
-    h += '</div></div>';
-    return h;
+    return h + '</article>';
   }
 
-  /* ESP */
+  /* ESP — a hub of task cards, then one page per task. */
   views.esp = function () {
-    var e = D.esp;
-    var h = '<h1>Employer Set Project</h1>' +
-      '<p class="lede">' + esc(e.overview.duration) + ' · ' + esc(e.overview.marks) + '. Five assessed tasks plus an unassessed pre-release familiarisation task.</p>';
-
-    h += '<section class="panel" style="margin-bottom:14px"><h3>Time and marks per task</h3>' +
-      '<table class="mtable"><thead><tr><th>Task</th><th>Time</th><th>Marks</th></tr></thead><tbody>' +
-      e.overview.split.map(function (r) {
-        return '<tr><td><b>' + esc(r.task) + '</b></td><td class="mono" style="white-space:nowrap">' +
-          esc(r.time) + '</td><td class="mono">' + esc(r.marks) + '</td></tr>';
-      }).join('') + '</tbody></table>' +
-      '<p class="small muted" style="margin:12px 0 0">' + esc(e.overview.splitNote) + '</p></section>';
-
-    h += '<div class="grid two"><section class="panel"><h3>Conditions</h3>' + listOf(e.overview.conditions) +
-      '<p class="small muted">' + esc(e.overview.note) + '</p></section>';
-
-    h += '<section class="panel"><h3>Where the marks are</h3>' +
-      e.overview.aos.map(function (a) {
-        return '<div class="ao-row"><span class="code">' + a.code + '</span>' +
-          '<span class="small" style="flex:0 0 150px">' + esc(a.name) + '</span>' +
-          '<span class="abar"><i style="width:' + (a.pct / 41 * 100) + '%"></i></span>' +
-          '<span class="apct">' + a.pct + '%</span></div>';
-      }).join('') +
-      '<p class="small muted" style="margin-bottom:0">' + esc(e.overview.aoNote) + '</p></section></div>';
-
-    h += '<h2>The tasks</h2>';
-    e.tasks.forEach(function (t) {
-      h += '<section class="panel task-card">' +
-        '<div class="task-head"><span class="code">' + esc(t.code) + '</span><h3 style="margin:0">' + esc(t.title) + '</h3>' +
-        (t.assessed === false ? '<span class="pill warn">not assessed</span>' : '<span class="pill ok">assessed</span>') +
-        '</div>' +
-        '<p class="small muted">' + esc(t.time) + '</p>' +
-        '<p><b>You are given:</b> ' + esc(t.given) + '<br><b>You produce:</b> ' + esc(t.produce) + '</p>';
-
-      if (t.steps) h += '<div class="sub-h">How to use it</div>' + listOf(t.steps);
-      if (t.sections) {
-        t.sections.forEach(function (s) {
-          h += '<div class="sub-h">' + esc(s.h) + '</div>' + listOf(s.points);
-        });
-      }
-      if (t.defects) h += '<div class="sub-h">Defects to look for</div>' + listOf(t.defects);
-      if (t.strategy) h += '<div class="sub-h">Working strategy</div>' + listOf(t.strategy);
-      if (t.language) h += '<div class="sub-h">Language to use</div>' + listOf(t.language);
-      if (t.checklist) {
-        h += '<div class="sub-h">Checklist</div><ul class="chk">' +
-          t.checklist.map(function (c, i) {
-            var k = 'esp-' + t.id + '-' + i;
-            return '<li class="' + (state.chk[k] ? 'done' : '') + '"><input type="checkbox" data-chk="' + k + '"' +
-              (state.chk[k] ? ' checked' : '') + '><span>' + esc(c) + '</span></li>';
-          }).join('') + '</ul>';
-      }
-      if (t.mistakes) h += '<div class="sub-h">What loses marks</div>' + listOf(t.mistakes, 'warn-list');
-      h += '</section>';
-    });
-
-    h += '<section class="panel"><h3>' + esc(e.timing.title) + '</h3>' + listOf(e.timing.points) + '</section>';
-    return h;
+    var E = D.esp;
+    var page = E.pages.filter(function (p) { return p.id === subPath(); })[0];
+    if (page) {
+      return crumbs([['Home', 'dash'], ['Employer Set Project', 'esp'], [page.code, null]]) +
+        pageHead(page.code + ' — ' + page.title, page.summary, page.facts) +
+        docBody(page.parts) + pager('esp', E.pages, page.id);
+    }
+    return crumbs([['Home', 'dash'], ['Employer Set Project', null]]) +
+      pageHead(E.name + ' · ' + E.paper, E.intro, E.facts) +
+      '<div class="section-label">The tasks</div><div class="hub-grid">' +
+      E.pages.map(function (p) { return hubCard('esp', p); }).join('') + '</div>' +
+      '<div class="section-label">Overview</div>' + docBody(E.hub);
   };
 
-  /* Occupational Specialism */
+  /* Occupational Specialism — the four tasks, then the skills to build it. */
   views.os = function () {
-    var o = D.os;
-    var h = '<h1>Occupational Specialism</h1>' +
-      '<p class="lede">' + esc(o.overview.name) + ' — ' + esc(o.overview.duration) + ' · ' + esc(o.overview.marks) + '.</p>';
-
-    h += '<div class="grid two"><section class="panel"><h3>How it works</h3>' + listOf(o.overview.conditions) +
-      '<div class="sub-h">Generative AI</div><p class="small">' + esc(o.overview.aiNote) + '</p></section>';
-
-    h += '<section class="panel"><h3>Performance outcomes</h3>' +
-      o.overview.pos.map(function (p) {
-        return '<div class="ao-row"><span class="code">' + p.code + '</span>' +
-          '<span class="small" style="flex:1">' + esc(p.name) + '</span>' +
-          '<span class="abar" style="flex:0 0 70px"><i style="width:' + (p.pct / 39.6 * 100) + '%"></i></span>' +
-          '<span class="apct">' + p.pct + '%</span></div>';
-      }).join('') +
-      '<p class="small muted" style="margin-bottom:0">' + esc(o.overview.dpddNote) + '</p></section></div>';
-
-    h += '<h2>The four tasks</h2>';
-    o.tasks.forEach(function (t) {
-      h += '<section class="panel task-card"><div class="task-head"><span class="code">' + esc(t.code) + '</span>' +
-        '<h3 style="margin:0">' + esc(t.title) + '</h3></div>' +
-        '<p><b>You produce:</b> ' + esc(t.produce) + '</p>' + listOf(t.points) +
-        '<div class="sub-h">Checklist</div><ul class="chk">' +
-        t.checklist.map(function (c, i) {
-          var k = 'os-' + t.id + '-' + i;
-          return '<li class="' + (state.chk[k] ? 'done' : '') + '"><input type="checkbox" data-chk="' + k + '"' +
-            (state.chk[k] ? ' checked' : '') + '><span>' + esc(c) + '</span></li>';
-        }).join('') + '</ul></section>';
-    });
-
-    h += '<h2>Specialism content areas</h2>';
-    o.areas.forEach(function (a) {
-      h += '<section class="panel area-card" data-area="' + a.id + '">' +
-        '<div class="area-head"><div class="n">' + a.num + '</div><div><h3>' + esc(a.title) + '</h3></div><div class="chev">›</div></div>' +
-        '<div class="area-body">' + listOf(a.points) + '</div></section>';
-    });
-    return h;
+    var O = D.os, id = subPath();
+    var task = O.tasks.filter(function (p) { return p.id === id; })[0];
+    var skill = O.skills.filter(function (p) { return p.id === id; })[0];
+    var page = task || skill;
+    if (page) {
+      var group = task ? O.tasks : O.skills;
+      return crumbs([['Home', 'dash'], ['Occupational Specialism', 'os'], [page.code, null]]) +
+        pageHead(page.code + ' — ' + page.title, page.summary, page.facts) +
+        docBody(page.parts) + pager('os', group, page.id);
+    }
+    return crumbs([['Home', 'dash'], ['Occupational Specialism', null]]) +
+      pageHead(O.name + ' · ' + O.paper, O.intro, O.facts) +
+      '<div class="section-label">The four tasks</div><div class="hub-grid">' +
+      O.tasks.map(function (p) { return hubCard('os', p); }).join('') + '</div>' +
+      '<div class="section-label">Skills you need to build it</div><div class="hub-grid">' +
+      O.skills.map(function (p) { return hubCard('os', p); }).join('') + '</div>' +
+      '<div class="section-label">Overview</div>' + docBody(O.hub);
   };
+
+  /* The HTML / CSS / JS / SQL section now lives inside the Occupational
+     Specialism. Old bookmarks land on its first skill page. */
+  views.webdev = function () { setTimeout(function () { location.replace('#os/html'); }, 0); return ''; };
 
   /* Python */
   views.python = function () {
@@ -1589,16 +1690,29 @@
         });
       });
     });
-    D.esp.tasks.forEach(function (t) {
-      var body = [t.given, t.produce].concat(t.checklist || [], t.mistakes || [],
-        (t.sections || []).reduce(function (acc, s) { return acc.concat(s.points); }, [])).join(' ');
-      idx.push({ text: t.code + ' ' + t.title + ' ' + body, title: t.code + ' — ' + t.title, where: 'Employer Set Project', go: 'esp' });
+    function pageText(page) {
+      var bits = [page.code, page.title, page.summary];
+      page.parts.forEach(function (part) {
+        bits.push(part.h);
+        part.blocks.forEach(function (b) {
+          if (b.p) bits.push(b.p);
+          if (b.ul) bits.push(b.ul.join(' '));
+          if (b.ol) bits.push(b.ol.join(' '));
+          if (b.table) bits.push(b.table.rows.map(function (r) { return r.join(' '); }).join(' '));
+          if (b.code) bits.push(b.code.title + ' ' + (b.code.note || '') + ' ' + b.code.src);
+          if (b.callout) bits.push((b.callout.title || '') + ' ' + (b.callout.text || '') + ' ' + (b.callout.list || []).join(' '));
+          if (b.check) bits.push(b.check.items.join(' '));
+        });
+      });
+      return bits.join(' ').replace(/\*\*|`/g, '');
+    }
+    D.esp.pages.forEach(function (pg) {
+      idx.push({ text: pageText(pg), title: pg.code + ' — ' + pg.title, snippet: pg.summary,
+        where: 'Employer Set Project', go: 'esp/' + pg.id });
     });
-    D.os.tasks.forEach(function (t) {
-      idx.push({ text: t.code + ' ' + t.title + ' ' + t.points.join(' '), title: t.code + ' — ' + t.title, where: 'Occupational Specialism', go: 'os' });
-    });
-    D.os.areas.forEach(function (a) {
-      idx.push({ text: a.title + ' ' + a.points.join(' '), title: a.title, where: 'Specialism content area ' + a.num, go: 'os' });
+    D.os.tasks.concat(D.os.skills).forEach(function (pg) {
+      idx.push({ text: pageText(pg), title: pg.code + ' — ' + pg.title, snippet: pg.summary,
+        where: 'Occupational Specialism', go: 'os/' + pg.id });
     });
     D.python.patterns.forEach(function (p) {
       idx.push({ text: p.h + ' ' + p.code, title: p.h, where: 'Python & algorithms', go: 'python' });
@@ -1627,6 +1741,7 @@
   var searchTerm = '';
 
   function render() {
+    codeStore = [];
     var v = currentView();
     var html = searchTerm ? searchView(searchTerm) : (views[v] || views.dash)();
     $('#view').innerHTML = html;
@@ -1636,23 +1751,14 @@
   }
 
   var pendingOpen = null;
+  /* After navigating to an area page from the plan, dashboard or search,
+     scroll to the topic that was asked for. */
   function restoreOpen() {
     if (!pendingOpen) return;
-    var parts = pendingOpen.split('/');
+    var id = pendingOpen;
     pendingOpen = null;
-    var area = $('[data-area="' + parts[0] + '"]');
-    if (area) {
-      area.classList.add('open');
-      if (parts[1]) {
-        var t = $('[data-topic="' + parts[1] + '"]', area);
-        if (t) {
-          t.classList.add('open');
-          setTimeout(function () { t.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 30);
-        }
-      } else {
-        area.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
+    var el = $('[data-topic="' + id + '"]');
+    if (el) setTimeout(function () { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 30);
   }
 
   /* ── Events ────────────────────────────────────────────────────── */
@@ -1664,21 +1770,41 @@
       /* The plan's Open buttons sit inside a <label>, whose default action
          would also tick the checkbox. */
       if (goBtn.closest('.plantask')) e.preventDefault();
+      var dest = goBtn.getAttribute('data-go');
       var openTarget = goBtn.getAttribute('data-open');
-      if (openTarget) pendingOpen = openTarget;
+      if (openTarget) dest = routeForOpen(openTarget, dest);
       searchTerm = ''; $('#search').value = '';
       document.body.classList.remove('nav-open');
-      go(goBtn.getAttribute('data-go'));
+      if ('#' + dest === location.hash) render(); else go(dest);
       return;
     }
 
     var openBtn = t.closest('[data-open]');
-    if (openBtn && !goBtn) {
-      pendingOpen = openBtn.getAttribute('data-open');
-      var areaId = pendingOpen.split('/')[0];
-      var owner = AREAS.filter(function (a) { return a.id === areaId; })[0];
+    if (openBtn) {
+      var dest2 = routeForOpen(openBtn.getAttribute('data-open'), null);
       searchTerm = ''; $('#search').value = '';
-      if (owner) go('p' + owner.paper); else render();
+      if ('#' + dest2 === location.hash) render(); else go(dest2);
+      return;
+    }
+
+    /* jump chips: topics on an area page, parts on a document page */
+    var jump = t.closest('[data-jump]');
+    if (jump) {
+      var target = $('[data-topic="' + jump.getAttribute('data-jump') + '"]');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    var jumpPart = t.closest('[data-jump-part]');
+    if (jumpPart) {
+      var sec = $('#part-' + jumpPart.getAttribute('data-jump-part'));
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    /* copy buttons on code samples */
+    var copyBtn = t.closest('[data-copy]');
+    if (copyBtn) {
+      copyText(codeStore[+copyBtn.getAttribute('data-copy')] || '', copyBtn);
       return;
     }
 
@@ -1702,6 +1828,12 @@
           if (row) row.innerHTML = '<div class="name small muted">Confidence across this area</div>' + bar(areaProgress(a));
         }
       }
+      var dot = $('.chip[data-jump="' + id + '"] .dot');
+      if (dot) dot.className = 'dot c' + state.conf[id];
+      var ac = $('[data-area-conf="' + areaOf(id) + '"]');
+      var owning = AREAS.filter(function (x) { return x.id === areaOf(id); })[0];
+      if (ac && owning) ac.textContent = areaProgress(owning) + '%';
+      $$('button', wrap).forEach(function (b) { b.setAttribute('aria-pressed', b.classList.contains('on')); });
       renderNav();
       return;
     }
@@ -1857,8 +1989,6 @@
       return;
     }
     if (t.id === 'exportPapers') { exportPapers(); return; }
-    var wt = t.closest('[data-webtrack]');
-    if (wt) { webTrack = wt.getAttribute('data-webtrack'); render(); return; }
     if (t.id === 'exportCatchup') {
       var cblob = new Blob([catchupToText()], { type: 'text/plain' });
       var ca = document.createElement('a');
@@ -2012,7 +2142,7 @@
   });
 
   /* ── Boot ──────────────────────────────────────────────────────── */
-  document.documentElement.setAttribute('data-theme', state.theme || 'dark');
+  document.documentElement.setAttribute('data-theme', state.theme || 'light');
   if (!location.hash) location.hash = '#dash';
   render();
 })();
