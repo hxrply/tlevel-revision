@@ -18,7 +18,7 @@
       exams: {}, theme: 'light', themeV: 2, papers: [],
       written: { ans: {}, marks: {}, history: [] },
       plan: { done: {}, start: '' },
-      catchup: { done: {} }
+      catchup: { done: {}, ans: {}, sent: {} }
     };
     try {
       var raw = localStorage.getItem(KEY);
@@ -31,6 +31,8 @@
       if (!saved.plan.done) saved.plan.done = {};
       if (!saved.catchup) saved.catchup = { done: {} };
       if (!saved.catchup.done) saved.catchup.done = {};
+      if (!saved.catchup.ans) saved.catchup.ans = {};
+      if (!saved.catchup.sent) saved.catchup.sent = {};
       /* The redesign made the beige theme the default. Anyone still on the
          old dark default is moved to it once; choosing dark again sticks. */
       if (saved.themeV !== 2) { saved.theme = 'light'; saved.themeV = 2; }
@@ -73,12 +75,6 @@
     var t = allTopics(), total = t.length * 3, got = 0;
     t.forEach(function (x) { got += confOf(x.topic.id); });
     return total ? Math.round(got / total * 100) : 0;
-  }
-  function daysUntil(d) {
-    if (!d) return null;
-    var then = new Date(d + 'T09:00:00');
-    if (isNaN(then)) return null;
-    return Math.ceil((then - new Date()) / 86400000);
   }
   function shuffle(arr) {
     var a = arr.slice();
@@ -305,11 +301,10 @@
       .sort(function (a, b) { return confOf(a.topic.id) - confOf(b.topic.id); })
       .slice(0, 6);
 
-    var d1 = daysUntil(state.exams.p1), d2 = daysUntil(state.exams.p2), de = daysUntil(state.exams.esp);
     var acc = state.quiz.asked ? Math.round(state.quiz.right / state.quiz.asked * 100) : 0;
 
     var h = '<h1>Revision dashboard</h1>' +
-      '<p class="lede">Everything for the Pearson T Level Digital core and specialism: eight content areas across two papers, the five Employer Set Project tasks, and the Occupational Specialism project. Rate each topic red / amber / green as you revise and this page tracks what is left.</p>';
+      '<p class="lede">Pearson T Level in Digital Production, Design and Development: eight content areas across Core Papers 1 and 2, the five Employer Set Project tasks and the Occupational Specialism. Rate each topic red, amber or green as you revise and this page tracks what is left.</p>';
 
     h += '<div class="grid four" style="margin-bottom:18px">' +
       statCard(overallProgress() + '%', 'Syllabus confident') +
@@ -319,17 +314,6 @@
       '</div>';
 
     h += '<div class="grid two">';
-
-    /* countdown panel */
-    h += '<section class="panel"><h3>Exam countdown</h3>' +
-      '<div class="grid three" style="margin:10px 0 14px">' +
-      cdBlock('Paper 1', d1) + cdBlock('Paper 2', d2) + cdBlock('ESP', de) +
-      '</div>' +
-      '<div class="grid three">' +
-      dateField('p1', 'Paper 1 date') + dateField('p2', 'Paper 2 date') + dateField('esp', 'ESP start') +
-      '</div>' +
-      '<p class="small muted" style="margin-bottom:0">Core exams normally sit in the June or November series; your centre will confirm dates.</p>' +
-      '</section>';
 
     /* next up */
     h += '<section class="panel"><h3>Next up</h3>' +
@@ -343,6 +327,17 @@
         : '<p class="muted">Every topic is marked green. Move on to timed quizzes and past ESP tasks.</p>') +
       '</section>';
 
+    /* catch-up */
+    var cuWaiting = cuPending().length, cuMarked = 0, cuTotal = 0;
+    CATCH.days.forEach(function (d) { d.qs.forEach(function (q) { cuTotal++; if (markedQ(q.n)) cuMarked++; }); });
+    h += '<section class="panel"><h3>Catch-up</h3>' +
+      '<p class="small muted">Days 17 to 28 condensed, with an answer box under every question.</p>' +
+      '<div class="progress-row"><div class="name"><b>' + cuMarked + ' of ' + cuTotal + '</b> questions marked</div>' +
+      bar(Math.round(cuMarked / cuTotal * 100)) + '</div>' +
+      (cuWaiting ? '<div class="callout" style="margin:10px 0"><b>' + cuWaiting + ' answer' + (cuWaiting === 1 ? '' : 's') +
+        ' waiting to be marked</b><br>Open catch-up and press Send for marking.</div>' : '') +
+      '<button class="btn btn-accent btn-sm" data-go="catchup">Open catch-up</button></section>';
+
     h += '</div>';
 
     /* progress by area */
@@ -353,7 +348,7 @@
         var pct = areaProgress(a);
         h += '<div class="progress-row"><div class="name"><b>' + a.num + '. ' + esc(a.title) + '</b> ' +
           '<span class="small muted">· ' + a.topics.length + ' topics</span></div>' + bar(pct) +
-          '<button class="btn btn-sm" data-go="p' + p + '">Open</button></div>';
+          '<button class="btn btn-sm" data-go="p' + p + '/' + a.id + '">Open</button></div>';
       });
     });
     h += '</section>';
@@ -380,16 +375,6 @@
   };
   function statCard(num, lbl) {
     return '<div class="panel stat"><div class="num">' + esc(num) + '</div><div class="lbl">' + esc(lbl) + '</div></div>';
-  }
-  function cdBlock(name, d) {
-    var txt = d === null ? '—' : (d > 0 ? d : (d === 0 ? 'today' : 'past'));
-    var cls = d !== null && d <= 14 && d >= 0 ? 'style="color:var(--amber)"' : '';
-    return '<div><div class="days" ' + cls + '>' + txt + '</div><div class="small muted">' +
-      esc(name) + (d > 0 ? ' — days to go' : '') + '</div></div>';
-  }
-  function dateField(k, label) {
-    return '<label class="field">' + esc(label) +
-      '<input type="date" data-exam="' + k + '" value="' + (state.exams[k] || '') + '"></label>';
   }
 
 
@@ -648,101 +633,183 @@
     return null;
   }
 
-  views.catchup = function () {
-    var totalQ = 0, totalDays = CATCH.days.length, doneDays = 0, totalMins = 0, markedQs = 0;
+  /* ── Catch-up answers ─────────────────────────────────────────────
+     Answers are typed under each question and kept on this device. The
+     site has no server, so nobody else can read them: "Send for marking"
+     bundles every answered-but-unmarked question into one message to paste
+     into the chat. Once a question is marked in the tutor notes, the score
+     and feedback appear here automatically, matched on question number. */
+  function cuAns(n) { return state.catchup.ans[n] || ''; }
+  function hasAns(n) { return !!cuAns(n).trim(); }
+  function cuFind(n) {
+    var hit = null;
+    CATCH.days.forEach(function (d) { d.qs.forEach(function (q) { if (String(q.n) === String(n)) hit = { d: d, q: q }; }); });
+    return hit;
+  }
+  function cuPending() {
+    var out = [];
     CATCH.days.forEach(function (d) {
-      totalQ += d.qs.length;
+      d.qs.forEach(function (q) { if (!markedQ(q.n) && hasAns(q.n)) out.push({ d: d, q: q }); });
+    });
+    return out;
+  }
+  function cuStatus(q) {
+    var mk = markedQ(q.n);
+    if (mk && mk.q.got) {
+      return '<span class="pill ' + (parseInt(mk.q.got, 10) / q.marks >= 0.6 ? 'ok' : 'warn') + '">you scored ' + esc(mk.q.got) + '</span>';
+    }
+    if (mk) return '<span class="pill warn">marked · not attempted</span>';
+    if (hasAns(q.n)) {
+      return state.catchup.sent[q.n] ? '<span class="pill p1">sent · waiting to be marked</span>'
+                                     : '<span class="pill p1">answered · ready to send</span>';
+    }
+    return '<span class="pill">not answered yet</span>';
+  }
+  function cuDayCount(d) {
+    var n = 0;
+    d.qs.forEach(function (q) { if (hasAns(q.n) || markedQ(q.n)) n++; });
+    return 'answered ' + n + '/' + d.qs.length;
+  }
+
+  function cuSendText(pending) {
+    var L = String.fromCharCode(10);
+    var when = new Date().toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    var out = ['MARK THESE - catch-up answers',
+      'Sent ' + when + ' · ' + pending.length + ' answer' + (pending.length === 1 ? '' : 's') +
+      ' · Q' + pending[0].q.n + (pending.length > 1 ? '-Q' + pending[pending.length - 1].q.n : ''), ''];
+    var lastDay = null;
+    pending.forEach(function (x) {
+      if (x.d.day !== lastDay) {
+        out.push('== Day ' + x.d.day + ' · ' + x.d.title + ' ==', '');
+        lastDay = x.d.day;
+      }
+      out.push('Q' + x.q.n + ' [' + x.q.marks + ' marks, ' + x.q.cmd + '] ' + x.q.q);
+      cuAns(x.q.n).trim().split(/\r?\n/).forEach(function (line) { out.push('> ' + line); });
+      out.push('');
+    });
+    return out.join(L);
+  }
+
+  function updateSendbar() {
+    var bar = $('#cuBar');
+    if (!bar) return;
+    var n = cuPending().length;
+    bar.hidden = n === 0;
+    var c = $('#cuCount');
+    if (c) c.textContent = n + ' answer' + (n === 1 ? '' : 's');
+  }
+  function refreshCuQuestion(n) {
+    var hit = cuFind(n);
+    if (!hit) return;
+    var st = $('[data-custatus="' + n + '"]');
+    if (st) st.innerHTML = cuStatus(hit.q);
+    var dc = $('[data-cuday="' + hit.d.day + '"]');
+    if (dc) dc.textContent = cuDayCount(hit.d);
+  }
+
+  views.catchup = function () {
+    var totalQ = 0, answered = 0, markedQs = 0, doneDays = 0, totalMins = 0;
+    CATCH.days.forEach(function (d) {
       totalMins += d.mins;
       if (state.catchup.done['d' + d.day]) doneDays++;
-      d.qs.forEach(function (q) { if (markedQ(q.n)) markedQs++; });
+      d.qs.forEach(function (q) {
+        totalQ++;
+        if (markedQ(q.n)) markedQs++;
+        else if (hasAns(q.n)) answered++;
+      });
     });
 
-    var h = '<h1>Catch-up</h1><p class="lede">' + esc(CATCH.intro) + '</p>';
+    var h = crumbs([['Home', 'dash'], ['Catch-up', null]]) +
+      pageHead('Catch-up', CATCH.intro, [
+        [doneDays + '/' + CATCH.days.length, 'days done'], [answered + '', 'waiting to be marked'],
+        [markedQs + '/' + totalQ, 'marked'], ['about ' + Math.round(totalMins / 60) + 'h', 'in total']
+      ]);
 
-    h += '<div class="grid four" style="margin-bottom:16px">' +
-      statCard(totalDays - doneDays, 'Days to recover') +
-      statCard(doneDays, 'Done') +
-      statCard(markedQs + '/' + totalQ, 'Marked') +
-      statCard(Math.round(totalMins / 60) + 'h', 'Total time') +
-      '</div>';
-
-    h += '<section class="panel" style="margin-bottom:16px">' +
-      '<h3>How to use this</h3><p class="small">' + esc(CATCH.howto) + '</p>' +
+    h += '<article class="topic-card doc"><section class="part"><h2 class="doc-h"><span class="ic" aria-hidden="true">✎</span>How marking works</h2>' +
+      '<ol class="clean">' +
+      '<li>Read the day, do the checkpoint from memory, then <b>type your answer in the box under each question</b>. It saves on this device as you type.</li>' +
+      '<li>When you want them marked, press <b>Send for marking</b> at the bottom. It copies every answered question that has not been marked yet into one message — on a phone it opens the share menu instead.</li>' +
+      '<li>Paste it into your chat with Claude and say <b>mark these</b>.</li>' +
+      '<li>Once they are marked, your score and the feedback appear under each question here, next to your answer.</li>' +
+      '</ol>' +
+      '<div class="callout warn"><b>Answers stay on the device you typed them on</b><br>' +
+      'If you answer on your phone at college, send them from your phone. Clearing your browser data deletes unsent answers.</div>' +
+      '</section><section class="part"><h2 class="doc-h"><span class="ic" aria-hidden="true">↓</span>Working without signal</h2>' +
+      '<p>' + esc(CATCH.howto) + '</p>' +
       '<div class="btn-row"><button class="btn btn-sm" id="exportCatchup">Download as text file</button>' +
-      '<span class="small muted">Everything below, questions and model answers, as plain text — ' +
-      'for working somewhere with no signal.</span></div></section>';
+      '<span class="small muted">Every day, question and model answer as plain text.</span></div></section></article>';
+
+    h += '<div class="section-label">Days</div>';
 
     CATCH.days.forEach(function (d, di) {
       var done = !!state.catchup.done['d' + d.day];
       var dayGot = 0, dayPoss = 0, dayMarked = 0;
       d.qs.forEach(function (q) {
         var mk = markedQ(q.n);
-        if (mk && mk.q.got) {
-          dayMarked++;
-          dayGot += parseInt(mk.q.got, 10) || 0;
-          dayPoss += mk.q.marks;
-        }
+        if (mk && mk.q.got) { dayMarked++; dayGot += parseInt(mk.q.got, 10) || 0; dayPoss += mk.q.marks; }
       });
-      h += '<section class="panel area-card' + (!done && di === 0 ? ' open' : '') + '" data-area="cu' + d.day + '">' +
+      var firstOpen = !done && dayMarked < d.qs.length &&
+        CATCH.days.slice(0, di).every(function (x) { return state.catchup.done['d' + x.day] || x.qs.every(function (q) { return markedQ(q.n); }); });
+
+      h += '<section class="panel area-card' + (firstOpen ? ' open' : '') + '" data-area="cu' + d.day + '">' +
         '<div class="area-head"><div class="n">' + d.day + '</div>' +
         '<div style="flex:1"><h3>' + esc(d.title) + (done ? ' <span class="pill ok">done</span>' : '') + '</h3>' +
-        '<div class="small muted">' + esc(d.plan) + ' · content area ' + esc(d.area) +
-        ' · about ' + d.mins + ' min · ' + d.qs.length + ' questions' +
-        (dayMarked ? ' · marked ' + dayGot + '/' + dayPoss : '') + '</div></div>' +
+        '<div class="small muted">' + esc(d.plan) + ' · content area ' + esc(d.area) + ' · about ' + d.mins + ' min · ' +
+        '<span data-cuday="' + d.day + '">' + cuDayCount(d) + '</span>' +
+        (dayMarked ? ' · scored ' + dayGot + '/' + dayPoss : '') + '</div></div>' +
         '<div class="chev">›</div></div><div class="area-body">';
 
-      h += '<p class="small"><b>Why this one matters.</b> ' + esc(d.why) + '</p>';
-
+      h += '<div class="cu-sec"><p><b>Why this one matters.</b> ' + esc(d.why) + '</p></div>';
       d.core.forEach(function (c) {
-        h += '<div class="qbox"><b>' + esc(c.h) + '</b><ul class="tight">';
-        c.b.forEach(function (b) { h += '<li>' + esc(b) + '</li>'; });
-        h += '</ul></div>';
+        h += '<div class="cu-sec"><h4>' + esc(c.h) + '</h4><ul class="clean">' +
+          c.b.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul></div>';
       });
+      h += '<div class="cu-sec"><div class="callout bad"><b>Traps</b><ul>' +
+        d.traps.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>' +
+        '<div class="callout"><b>Checkpoint — close the page and write this from memory</b><br>' + esc(d.check) + '</div></div>';
 
-      h += '<div class="tnote-cost"><b>Traps</b><ul class="tight">';
-      d.traps.forEach(function (t) { h += '<li>' + esc(t) + '</li>'; });
-      h += '</ul></div>';
-
-      h += '<div class="tnote-how"><b>Checkpoint — close the page and write this from memory</b><br>' +
-        esc(d.check) + '</div>';
-
-      h += '<h4 style="margin:14px 0 6px">Questions</h4>';
+      h += '<div class="cu-sec"><h4>Questions</h4>';
       d.qs.forEach(function (q) {
         var mk = markedQ(q.n);
-        var scored = mk && mk.q.got;
-
-        h += '<div class="tnote qbox">' +
+        var mine = cuAns(q.n);
+        h += '<div class="tnote" data-cuq="' + q.n + '">' +
           '<div class="tnote-head"><span class="qn">Q' + q.n + '</span>' +
-          '<span class="pill">' + esc(q.cmd) + '</span>' +
-          '<span class="small muted">' + q.marks + ' marks</span>' +
-          (scored
-            ? '<span class="pill ' + (parseInt(mk.q.got, 10) / q.marks >= 0.6 ? 'ok' : 'warn') +
-              '" style="margin-left:auto">you scored ' + esc(mk.q.got) + '</span>'
-            : (mk ? '<span class="pill warn" style="margin-left:auto">not attempted</span>'
-                  : '<span class="pill" style="margin-left:auto">not marked yet</span>')) +
-          '</div>' +
+          '<span class="pill">' + esc(q.cmd) + '</span><span class="small muted">' + q.marks + ' marks</span>' +
+          '<span style="margin-left:auto" data-custatus="' + q.n + '">' + cuStatus(q) + '</span></div>' +
           '<div class="qq">' + esc(q.q) + '</div>';
 
-        if (mk && mk.q.how) {
-          h += '<div class="tnote-how"><b>How to answer</b><br>' + esc(mk.q.how) + '</div>';
+        if (mk) {
+          if (mk.q.how) h += '<div class="tnote-how"><b>How to answer</b><br>' + esc(mk.q.how) + '</div>';
+          if (mine.trim()) h += '<div class="cu-mine"><b>Your answer</b><div>' + esc(mine) + '</div></div>';
+          h += '<div class="qbox bare open">' +
+            '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">Model answer and feedback</button></div>' +
+            '<div class="qa"><b>Model answer</b><p>' + esc(mk.q.answer) + '</p>' +
+            (mk.q.cost ? '<div class="tnote-cost"><b>Feedback — what it cost you</b><br>' + esc(mk.q.cost) + '</div>' : '') +
+            '</div></div>';
+        } else {
+          h += '<div class="cu-answer"><label class="small muted" for="cu-ans-' + q.n + '"><b>Your answer</b></label>' +
+            '<textarea id="cu-ans-' + q.n + '" data-cuans="' + q.n + '" rows="' + (q.marks >= 6 ? 7 : 4) + '" ' +
+            'placeholder="Type your answer here — aim for about ' + (q.marks <= 2 ? 'one line' : q.marks <= 4 ? q.marks + ' sentences' : 'a structured paragraph per point') + '.">' +
+            esc(mine) + '</textarea>' +
+            '<div class="saved" data-cusaved="' + q.n + '">' + (mine.trim() ? 'Saved on this device' : '') + '</div></div>' +
+            '<div class="qbox bare">' +
+            '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">Show the model answer</button>' +
+            '<span class="small muted">Answer first — reading it before you write teaches you nothing.</span></div>' +
+            '<div class="qa"><b>Model answer</b><p>' + esc(q.a) + '</p></div></div>';
         }
-
-        h += '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">' +
-          (mk ? 'Model answer and feedback' : 'Model answer') + '</button></div>' +
-          '<div class="qa"><b>Model answer</b><p>' + esc(mk ? mk.q.answer : q.a) + '</p>' +
-          (mk && mk.q.cost
-            ? '<div class="tnote-cost"><b>Feedback — what it cost you</b><br>' + esc(mk.q.cost) + '</div>'
-            : '') +
-          '</div></div>';
+        h += '</div>';
       });
+      h += '</div>';
 
-      h += '<div class="btn-row" style="margin-top:12px">' +
-        '<label class="chk"><input type="checkbox" data-cudone="d' + d.day + '"' +
+      h += '<div class="cu-sec"><label class="chk-day"><input type="checkbox" data-cudone="d' + d.day + '"' +
         (done ? ' checked' : '') + '> Mark day ' + d.day + ' as done</label></div>';
-
       h += '</div></section>';
     });
 
+    var pend = cuPending().length;
+    h += '<div class="sendbar" id="cuBar"' + (pend ? '' : ' hidden') + '>' +
+      '<span class="grow"><b id="cuCount">' + pend + ' answer' + (pend === 1 ? '' : 's') + '</b> ready to be marked</span>' +
+      '<button class="btn btn-accent btn-sm" id="cuSend" type="button">Send for marking</button></div>';
     return h;
   };
 
@@ -1996,6 +2063,26 @@
       return;
     }
     if (t.id === 'exportPapers') { exportPapers(); return; }
+    if (t.id === 'cuSend') {
+      var pending = cuPending();
+      if (!pending.length) return;
+      var text = cuSendText(pending);
+      var markSent = function () {
+        pending.forEach(function (x) { state.catchup.sent[x.q.n] = Date.now(); refreshCuQuestion(x.q.n); });
+        save();
+      };
+      var mobile = /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+      if (mobile && navigator.share) {
+        navigator.share({ title: 'Catch-up answers for marking', text: text })
+          .then(markSent, function () { /* share sheet closed: nothing sent */ });
+      } else {
+        copyText(text, t);
+        markSent();
+        var g = $('#cuBar .grow');
+        if (g) g.innerHTML = '<b>Copied.</b> Paste it into your chat with Claude and say <b>mark these</b>.';
+      }
+      return;
+    }
     if (t.id === 'exportCatchup') {
       var cblob = new Blob([catchupToText()], { type: 'text/plain' });
       var ca = document.createElement('a');
@@ -2074,7 +2161,6 @@
 
   document.addEventListener('change', function (e) {
     var t = e.target;
-    if (t.matches('[data-exam]')) { state.exams[t.getAttribute('data-exam')] = t.value; save(); render(); }
     if (t.id === 'cardFilter') { cards.filter = t.value; cards.deck = pickDeck(); cards.i = 0; cards.flipped = false; render(); }
     if (t.matches('[data-got]')) {
       var ids = t.getAttribute('data-got').split('|');
@@ -2107,6 +2193,24 @@
       var box = $('input[data-yourmark="' + mqid + '"]');
       if (box) box.value = suggestedMark(mqid);
     }
+  });
+
+  var cuTimers = {};
+  document.addEventListener('input', function (e) {
+    if (!e.target.matches || !e.target.matches('textarea[data-cuans]')) return;
+    var n = e.target.getAttribute('data-cuans');
+    var val = e.target.value;
+    var note = $('[data-cusaved="' + n + '"]');
+    if (note) note.textContent = 'Saving…';
+    clearTimeout(cuTimers[n]);
+    cuTimers[n] = setTimeout(function () {
+      state.catchup.ans[n] = val;
+      delete state.catchup.sent[n];        /* edited since sending: send again */
+      save();
+      if (note) note.textContent = val.trim() ? 'Saved on this device' : '';
+      refreshCuQuestion(n);
+      updateSendbar();
+    }, 300);
   });
 
   var ansTimer;
