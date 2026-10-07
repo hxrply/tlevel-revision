@@ -147,14 +147,16 @@ html[data-theme="dark"] .brand-mark { color: #2A1720; }
 /* ── Topbar ───────────────────────────────────────────────────────── */
 .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
 .searchwrap { position: relative; flex: 1; min-width: 200px; }
-.searchwrap input {
+/* input[type=text] is named so this outranks the generic form rule further
+   down, which has the same specificity and was overriding the left padding. */
+.searchwrap input[type=text] {
   width: 100%; padding: 10px 16px 10px 40px;
   background: var(--panel); color: var(--text);
   border: 1px solid var(--line); border-radius: 999px; font: inherit;
   box-shadow: var(--shadow);
 }
 .searchwrap input:focus { outline: 3px solid var(--pink-line); outline-offset: 1px; border-color: var(--pink); }
-.searchwrap .sicon { position: absolute; left: 16px; top: 9px; color: var(--dim); }
+.searchwrap .sicon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--dim); pointer-events: none; }
 .menu-toggle { display: none; }
 
 /* ── Type ─────────────────────────────────────────────────────────── */
