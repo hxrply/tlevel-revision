@@ -555,6 +555,49 @@ window.TLDATA.tutorNotes = {
           cost: 'All six, including veracity and velocity in the right list - on Day 18 velocity was the distractor picked as a value-of-data metric. Next step: for each V, be able to say what it forces an organisation to do. High volume needs scalable storage such as a data lake; high variety needs flexible schemas; high velocity needs stream rather than batch processing; poor veracity means cleaning and validating before use.' }
       ]
     }
+,
+
+    {
+      day: 20, date: '12 Oct', topic: 'Content area 6.5 - Visualisation, data models and access control',
+      score: '9/16',
+      questions: [
+
+        { n: 77, marks: 4, cmd: 'Explain',
+          q: 'Explain why a relational model would be chosen over a hierarchical model for a college system holding students, courses and tutors.',
+          how: 'The deciding fact is the relationship type. A student takes many courses and a course has many students - that is many-to-many. A hierarchical model only allows one parent per record, so it cannot represent that. Name the relationship, say why the hierarchy fails, then say how the relational model handles it.',
+          answer: 'A student takes several courses and a course has several students, which is a many-to-many relationship; a hierarchical model allows only one-to-many parent and child links, so it cannot represent this without duplicating records (2). The relational model links tables through primary and foreign keys, so a junction table expresses the relationship once, keeping redundancy minimal through normalisation (1) and allowing flexible SQL queries such as listing every course for one tutor without restructuring the data (1).',
+          got: '1/4',
+          cost: 'Relational was the right choice and earned a mark. The reasoning treated a hierarchical model as an organisation chart of people above and below each other. It is a data structure where every record has exactly one parent - which is why it fails here: one student needs several parent courses. The phrase many-to-many was the missing key.' },
+
+        { n: 78, marks: 3, cmd: 'Explain',
+          q: 'Explain the difference between role-based and rule-based access control, giving one example of each.',
+          how: 'RBAC - by role. RuBAC - by rule. One sentence each with a concrete example, then a third sentence comparing them: RBAC is simpler to manage at scale, RuBAC gives finer control over the circumstances of access.',
+          answer: 'Role-based access control attaches permissions to a job role, so a new reception employee is given the reception role and inherits exactly the rights that role carries (1). Rule-based access control grants access according to conditions, for example allowing payroll access only from an on-site device during working hours (1). RBAC is simpler to administer at scale because changes are made once per role, whereas RuBAC gives finer control over the circumstances of access (1).',
+          got: '2/3',
+          cost: 'Both definitions were right in substance, and the rule-based example (only in working hours) was exactly the right kind of example - even though the multiple-choice version of this was answered as a guess. The role-based side needed a concrete example such as only HR staff seeing salaries, and there was no comparison of the two for the third mark.' },
+
+        { n: 79, marks: 2, cmd: 'Explain',
+          q: 'A manager needs to see current sales performance at a glance. Explain which visualisation format is most suitable and why.',
+          how: 'Name the format, then give the reason tied to the user: a manager needs current status quickly, not exact detail.',
+          answer: 'A dashboard (1), because it presents live KPIs such as sales to date, customers served and stock levels together in one view, letting the manager judge current status immediately without reading detail or running a report (1).',
+          got: '2/2',
+          cost: 'Full marks - the right format with a reason tied to what the manager needs. Naming one or two of the KPIs it would show makes the answer more convincing in a longer question.' },
+
+        { n: 80, marks: 3, cmd: 'Explain',
+          q: 'Explain the difference between a data warehouse, a data lake and a data mart.',
+          how: 'Three definitions, one mark each. The mart is the one people get wrong: it is not where data is collected, it is a slice of the warehouse for one department.',
+          answer: 'A data warehouse holds structured, cleaned data organised for reporting across the organisation (1). A data lake holds raw data of any type, structured or unstructured, stored cheaply until a use is found for it (1). A data mart is a subset of a warehouse serving the needs of one department, such as finance or marketing (1).',
+          got: '2/3',
+          cost: 'Warehouse and lake were both right. The data mart was described as where data is collected - it is a smaller subset of the warehouse built for one department, so the finance team queries the finance mart instead of the whole warehouse.' },
+
+        { n: 81, marks: 4, cmd: 'Explain',
+          q: 'Explain two drawbacks of presenting data as an infographic for a public audience.',
+          how: 'The drawback has to be about the infographic format itself - what happens to the data when it is turned into a simple picture. Two points, each developed with its consequence for the reader.',
+          answer: 'Infographics compress data into a simple visual message, so detail and caveats are lost and the audience cannot see the underlying figures or sample size to judge reliability (2). Design choices can also mislead, whether or not intentionally - a truncated axis exaggerates a small difference and disproportionate icons overstate a change - so the reader can draw a conclusion the data does not support (2). Infographics are also image-based, so without alt text they are inaccessible to screen-reader users.',
+          got: '2/4',
+          cost: 'The accessibility point was a genuine drawback of the format with its consequence, and scored. The first point - competitors being able to see company data - is a drawback of publishing the data at all, in any format, so it did not answer the question. The two the mark scheme expects are lost detail and misleading design such as truncated axes.' }
+      ]
+    }
 
 
   ]
