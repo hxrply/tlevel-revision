@@ -540,6 +540,21 @@ window.TLDATA.tutorNotes = {
           cost: 'Quantitative was read as high amounts of data. It means numeric and measurable - the quantity in the word refers to the data being a quantity, not to there being a lot of it. The three representations were not given.' }
       ]
     }
+,
+
+    {
+      day: 19, date: '9 Oct', topic: 'Content area 6.3 and 6.4 - Formats, big data and data quality',
+      score: '3/3 so far (1 of 5 answered)',
+      questions: [
+
+        { n: 72, marks: 3, cmd: 'State',
+          q: 'State the six Vs of big data.',
+          how: 'Pure recall - six words. Learn them as two groups of three so none goes missing: what the data is (volume, variety, veracity) and how it behaves (velocity, variability, value). Exam questions usually follow up by asking what one V means for storage or processing.',
+          answer: 'Volume, variety, variability, velocity, veracity, value.',
+          got: '3/3',
+          cost: 'All six, including veracity and velocity in the right list - on Day 18 velocity was the distractor picked as a value-of-data metric. Next step: for each V, be able to say what it forces an organisation to do. High volume needs scalable storage such as a data lake; high variety needs flexible schemas; high velocity needs stream rather than batch processing; poor veracity means cleaning and validating before use.' }
+      ]
+    }
 
 
   ]
