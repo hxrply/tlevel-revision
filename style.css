@@ -603,6 +603,8 @@ html[data-theme="dark"] .tnote-how b { color: var(--pink); }
 .tnote .qa p { margin: 6px 0 0; }
 .tnote-cost { margin-top: 12px; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--red-soft); border: 1px solid color-mix(in srgb, var(--red) 25%, transparent); font-size: 14.5px; }
 .tnote-cost b { color: var(--red); }
+.tnote-cost.full { background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 25%, transparent); }
+.tnote-cost.full b { color: var(--green); }
 
 /* Catch-up: each day split into sections by thin dividers */
 .cu-sec { padding: 14px 0; }

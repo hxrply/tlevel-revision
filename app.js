@@ -786,7 +786,8 @@
           h += '<div class="qbox bare open">' +
             '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">Model answer and feedback</button></div>' +
             '<div class="qa"><b>Model answer</b><p>' + esc(mk.q.answer) + '</p>' +
-            (mk.q.cost ? '<div class="tnote-cost"><b>Feedback — what it cost you</b><br>' + esc(mk.q.cost) + '</div>' : '') +
+            (mk.q.cost ? '<div class="tnote-cost' + (parseInt(mk.q.got, 10) >= q.marks ? ' full' : '') + '"><b>' +
+              (parseInt(mk.q.got, 10) >= q.marks ? 'Feedback — full marks' : 'Feedback — what it cost you') + '</b><br>' + esc(mk.q.cost) + '</div>' : '') +
             '</div></div>';
         } else {
           h += '<div class="cu-answer"><label class="small muted" for="cu-ans-' + q.n + '"><b>Your answer</b></label>' +
