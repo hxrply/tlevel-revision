@@ -380,7 +380,7 @@
     var acc = state.quiz.asked ? Math.round(state.quiz.right / state.quiz.asked * 100) : 0;
 
     var h = '<h1>Revision dashboard</h1>' +
-      '<p class="lede">Pearson T Level in Digital Production, Design and Development: eight content areas across Core Papers 1 and 2, the five Employer Set Project tasks and the Occupational Specialism. Rate each topic red, amber or green as you revise and this page tracks what is left.</p>';
+      '<p class="lede">Pearson T Level in Digital Software Development: eight content areas across Core Papers 1 and 2, the five Employer Set Project tasks and the Occupational Specialism. Rate each topic red, amber or green as you revise and this page tracks what is left.</p>';
 
     h += '<div class="grid four" style="margin-bottom:18px">' +
       statCard(overallProgress() + '%', 'Syllabus confident') +
@@ -951,10 +951,10 @@
   views.p2 = function () { return paperView(2); };
 
   var PAPER_INFO = {
-    1: { title: 'Core Paper 1', code: '19536',
+    1: { title: 'Core Paper 1',
          lede: 'Content areas 1 to 4: problem solving, programming, emerging issues and the impact of digital, and legislation. ' +
                'Section A is short-answer questions; Section B is five longer scenario questions that build in difficulty.' },
-    2: { title: 'Core Paper 2', code: '19537',
+    2: { title: 'Core Paper 2',
          lede: 'Content areas 5 to 8: business context, data, digital environments, and security. ' +
                'Section A is short-answer questions; Section B is five longer scenario questions that build in difficulty.' }
   };
@@ -975,7 +975,7 @@
     var words = areas.reduce(function (n, a) { return n + termCount(a); }, 0);
 
     var h = crumbs([['Home', 'dash'], [info.title, null]]) +
-      pageHead(info.title + ' · ' + info.code, info.lede, [
+      pageHead(info.title, info.lede, [
         ['2h 15m', 'exam'], ['90', 'marks'], ['30%', 'of the core grade'],
         [topics + '', 'topics'], [words + '', 'key words']
       ]);
@@ -1067,7 +1067,7 @@
         docBody(page.parts) + pager('esp', E.pages, page.id);
     }
     return crumbs([['Home', 'dash'], ['Employer Set Project', null]]) +
-      pageHead(E.name + ' · ' + E.paper, E.intro, E.facts) +
+      pageHead(E.name + (E.paper ? ' · ' + E.paper : ''), E.intro, E.facts) +
       '<div class="section-label">The tasks</div><div class="hub-grid">' +
       E.pages.map(function (p) { return hubCard('esp', p); }).join('') + '</div>' +
       '<div class="section-label">Overview</div>' + docBody(E.hub);
@@ -1077,18 +1077,21 @@
   views.os = function () {
     var O = D.os, id = subPath();
     var task = O.tasks.filter(function (p) { return p.id === id; })[0];
+    var area = O.areas.filter(function (p) { return p.id === id; })[0];
     var skill = O.skills.filter(function (p) { return p.id === id; })[0];
-    var page = task || skill;
+    var page = task || area || skill;
     if (page) {
-      var group = task ? O.tasks : O.skills;
+      var group = task ? O.tasks : area ? O.areas : O.skills;
       return crumbs([['Home', 'dash'], ['Occupational Specialism', 'os'], [page.code, null]]) +
         pageHead(page.code + ' — ' + page.title, page.summary, page.facts) +
         docBody(page.parts) + pager('os', group, page.id);
     }
     return crumbs([['Home', 'dash'], ['Occupational Specialism', null]]) +
-      pageHead(O.name + ' · ' + O.paper, O.intro, O.facts) +
+      pageHead(O.name + (O.paper ? ' · ' + O.paper : ''), O.intro, O.facts) +
       '<div class="section-label">The four tasks</div><div class="hub-grid">' +
       O.tasks.map(function (p) { return hubCard('os', p); }).join('') + '</div>' +
+      '<div class="section-label">What the specialism covers — your specification</div><div class="hub-grid">' +
+      O.areas.map(function (p) { return hubCard('os', p); }).join('') + '</div>' +
       '<div class="section-label">Skills you need to build it</div><div class="hub-grid">' +
       O.skills.map(function (p) { return hubCard('os', p); }).join('') + '</div>' +
       '<div class="section-label">Overview</div>' + docBody(O.hub);
@@ -1864,7 +1867,7 @@
       idx.push({ text: pageText(pg), title: pg.code + ' — ' + pg.title, snippet: pg.summary,
         where: 'Employer Set Project', go: 'esp/' + pg.id });
     });
-    D.os.tasks.concat(D.os.skills).forEach(function (pg) {
+    D.os.tasks.concat(D.os.areas, D.os.skills).forEach(function (pg) {
       idx.push({ text: pageText(pg), title: pg.code + ' — ' + pg.title, snippet: pg.summary,
         where: 'Occupational Specialism', go: 'os/' + pg.id });
     });

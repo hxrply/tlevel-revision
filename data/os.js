@@ -1,20 +1,20 @@
 /* GENERATED FILE — do not edit by hand.
    Source: tools/os_content.py. Regenerate with: python tools/build_content.py
-   Occupational Specialism, paper 19540. */
+   Occupational Specialism — Digital Software Development. */
 
 window.TLDATA = window.TLDATA || {};
 
 window.TLDATA.os = {
- "name": "Occupational Specialism",
- "paper": "19540",
- "intro": "One extended project in four tasks: propose and design a solution for a client, build a working prototype in at least two languages, gather feedback on it, then evaluate it. Graded Pass, Merit or Distinction. The skills pages below teach the front end and back end you need to build it.",
+ "name": "Occupational Specialism — Digital Software Development",
+ "paper": "",
+ "intro": "One extended project in four tasks: analyse a problem and design a solution, build it in at least two languages, gather feedback, then evaluate it. Graded Pass, Merit or Distinction, worth half of your whole T Level. Everything marked as specification below is from your own DSD specification.",
  "facts": [
   [
-   "145",
+   "144",
    "marks"
   ],
   [
-   "67 hours",
+   "50h 30m",
    "supervised"
   ],
   [
@@ -32,55 +32,96 @@ window.TLDATA.os = {
    "ic": "◷",
    "blocks": [
     {
+     "p": "The 144 marks are awarded against six **performance outcomes**, not task by task. Your work across all four tasks is the evidence for them."
+    },
+    {
      "table": {
       "cols": [
-       "Task",
-       "Supervised time",
+       "Performance outcome",
        "Marks",
-       "How the marks split"
+       "Share"
       ],
       "num": [
+       1,
        2
       ],
       "rows": [
        [
-        "Task 1 · Proposal and design",
-        "20 hours over 3 weeks",
-        "58",
-        "Proposal 24 (decomposition 9 · wider issues 9 · business context 6) · Design 34 (interface 6 · algorithms 10 · data 6 · test strategy 6 · communication 6)"
-       ],
-       [
-        "Task 2 · Developing the solution",
-        "30 hours over 4 weeks",
-        "48",
-        "Functionality 8 · code organisation 8 · user experience 8 · legal and standards 6 · test data 6 · testing to drive iteration 6 · iterative documentation 6"
-       ],
-       [
-        "Task 3a · Gathering feedback",
-        "15 hours",
+        "PO1 · Analyse a problem to define requirements and acceptance criteria, aligned to user needs",
         "24",
-        "Feedback materials 12 · feedback tools 6 · communication 6"
+        "16.7%"
        ],
        [
-        "Task 3b · Evaluating",
-        "one 2-hour session",
-        "15",
-        "Assets and content 6 · evaluation of outcomes 9"
+        "PO2 · Design, implement and test software",
+        "57",
+        "39.6%"
+       ],
+       [
+        "PO3 · Change, maintain and support software",
+        "18",
+        "12.5%"
+       ],
+       [
+        "PO4 · Create solutions in a social and collaborative environment",
+        "9",
+        "6.3%"
+       ],
+       [
+        "PO5 · Discover, evaluate and apply reliable sources of knowledge",
+        "18",
+        "12.5%"
+       ],
+       [
+        "PO6 · Apply ethical principles and manage risks in line with legal and regulatory requirements",
+        "18",
+        "12.5%"
        ]
       ],
       "foot": [
        "Total",
-       "67 hours",
-       "145",
-       ""
+       "144",
+       "100%"
       ]
      }
     },
     {
+     "ul": [
+      "One synoptic project, done over several sessions up to **50 hours 30 minutes** supervised, in windows set by Pearson. Some tasks include unsupervised activities.",
+      "**Internet access is allowed for every task except Task 3b.**",
+      "Your output is a portfolio of evidence submitted electronically, marked by Pearson.",
+      "You are assessed on applying skills, not answering knowledge questions — but you need the knowledge to make good decisions."
+     ]
+    },
+    {
      "callout": {
       "kind": "warn",
-      "title": "If you used this site before October",
-      "text": "The old version of this page described the newer Digital Software Development specialism — 50 hours 30, 144 marks and a generative-AI activity. None of that applies to your 19540 papers. Everything on these pages now comes from your real task booklets and mark scheme."
+      "title": "Corrected in October",
+      "text": "For a few days this section showed the older Digital Production, Design and Development specialism (67 hours, 145 marks), whose papers were in your college files as practice. Your specialism is Digital Software Development: 50 hours 30 minutes and 144 marks, with the generative-AI activity in Task 1."
+     }
+    }
+   ]
+  },
+  {
+   "h": "Activity C — using generative AI",
+   "ic": "✦",
+   "blocks": [
+    {
+     "p": "Task 1 Activity C requires you to use a generative AI model to produce short code snippets for specific pieces of functionality — not a whole solution. You must show your prompts, the output, your review of how well it meets the requirement, and your refinement of it. Using AI to generate the entire solution is not what is being assessed and will not gain the marks."
+    },
+    {
+     "ul": [
+      "Use it for **short snippets** that solve one specific piece of functionality you will fit into your own code — never the whole solution.",
+      "Record the **prompt** you gave, the **raw output**, your **review** of how far it meets the need, and the **refined** prompt or code that followed.",
+      "Your spec suggests a natural-language model such as ChatGPT or Google Gemini; Pearson does not specify one.",
+      "Judge the output like a code review: does it handle invalid input, is it secure, does it follow your naming and commenting conventions? Saying where it fell short is the evidence."
+     ]
+    },
+    {
+     "code": {
+      "title": "One way to evidence a snippet",
+      "lang": "text",
+      "src": "Functionality:  validate a UK postcode entered on the booking form\n\nPrompt 1:  \"Write a JavaScript function that checks a UK postcode.\"\nOutput:    a single regular expression, no comments, accepts lowercase only.\nReview:    Meets the basic need but rejects \"CM1 1QH\" in capitals, gives no\n           message to the user, and has no explanation of the pattern.\n\nPrompt 2:  \"Rewrite it to accept upper or lower case and optional space, return\n           true/false, and comment each part of the pattern.\"\nOutput:    function isValidPostcode(value) { ... }   (commented)\nReview:    Now correct for the 8 valid and 6 invalid test values in my test log.\n           Renamed to match my camelCase convention and added a trim().\n\nDecision:  Used in validation.js with my own error message handling.",
+      "note": "Invented example. The marks are in the review and refinement, not in getting the AI to answer."
      }
     }
    ]
@@ -90,7 +131,7 @@ window.TLDATA.os = {
    "ic": "⚠",
    "blocks": [
     {
-     "p": "Task 2 must be built in **at least two programming languages** covering front end and back end. **HTML and CSS do not count** — they are markup and styling, not programming languages. The top functionality band also requires the code in both languages to work consistently."
+     "p": "Your specification requires **at least two** of these languages, covering front end and back end: **Python 3 (3.10 or later), C#, SQL, JavaScript, PHP.** HTML and CSS are not on the list, so they do not count — you will still use them for the interface."
     },
     {
      "table": {
@@ -101,15 +142,19 @@ window.TLDATA.os = {
       "rows": [
        [
         "JavaScript + PHP (+ SQL)",
-        "The most common student stack. HTML/CSS/JS in the browser, PHP on the server, MySQL for the data. Three languages, comfortably over the bar"
+        "The most common student stack: HTML/CSS/JS in the browser, PHP on the server, MySQL for the data. Three languages from the list"
        ],
        [
         "JavaScript + SQL",
-        "Valid, but SQL cannot be called from the browser. Something on the server still has to run it, which in practice means PHP"
+        "Valid, but SQL cannot be run from the browser, so something on the server still has to run it — in practice PHP or Python"
        ],
        [
         "Python + SQL",
-        "Valid. A Python web framework such as Flask or Django with a SQL database"
+        "A Python web framework such as Flask or Django with a SQL database. Python 3.10+ is the language of your core papers, so you already know it"
+       ],
+       [
+        "C# + SQL",
+        "Valid, typically ASP.NET with SQL Server; heavier to set up"
        ]
       ]
      }
@@ -118,13 +163,13 @@ window.TLDATA.os = {
      "callout": {
       "kind": "bad",
       "title": "Build the core feature yourself",
-      "text": "One student embedded a third-party calculator in an iframe as their main feature. It was capped at band 2 because it showed none of their own coding, broke the visual consistency and left that logic undocumented. The Distinction example wrote the same calculator in JavaScript from scratch."
+      "text": "In 2025 a student embedded a third-party calculator in an iframe as their main feature and was capped at band 2: it showed none of their own coding and broke the visual consistency. The Distinction example wrote the same calculator from scratch."
      }
     }
    ]
   },
   {
-   "h": "What separates Pass from Distinction",
+   "h": "What separated Pass from Distinction in 2025",
    "ic": "★",
    "blocks": [
     {
@@ -185,102 +230,90 @@ window.TLDATA.os = {
   {
    "id": "t1",
    "code": "Task 1",
-   "title": "Proposal and design",
-   "summary": "Research the industry, write a proposal for the client, then design the interface, data, algorithms and tests.",
+   "title": "Analysing a problem and designing a solution",
+   "summary": "Analyse the client's problem, define requirements and acceptance criteria, design the solution, and use generative AI for code snippets.",
    "facts": [
     [
-     "20 hours",
-     "over 3 weeks"
+     "Task 1",
+     "of 4"
     ],
     [
-     "58",
-     "marks"
-    ],
-    [
-     "monitored internet",
-     "in sessions"
+     "includes AI",
+     "Activity C"
     ]
    ],
    "parts": [
     {
-     "h": "Rules for this task",
+     "h": "What you produce",
+     "ic": "◎",
+     "blocks": [
+      {
+       "p": "Requirements analysis, user analysis, and full design documentation for the solution — plus the AI snippet activity."
+      }
+     ]
+    },
+    {
+     "h": "What your specification asks for",
      "ic": "§",
      "blocks": [
       {
        "ul": [
-        "You only produce the proposal and designs **in supervised sessions**, and cannot access them outside.",
-        "Outside sessions you **may research** and make notes of **facts and figures**.",
-        "Notes you take in must not interpret or analyse the research for the scenario. Your tutor checks them and they are submitted as an appendix.",
-        "You have **monitored internet access** during the sessions. A test strategy template is provided."
+        "Analyse the brief: identify the client, the end users, the business need and the measurable value of solving it.",
+        "Apply computational thinking to split the problem into discrete objects.",
+        "Define functional requirements: inputs required, data needed, processing that must happen, system logic, deployment and usage platforms.",
+        "Define non-functional requirements: security, accessibility, scalability, and KPIs for responsiveness, load handling and reliability.",
+        "Write user acceptance criteria — testable statements of what \"done\" means. These come back in Task 3.",
+        "Perform a user analysis using business analysis models: user stories, activity diagrams, mind maps, product road maps, process diagrams, entity relationship diagrams.",
+        "Design the product: interface designs (wireframes, style guide, clickable prototype), algorithms for the key problems, and data requirements designs (data dictionary, ERD, normalisation to third normal form).",
+        "Choose your languages and justify them against: suitability for the task, organisational policy, scalability, security, availability of trained staff, cost and reliability. You must use at least two of Python 3.10+, C#, SQL, JavaScript, PHP.",
+        "Identify risks and how you will mitigate them; identify legal, regulatory and ethical requirements for this context.",
+        "Activity C: use a generative AI model for specific snippets — record the prompt, the raw output, your evaluation of it against the requirement, and your refinement."
        ]
       }
      ]
     },
     {
-     "h": "Activity A(i) — research",
-     "ic": "⌕",
+     "h": "Examiner advice",
+     "ic": "★",
      "blocks": [
-      {
-       "p": "Research how digital solutions meet the needs of users in the client's industry. Cover:"
-      },
-      {
-       "ul": [
-        "How **hardware and software** are used in that industry.",
-        "**Emerging technologies** in the sector.",
-        "How digital solutions meet **different user needs**.",
-        "The **industry guidelines and regulations** you must follow."
-       ]
-      },
       {
        "callout": {
         "kind": "tip",
-        "title": "Keep it as facts and figures",
-        "text": "Write what is true and where it came from — statistics, regulations, named products — with the source and date. Save the interpretation for the proposal itself, written in the session."
+        "title": "Where the advice below comes from",
+        "text": "Your specification sets what this task must contain (above). The advice below comes from the Summer 2025 examiner report on the predecessor specialism, which had the same four tasks — it shows what was rewarded and what lost marks."
        }
       }
      ]
     },
     {
-     "h": "Activity A(ii) — the proposal (24 marks)",
-     "ic": "✎",
+     "h": "Activity C — using generative AI",
+     "ic": "✦",
      "blocks": [
       {
-       "table": {
-        "cols": [
-         "Strand",
-         "Marks",
-         "Distinction needs"
-        ],
-        "num": [
-         1
-        ],
-        "rows": [
-         [
-          "Decomposing the problem",
-          "9",
-          "Every problem identified and decomposed; a solution that meets the full needs, mitigates the risks and addresses the regulations"
-         ],
-         [
-          "Appreciation of wider issues",
-          "9",
-          "Comprehensive reasoning that fully justifies how needs are met, risks mitigated and regulations addressed"
-         ],
-         [
-          "Appreciation of the business context",
-          "6",
-          "Comprehensive, perceptive definitions of functional and non-functional requirements, KPIs and user acceptance criteria"
-         ]
-        ],
-        "foot": [
-         "Total",
-         "24",
-         ""
-        ]
-       }
+       "p": "Task 1 Activity C requires you to use a generative AI model to produce short code snippets for specific pieces of functionality — not a whole solution. You must show your prompts, the output, your review of how well it meets the requirement, and your refinement of it. Using AI to generate the entire solution is not what is being assessed and will not gain the marks."
       },
       {
-       "p": "Your proposal must cover: the business context; functional and non-functional requirements; decomposition of the problems; KPIs and user acceptance criteria; a description of the solution; and justification of how it meets the client's and users' needs, how risks are mitigated, and how regulations and law are addressed."
+       "ul": [
+        "Use it for **short snippets** that solve one specific piece of functionality you will fit into your own code — never the whole solution.",
+        "Record the **prompt** you gave, the **raw output**, your **review** of how far it meets the need, and the **refined** prompt or code that followed.",
+        "Your spec suggests a natural-language model such as ChatGPT or Google Gemini; Pearson does not specify one.",
+        "Judge the output like a code review: does it handle invalid input, is it secure, does it follow your naming and commenting conventions? Saying where it fell short is the evidence."
+       ]
       },
+      {
+       "code": {
+        "title": "One way to evidence a snippet",
+        "lang": "text",
+        "src": "Functionality:  validate a UK postcode entered on the booking form\n\nPrompt 1:  \"Write a JavaScript function that checks a UK postcode.\"\nOutput:    a single regular expression, no comments, accepts lowercase only.\nReview:    Meets the basic need but rejects \"CM1 1QH\" in capitals, gives no\n           message to the user, and has no explanation of the pattern.\n\nPrompt 2:  \"Rewrite it to accept upper or lower case and optional space, return\n           true/false, and comment each part of the pattern.\"\nOutput:    function isValidPostcode(value) { ... }   (commented)\nReview:    Now correct for the 8 valid and 6 invalid test values in my test log.\n           Renamed to match my camelCase convention and added a trim().\n\nDecision:  Used in validation.js with my own error message handling.",
+        "note": "Invented example. The marks are in the review and refinement, not in getting the AI to answer."
+       }
+      }
+     ]
+    },
+    {
+     "h": "Requirements, KPIs, acceptance criteria and risks",
+     "ic": "✎",
+     "blocks": [
       {
        "code": {
         "title": "Requirements that score versus requirements that do not",
@@ -301,64 +334,6 @@ window.TLDATA.os = {
         "lang": "text",
         "src": "Risk:        Members' health information (injuries entered when booking\n             a personal trainer) is exposed.\nLikelihood:  Medium   Impact: High — special category data under UK GDPR\nMitigation:  Store only a yes/no flag and a free-text note visible to staff\n             with the trainer role; encrypt the column; record consent at\n             the point of entry; delete it 12 months after the last booking.\nRegulation:  UK GDPR Article 9 (special category data), data minimisation."
        }
-      }
-     ]
-    },
-    {
-     "h": "Activity B — the design (34 marks)",
-     "ic": "▣",
-     "blocks": [
-      {
-       "table": {
-        "cols": [
-         "Strand",
-         "Marks",
-         "Distinction needs"
-        ],
-        "num": [
-         1
-        ],
-        "rows": [
-         [
-          "Effectiveness of the interface design",
-          "6",
-          "Sophisticated layout and white space, clear visual hierarchy, common conventions"
-         ],
-         [
-          "Algorithms — decomposition",
-          "4",
-          "Highly effective decomposition covering inputs, processes and outputs"
-         ],
-         [
-          "Algorithms — logic and conventions",
-          "6",
-          "Precise, efficient logic and consistent conventions"
-         ],
-         [
-          "Data requirements",
-          "6",
-          "Variables, structures and types fully appropriate; consistent naming; error handling for every input that needs it"
-         ],
-         [
-          "Test strategy",
-          "6",
-          "How components interrelate, the order to test them, and the types of test"
-         ],
-         [
-          "Quality of communication",
-          "6",
-          "Consistently appropriate techniques, formats and technical language for the audience"
-         ]
-        ],
-        "foot": [
-         "Total",
-         "34",
-         ""
-        ]
-       }
-      },
-      {
-       "p": "The design must include visual/interface designs, data requirements, a selection of algorithm designs (up to **five complex problems**) and a test strategy — detailed enough for a third-party developer to build from, and clear enough for the client to decide."
       }
      ]
     },
@@ -441,19 +416,15 @@ window.TLDATA.os = {
        "check": {
         "key": "os-t1",
         "items": [
-         "Research notes are facts and figures with sources and dates",
-         "Complex subsystems decomposed, not just the top-level pages",
-         "Functional and non-functional requirements numbered and specific",
-         "Non-functional requirements measurable",
-         "KPIs tied to the client's own goals",
-         "User acceptance criteria testable yes or no",
-         "Risks and mitigations specific to this client",
-         "Each regulation explained — how the solution complies",
-         "Annotated wireframes and a consistent high-fidelity design",
-         "Up to five algorithms, each including validation and error routes",
-         "Data dictionary and ERD with types, constraints and relationships",
-         "Test strategy shows order, types and data categories",
-         "Readable by both the client and a developer"
+         "Functional and non-functional requirements listed separately and numbered.",
+         "Acceptance criteria written so each can be tested yes/no.",
+         "At least two business analysis models used, not just a list of features.",
+         "Wireframes for every screen, plus a style guide.",
+         "Data design: ERD and normalisation to 3NF where a database is used.",
+         "Language choice justified against named criteria, not \"because I know it\".",
+         "Risk table: risk, likelihood, seriousness, impact, mitigation, contingency.",
+         "AI prompts, outputs, review and refinement all evidenced.",
+         "Sources of knowledge referenced and their reliability evaluated (PO5 marks)."
         ]
        }
       }
@@ -465,15 +436,11 @@ window.TLDATA.os = {
    "id": "t2",
    "code": "Task 2",
    "title": "Developing the solution",
-   "summary": "Build a working prototype in at least two languages, with an assets log, test log and development log.",
+   "summary": "Build the working software from your Task 1 designs in at least two languages, with testing evidence.",
    "facts": [
     [
-     "30 hours",
-     "over 4 weeks"
-    ],
-    [
-     "48",
-     "marks"
+     "Task 2",
+     "of 4"
     ],
     [
      "2+ languages",
@@ -482,81 +449,49 @@ window.TLDATA.os = {
    ],
    "parts": [
     {
-     "h": "Rules for this task",
+     "h": "What you produce",
+     "ic": "◎",
+     "blocks": [
+      {
+       "p": "The working software, built from your Task 1 designs, using at least two languages, plus testing evidence."
+      }
+     ]
+    },
+    {
+     "h": "What your specification asks for",
      "ic": "§",
      "blocks": [
       {
        "ul": [
-        "**Monitored internet access** and a copy of your Task 1 proposal and designs — which you cannot change.",
-        "A test log template is provided.",
-        "Your tutor may tell you whether the design is appropriate and whether the solution will work, but **not how to improve it**.",
-        "Submit key versions of the prototype and its **source code in its original file format**, not as PDFs."
+        "Implement front-end and back-end using at least two appropriate languages.",
+        "Use tools, APIs, packages, modules and libraries appropriately — dynamic content, form handling, file and data handling, database create/read/update/delete, interface components, media, responsive layout, network communication, security features (user access control, encrypting data).",
+        "Connect code to data sources: create the database, connect via API/JDBC/ODBC, extract, store, update and delete data. Show the connection method and how credentials are handled securely.",
+        "Apply UX principles: consistency, information hierarchy, visual hierarchy, confirmation of actions, user control, accessibility.",
+        "Apply UI technique: layout grids, use of space, typography and spacing, colour and contrast, input focus, hover states — with decisions justified by browser support, target device, user characteristics, bandwidth, branding, accessibility and input method.",
+        "Use common coding conventions throughout: naming, commenting/annotation, modularisation, structure and indentation, version control.",
+        "Follow good practice (12-factor principles): one codebase in version control, declared dependencies, config in the environment, separate build and run, stateless processes, logs as event streams, dev/staging/production kept similar.",
+        "Test as you build: functional (unit, smoke, integration, system), non-functional (availability, compatibility, configuration, load), front-end (browser and OS compatibility, rendering, load times, responsiveness) and security testing (vulnerability scanning, static and dynamic analysis).",
+        "Record tests properly: purpose, test data (valid, invalid, valid extreme, invalid extreme, erroneous), pre-requisites, expected result, actual result, changes made, re-tests/regression.",
+        "Select a deployment method and evidence it: local install, network/server install, mobile, web, cloud, containerisation."
        ]
       }
      ]
     },
     {
-     "h": "Mark breakdown",
-     "ic": "▤",
+     "h": "Examiner advice",
+     "ic": "★",
      "blocks": [
       {
-       "table": {
-        "cols": [
-         "Strand",
-         "Marks",
-         "Distinction needs"
-        ],
-        "num": [
-         1
-        ],
-        "rows": [
-         [
-          "Functionality",
-          "8",
-          "Consistently efficient, working code in at least two languages, with precise logic throughout"
-         ],
-         [
-          "Code organisation",
-          "8",
-          "Easily maintainable by someone else: consistent naming, logical organisation, informative comments"
-         ],
-         [
-          "User experience",
-          "8",
-          "Excellent input handling, guidance and error messages, and outputs; fully robust"
-         ],
-         [
-          "Legal, regulatory and standards",
-          "6",
-          "Accessibility, compatibility, legal and ethical considerations, and controls for confidentiality, integrity and availability"
-         ],
-         [
-          "Suitability of test data",
-          "6",
-          "Detailed testing of inputs, calculations, validation and processes using normal, erroneous and extreme data"
-         ],
-         [
-          "Testing to inform iteration",
-          "6",
-          "Clear evidence that testing drove fixes, with re-tests"
-         ],
-         [
-          "Quality of the iterative process",
-          "6",
-          "Detailed records of notable changes, perceptive reasons for them, and effective versioning"
-         ]
-        ],
-        "foot": [
-         "Total",
-         "48",
-         ""
-        ]
+       "callout": {
+        "kind": "tip",
+        "title": "Where the advice below comes from",
+        "text": "Your specification sets what this task must contain (above). The advice below comes from the Summer 2025 examiner report on the predecessor specialism, which had the same four tasks — it shows what was rewarded and what lost marks."
        }
       }
      ]
     },
     {
-     "h": "What the functionality marks reward",
+     "h": "What examiners rewarded for functionality",
      "ic": "⚙",
      "blocks": [
       {
@@ -732,18 +667,14 @@ window.TLDATA.os = {
        "check": {
         "key": "os-t2",
         "items": [
-         "Two programming languages genuinely used (HTML/CSS do not count)",
-         "Core features coded by you, no iframes or embedded widgets",
-         "Database built with DDL and used with DML, more than one table",
-         "Prepared statements for every query; passwords hashed",
-         "Validation on the server, not only in the browser",
-         "Functions or classes, constants, few globals, informative comments",
-         "Accessibility checked against WCAG; works on phone and desktop",
-         "Assets log with sources, licences, purpose and dates",
-         "Test log with normal, boundary, erroneous and absent data",
-         "Every failed test has a fix and a re-test entry",
-         "Development log per iteration with keep or discard decision",
-         "Key versions saved; source submitted in original format"
+         "At least two languages genuinely used (e.g. Python back end + SQL, or JavaScript front end + PHP back end).",
+         "Code is modular, commented, consistently named and indented.",
+         "Version control used, with meaningful commit history as evidence.",
+         "Security implemented, not just described: input validation, hashed passwords, access control, no credentials hard-coded in the source.",
+         "Accessibility considered in the UI and evidenced.",
+         "Full test plan with all five types of test data.",
+         "Screenshots of both failing and passing tests, and of the fixes.",
+         "Deployment evidenced end to end."
         ]
        }
       }
@@ -755,15 +686,11 @@ window.TLDATA.os = {
    "id": "t3a",
    "code": "Task 3a",
    "title": "Gathering feedback",
-   "summary": "Demonstrate the prototype to technical and non-technical audiences and collect feedback you can analyse.",
+   "summary": "Gather feedback on your working solution from real users and from peers.",
    "facts": [
     [
-     "15 hours",
-     "supervised"
-    ],
-    [
-     "24",
-     "marks"
+     "Task 3a",
+     "of 4"
     ]
    ],
    "parts": [
@@ -772,44 +699,35 @@ window.TLDATA.os = {
      "ic": "◎",
      "blocks": [
       {
-       "ul": [
-        "Demonstration materials suitable for a **technical** audience, such as programmers, and a **non-technical** one, such as the client and users.",
-        "A **plan** for how you will gather feedback.",
-        "The feedback itself, **recorded in a form you can analyse**."
-       ]
-      },
+       "p": "Evidence of feedback gathered from users and peers on your working solution."
+      }
+     ]
+    },
+    {
+     "h": "What your specification asks for",
+     "ic": "§",
+     "blocks": [
       {
-       "table": {
-        "cols": [
-         "Strand",
-         "Marks",
-         "Distinction needs"
-        ],
-        "num": [
-         1
-        ],
-        "rows": [
-         [
-          "Effectiveness of the materials",
-          "12",
-          "Materials that would gather high-quality feedback on every aspect of the prototype"
-         ],
-         [
-          "Use of feedback tools",
-          "6",
-          "Tools that consistently give evidence for the next iteration"
-         ],
-         [
-          "Effectiveness of communication",
-          "6",
-          "Consistently right for both audiences, in technique, format and language"
-         ]
-        ],
-        "foot": [
-         "Total",
-         "24",
-         ""
-        ]
+       "ul": [
+        "Select techniques to obtain qualitative and quantitative data: surveys/questionnaires, user observation with observation records, interviews, focus groups representing a cross-section of the target audience, verbal feedback, performance and use data, peer mentoring.",
+        "Design the instruments properly — questions must map back to your acceptance criteria, not be generic \"did you like it?\" questions.",
+        "Get both types: quantitative (ratings, task completion times, error counts) and qualitative (comments, observed difficulties).",
+        "Record raw evidence: completed questionnaires, observation notes, interview notes, screenshots of analytics.",
+        "Cover a representative range of users, including any with accessibility needs identified in Task 1.",
+        "This is also where PO4 (collaborative working) is evidenced — code reviews, paired programming, walkthroughs, formal inspections."
+       ]
+      }
+     ]
+    },
+    {
+     "h": "Examiner advice",
+     "ic": "★",
+     "blocks": [
+      {
+       "callout": {
+        "kind": "tip",
+        "title": "Where the advice below comes from",
+        "text": "Your specification sets what this task must contain (above). The advice below comes from the Summer 2025 examiner report on the predecessor specialism, which had the same four tasks — it shows what was rewarded and what lost marks."
        }
       }
      ]
@@ -876,22 +794,36 @@ window.TLDATA.os = {
        "p": "Finish with a development plan where **every** proposed change links to a specific piece of feedback and gives a technical reason the fix is right — not just 'the PHP is broken', but why refactoring the database connection solves what testers reported."
       }
      ]
+    },
+    {
+     "h": "Checklist",
+     "ic": "☑",
+     "blocks": [
+      {
+       "check": {
+        "key": "os-t3a",
+        "items": [
+         "At least two different feedback techniques used.",
+         "Both qualitative and quantitative data collected.",
+         "Questions traceable to your acceptance criteria.",
+         "Raw, dated evidence included in the portfolio.",
+         "Participants represent the actual target users."
+        ]
+       }
+      }
+     ]
     }
    ]
   },
   {
    "id": "t3b",
    "code": "Task 3b",
-   "title": "Evaluating the solution",
-   "summary": "A two-hour, no-internet evaluation of your assets, sources and how well the prototype met its requirements.",
+   "title": "Evaluating feedback",
+   "summary": "Evaluate the feedback and your solution, and plan the changes. No internet for this task.",
    "facts": [
     [
-     "2 hours",
-     "single session"
-    ],
-    [
-     "15",
-     "marks"
+     "Task 3b",
+     "of 4"
     ],
     [
      "no internet",
@@ -900,49 +832,40 @@ window.TLDATA.os = {
    ],
    "parts": [
     {
-     "h": "Rules and marks",
+     "h": "What you produce",
+     "ic": "◎",
+     "blocks": [
+      {
+       "p": "An evaluation of the feedback and of the solution, with planned changes. No internet access for this task."
+      }
+     ]
+    },
+    {
+     "h": "What your specification asks for",
      "ic": "§",
      "blocks": [
       {
        "ul": [
-        "One two-hour supervised session, **no internet**.",
-        "You may use your design, your prototype and the feedback from Task 3a."
+        "Analyse the feedback: what does it actually show, including where responses conflict?",
+        "Evaluate the solution against every acceptance criterion and non-functional requirement (KPIs, accessibility, security).",
+        "Identify the changes required, prioritise them, and plan them — this is the PO3 change/maintain/support outcome.",
+        "Cover the change management stages: identify the issue, document it, communicate it to technical and non-technical audiences, plan and schedule the change, regression test, and control the release (planned vs reactive).",
+        "Reflect on your own performance: skills gaps you identified, how you addressed them, and what you would do differently.",
+        "Comment on the ethical, legal and regulatory decisions you made and whether they were appropriate (PO6).",
+        "Prepare beforehand: no internet in this task, so any reference material you need (your notes, your own documentation) must already be in your portfolio."
        ]
-      },
-      {
-       "table": {
-        "cols": [
-         "Strand",
-         "Marks",
-         "Distinction needs"
-        ],
-        "num": [
-         1
-        ],
-        "rows": [
-         [
-          "Effectiveness of assets and content",
-          "6",
-          "A comprehensive review of appropriateness, validity and reliability of sources, and legal and ethical implications, corroborated across sources"
-         ],
-         [
-          "Evaluation of project outcomes",
-          "9",
-          "A thorough evaluation against requirements, KPIs and acceptance criteria, with a perceptive, evidence-backed plan for the next iteration"
-         ]
-        ],
-        "foot": [
-         "Total",
-         "15",
-         ""
-        ]
-       }
-      },
+      }
+     ]
+    },
+    {
+     "h": "Examiner advice",
+     "ic": "★",
+     "blocks": [
       {
        "callout": {
         "kind": "tip",
-        "title": "Prepare your evidence first",
-        "text": "With no internet and two hours, organise your feedback charts, quotes and screenshots in Task 3a so you can drop them straight in."
+        "title": "Where the advice below comes from",
+        "text": "Your specification sets what this task must contain (above). The advice below comes from the Summer 2025 examiner report on the predecessor specialism, which had the same four tasks — it shows what was rewarded and what lost marks."
        }
       }
      ]
@@ -979,6 +902,295 @@ window.TLDATA.os = {
         "lang": "text",
         "src": "PASS\nAdd more accessibility features.\n\nDISTINCTION\nTwo of the six users in observation zoomed the page to read the class\ntimetable, and one asked for \"a way to make it read out\". Future iterations\nshould add a high-contrast mode and support for the browser's text-to-speech,\nwhich would also move NFR7 (WCAG AA) from partly to fully met."
        }
+      }
+     ]
+    },
+    {
+     "h": "Checklist",
+     "ic": "☑",
+     "blocks": [
+      {
+       "check": {
+        "key": "os-t3b",
+        "items": [
+         "Every acceptance criterion judged with evidence.",
+         "Feedback analysed, not just repeated.",
+         "Conflicting feedback acknowledged and a reasoned decision taken.",
+         "Changes prioritised with justification (impact vs effort).",
+         "Regression testing addressed.",
+         "Communication to non-technical stakeholders demonstrated.",
+         "Honest reflection on limitations and on your own development."
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "areas": [
+  {
+   "id": "a1",
+   "code": "Area 1",
+   "title": "Analyse a problem to define requirements and acceptance criteria",
+   "summary": "Software development lifecycle stages: research and familiarisation → planning and requirement analysis → user analysis → designing the product →…",
+   "facts": [
+    [
+     "14",
+     "points to know"
+    ]
+   ],
+   "parts": [
+    {
+     "h": "What your specification says you need to know",
+     "ic": "✓",
+     "blocks": [
+      {
+       "ul": [
+        "Software development lifecycle stages: research and familiarisation → planning and requirement analysis → user analysis → designing the product → developing and testing → deploying/implementing → maintenance.",
+        "Research and familiarisation: explore the client request, research the context and market (common problems and risks, current hardware/software use, emerging technologies, existing solutions and how they meet user needs, industry guidelines and regulations), and identify shortfalls in your own skills.",
+        "Planning and requirement analysis: identify business requirements; assess the measurable value to the user and to the client/business; apply computational thinking to split the problem into discrete objects; define functional and non-functional requirements; define KPIs; identify performance constraints; create user acceptance criteria; schedule tasks, subtasks and milestones; allocate resources; estimate costs; choose languages against criteria; identify and mitigate risks.",
+        "Roles: product owner/client (sets and communicates requirements), scrum master (facilitates the team and removes blockers), technical lead (technical guidance), project manager (plans and manages budget, scope, schedule, risk, quality), systems analyst (analyses the current system, defines requirements, designs the solution), UX/UI designer (researches users and designs the interface), software developer/engineer (builds and maintains it), operations engineer (stability), security engineer (security), software testers (quality assurance).",
+        "Methodologies — Agile: incremental delivery (sprint, epic, story, spike), high-quality product with initially limited functionality, each increment adds functionality, requirements can change throughout, can lack formal documentation, client sees working software each iteration, cost-effective route to an initial product, cancelled projects still leave usable code.",
+        "Scaled Agile: the same plus product increments, cohesive reporting across teams, and a final iteration focused on stability.",
+        "Waterfall: rigid, systematic steps; progress measured by artefacts completed; high initial cost and slower return; early cancellation may leave nothing usable; limited client interaction; heavy documentation.",
+        "RAD: rapid prototypes systematically improved; features first and quality second; clients may see only partial products early; relies on reusing existing code; suits small-to-medium projects.",
+        "Lean: eliminate waste (unnecessary or wrong features, repeated tasks, over-complex solutions, poor communication, unnecessary changes); decide as late as possible; short iterations with fast delivery; iterations must be fit for use rather than feature-complete; suits small teams and limited resources.",
+        "User Centred Design: ask who the user is, what they want to achieve, how/when/why they interact, and what the experience is. Characteristics: empathetic, iterative, interdisciplinary. Stages: understand the use context → specify user requirements → design the solution → assess against requirements, and repeat.",
+        "Secure by design: security is considered when requirements are written, not added at the end.",
+        "Functional requirements = what the system must do (inputs, data, processing, logic, platforms). Non-functional = how well it must do it (security, accessibility, scalability, responsiveness, load handling, reliability, acceptance criteria).",
+        "Spike testing: a short, time-boxed piece of exploratory work early on to establish requirements and determine the scope and difficulty of a problem.",
+        "Addressing personal training needs: identify the knowledge and skills gaps, then close them by coaching from a professional or peer, learning on the job, self-study, professional forums, or online workshops."
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a2",
+   "code": "Area 2",
+   "title": "Ethical principles, legal and regulatory requirements, and risk",
+   "summary": "Legal and regulatory areas to consider: intellectual property rights and licences, consumer protection, age ratings and classifications, advertising…",
+   "facts": [
+    [
+     "7",
+     "points to know"
+    ]
+   ],
+   "parts": [
+    {
+     "h": "What your specification says you need to know",
+     "ic": "✓",
+     "blocks": [
+      {
+       "ul": [
+        "Legal and regulatory areas to consider: intellectual property rights and licences, consumer protection, age ratings and classifications, advertising law, data protection and privacy, copyright and patent, gambling legislation, staff and employment practices, territorial restrictions, system security, equality and diversity.",
+        "Standards: ISO/IEC/IEEE 90003:2018 (software quality management) and W3C (web standards, and via WCAG, accessibility).",
+        "Ethical considerations: codes of conduct, professional practice, software licensing, inclusion and diversity — including bias in datasets and models, and honest use of AI-generated content.",
+        "Risk identification areas: data and system security (malicious vs accidental), compatibility with other systems, speed of development, meeting functional and non-functional requirements, meeting KPIs, legal and ethical considerations, user engagement, product reach.",
+        "Assess risk as likelihood versus seriousness, state the potential impact, plan mitigation, plan contingency, and monitor it on an ongoing basis.",
+        "Supporting policies and procedures: backup, security, CIA (confidentiality, integrity, availability), personnel/skills/training, business continuity planning, disaster recovery planning.",
+        "You must be able to make and justify development decisions based on risk versus reward for the specific context and market."
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a3",
+   "code": "Area 3",
+   "title": "Discover, evaluate and apply reliable sources of knowledge",
+   "summary": "Sources: search engines, wikis, blogs, academic papers, peers, forums, code comments, code…",
+   "facts": [
+    [
+     "6",
+     "points to know"
+    ]
+   ],
+   "parts": [
+    {
+     "h": "What your specification says you need to know",
+     "ic": "✓",
+     "blocks": [
+      {
+       "ul": [
+        "Sources: search engines, wikis, blogs, academic papers, peers, forums, code comments, code repositories.",
+        "Evaluating reliability: reputation (who is the author and are they credible), bias (who wrote it and what is their interest), evidence used to support the content, cross-referencing/triangulation against other sources, and currency (when was it last updated).",
+        "Official documentation and standards outrank a blog post; a five-year-old answer may reference a deprecated library.",
+        "Cite what you use in your portfolio and say why you judged it reliable — this is directly worth marks (PO5 is 12.5%).",
+        "Techniques for obtaining evaluation data: verbal feedback (formal and informal), surveys/questionnaires, performance and use data, user observation with observation records, focus groups representing a cross-section of the audience, interviews, peer mentoring, and formal line management/appraisal procedures.",
+        "Qualitative data explains why; quantitative data shows how much. You need both to evaluate a solution properly."
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a4",
+   "code": "Area 4",
+   "title": "Design",
+   "summary": "Function-oriented (top-down) design: consider how data flows through the system, build it from sub-systems (functions), use data flow diagrams, and…",
+   "facts": [
+    [
+     "16",
+     "points to know"
+    ]
+   ],
+   "parts": [
+    {
+     "h": "What your specification says you need to know",
+     "ic": "✓",
+     "blocks": [
+      {
+       "ul": [
+        "Function-oriented (top-down) design: consider how data flows through the system, build it from sub-systems (functions), use data flow diagrams, and break the problem down by what each function does.",
+        "Object-oriented design: make code reusable through methods, classes and objects/instances. Characteristics: encapsulation, data abstraction, polymorphism, inheritance. Design patterns fall into creational, structural and behavioural groups.",
+        "Data model design: visualise the data and how it is organised. Models — conceptual, logical, physical, hierarchical, relational. Tools — Entity Relationship Model and UML.",
+        "Test-driven development (TDD): write a test defining the improvement first → run all tests until the new one fails → write code → run tests and refactor → repeat.",
+        "Behaviour-driven development (BDD): specify the required behaviour before coding; behaviours must have business value and map to requirements; specification structure = title, narrative, acceptance criteria.",
+        "Functional design: build the program as modules that each perform one defined process. Characteristics: recursion, closures, first-class functions, higher-order functions, anonymous functions, currying. Components: arguments, statements, blocks, procedures, functions.",
+        "Source code and content management platforms: coding, repositories, branching, building, testing, deployment. Understand proprietary vs open source, and workflows (gitFlow, gitHubFlow).",
+        "Choose a platform on: target audience, budget, technical features, staff and training, ease/speed of development, platform updates, security, reliability, performance, compatibility.",
+        "UX design principles: consistency (intuitive, attractive, reinforces brand), information hierarchy (easier navigation), visual hierarchy (important content stands out), confirmation (the user knows what an action did), user control (navigate, work efficiently, correct errors), accessibility (usable by a wide range of users).",
+        "UI design outputs: wireframes, style guides, clickable prototypes.",
+        "Content management system features: SEO, page/screen management, social media integration, analytics, workflow management, publishing controls, security management, versioning and rollback, content repositories, open APIs, multilingual support, support.",
+        "Program design conventions: pre-defined code, flowcharts using standard BCS symbols, pseudocode using standard notation, control structures, data types, validation, data structures.",
+        "Asset selection: file types, file size, compression, streaming vs encoding audio, streaming vs embedding video, metadata, quality required, bandwidth and storage available, target platform. Use AI-generated assets legally and ethically.",
+        "Target platform features affect design: operating systems, file systems, server/infrastructure (physical or virtual), the language stack, and mobile vs web.",
+        "Databases support user management, e-commerce (stock, orders, personalisation), diagnostics and performance analysis. Design them with a data dictionary, an ERD, and normalisation to third normal form.",
+        "Network integration points: what is processed locally, what remotely, how data transfers between them, how systems connect, where the system boundaries are, and which external systems you integrate with."
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a5",
+   "code": "Area 5",
+   "title": "Create solutions in a social and collaborative environment",
+   "summary": "Why collaborate: reduced development time, better communication, shared knowledge, skills development, and code…",
+   "facts": [
+    [
+     "6",
+     "points to know"
+    ]
+   ],
+   "parts": [
+    {
+     "h": "What your specification says you need to know",
+     "ic": "✓",
+     "blocks": [
+      {
+       "ul": [
+        "Why collaborate: reduced development time, better communication, shared knowledge, skills development, and code reviews.",
+        "Code review forms: paired programming, informal walkthroughs, formal inspections.",
+        "Know when to work independently instead — focused individual work suits well-defined, self-contained tasks; collaboration suits design decisions, integration and quality assurance.",
+        "Collaborative technologies: communication (email, instant messaging), resource management (cloud storage, backup, synchronisation), knowledge (collaboration hubs, wikis, community forums, news sites), and documentation for both technical and non-technical audiences.",
+        "Code collaboration: version control and source control (branching, pull requests, merge conflict resolution) and shared IDE features.",
+        "Evidence this in the portfolio: commit history, review comments, meeting notes, agreed standards."
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a6",
+   "code": "Area 6",
+   "title": "Implement a solution using at least two languages",
+   "summary": "Permitted languages: Python 3 (3.10+), C#, SQL, JavaScript, PHP. You must use at least two, covering front end and back…",
+   "facts": [
+    [
+     "11",
+     "points to know"
+    ]
+   ],
+   "parts": [
+    {
+     "h": "What your specification says you need to know",
+     "ic": "✓",
+     "blocks": [
+      {
+       "ul": [
+        "Permitted languages: Python 3 (3.10+), C#, SQL, JavaScript, PHP. You must use at least two, covering front end and back end.",
+        "Use tools/APIs/packages/modules/libraries for: dynamic page content, containerisation, stateful vs stateless components, form handling, file and data handling (local files; create/open/read/write/delete/close files on a server; cookies; add/delete/modify database data), interface components, media content, adaptive/responsive layout, working with existing applications and platforms, specific devices, network communication, infrastructure as code, and security features (user access control, encryption).",
+        "Package front end and back end into a single usable product.",
+        "CI/CD pipelines: source code control → build automation → unit test automation → deployment automation → monitoring.",
+        "Coding conventions: naming, annotations/comments, modularisation, structure/indentation, version control.",
+        "12-factor principles: one codebase in version control with many deploys; explicitly declare and isolate dependencies; store config in the environment; treat backing services as attached resources; strictly separate build and run; execute as stateless processes; export services via port binding; scale out via the process model; fast startup and graceful shutdown; keep dev, staging and production similar; treat logs as event streams; run admin tasks as one-off processes.",
+        "UI features: images and animation, audio, effects, interactions (user input; textual, graphical, audio and haptic feedback), and data visualisation (dashboards, graphing, data presentation).",
+        "UI techniques: layout grids, layout and use of space, font selection and typesetting, letter and line spacing, justification, colour and contrast, input focus, hover controls.",
+        "Design decisions consider: browser support, target device/platform, user characteristics, bandwidth, style and branding, accessibility, and input method (voice, text, touch, mouse).",
+        "Connecting to data: APIs (request methods, endpoints, retrieving and parsing data, displaying it, API keys), JDBC (core API, driver manager, connection statement, prepared statement, result set, SQL queries), ODBC (application, driver manager, driver, data source). Connection needs the database/data source name, credentials and optional parameters. Operations: extract, store, update, delete.",
+        "Deployment methods: local installation, network/server installation, mobile platforms, web-based platforms, cloud-based platforms, containerisation, container-scheduling platforms."
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a7",
+   "code": "Area 7",
+   "title": "Testing a software solution",
+   "summary": "Functional testing: unit, smoke, integration,…",
+   "facts": [
+    [
+     "8",
+     "points to know"
+    ]
+   ],
+   "parts": [
+    {
+     "h": "What your specification says you need to know",
+     "ic": "✓",
+     "blocks": [
+      {
+       "ul": [
+        "Functional testing: unit, smoke, integration, system.",
+        "Non-functional testing: availability, compatibility, configuration, load.",
+        "Front-end testing checks: code/script performance and functionality, browser compatibility, OS compatibility, cross-browser performance, formatting and rendering, loading times, responsiveness.",
+        "Security testing: vulnerability scanning, static analysis, dynamic analysis, integration analysis.",
+        "Techniques: acceptance, alpha, beta, closed box, open box/structural. Manual and automated (including AI tools).",
+        "Alpha testing is internal, before release; beta testing is with real users outside the organisation.",
+        "Test plan contents: purpose of the test; test data (valid, invalid, valid extreme, invalid extreme, erroneous); pre-requisites for the test; expected results; then update with actual results, changes made, and re-tests/regression testing after changes.",
+        "Choose the test type to match the stage of the lifecycle: unit tests while building a module, integration when combining, system before acceptance, regression after any change."
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "a8",
+   "code": "Area 8",
+   "title": "Change, maintain and support software",
+   "summary": "Preventive maintenance addresses foreseeable issues: regulatory changes, compatibility with new products or technology, changes in business process,…",
+   "facts": [
+    [
+     "7",
+     "points to know"
+    ]
+   ],
+   "parts": [
+    {
+     "h": "What your specification says you need to know",
+     "ic": "✓",
+     "blocks": [
+      {
+       "ul": [
+        "Preventive maintenance addresses foreseeable issues: regulatory changes, compatibility with new products or technology, changes in business process, release of a new product or service.",
+        "Corrective maintenance addresses unforeseen problems: new vulnerabilities in other products (zero day), targeted attacks, data corruption, system failures.",
+        "Iterative development keeps a product relevant: review after user/client feedback, technology developments, competition, efficiency improvements, and future-proofing.",
+        "Change management stages: identify issues/changes from feedback and review → document developments and changes → communicate with technical and non-technical audiences → plan the changes → schedule them → regression test → control and release the update (planned or reactive).",
+        "Maintaining code in a team: separate code and use modularity, keep it readable, follow accepted conventions, comment/annotate informatively, and update change logs and documentation.",
+        "Supporting users — communication routes: face to face, remote conferencing, written (blogs, formal reports, technical documentation, release notes, user guides/help files, FAQs), visual and audio (demonstrations, screencasts, narration), and machine-readable API contracts. Match tone and technical vocabulary to the audience.",
+        "Systematic issue resolution: identify or replicate the issue → investigate the possible cause (user error, system error, application error, security breach) → apply testing techniques to find the error, make the change, confirm the error does not return and that nothing else broke → communicate how and when it was resolved to stakeholders → document lessons learned."
+       ]
       }
      ]
     }

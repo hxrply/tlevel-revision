@@ -1,13 +1,13 @@
 /* GENERATED FILE — do not edit by hand.
    Source: tools/esp_content.py. Regenerate with: python tools/build_content.py
-   Employer Set Project, paper 19538. */
+   Employer Set Project — T Level in Digital Software Development. */
 
 window.TLDATA = window.TLDATA || {};
 
 window.TLDATA.esp = {
  "name": "Employer Set Project",
- "paper": "19538",
- "intro": "Five assessed tasks sat in separate supervised sessions, all built around one business scenario you first meet in the pre-release. 100 marks and 40% of your core grade. Every number on these pages is checked against the real 19538 papers, mark scheme and examiner report for your qualification.",
+ "paper": "",
+ "intro": "Five assessed tasks sat in supervised sessions, all built around one business scenario you first meet in the pre-release. 100 marks and 40% of your core grade. The times and marks on these pages are from your own DSD specification and Pearson's DSD sample mark scheme.",
  "facts": [
   [
    "100",
@@ -22,8 +22,8 @@ window.TLDATA.esp = {
    "of the core grade"
   ],
   [
-   "69",
-   "marks for an A (Summer 2025)"
+   "no internet",
+   "and no AI tools"
   ]
  ],
  "hub": [
@@ -45,27 +45,27 @@ window.TLDATA.esp = {
       "rows": [
        [
         "Pre-release",
-        "about 6 hours",
+        "up to 4 hours",
         "0",
-        "Not assessed — team research"
+        "Not assessed — research in groups of up to six"
        ],
        [
         "Task 1 · Planning a project",
         "3 hours",
-        "19",
-        "Gantt chart 6 · resource and cost plan 4 · rationale 9"
+        "18",
+        "Gantt chart 3 · project costings 3 · resource allocation 3 · rationale 9"
        ],
        [
         "Task 2 · Fixing defects",
         "3 hours",
         "21",
-        "Use of testing 8 · testing process 4 · the solution 9"
+        "Use of testing 9 · testing process 3 · the solution 9"
        ],
        [
         "Task 3 · Designing a solution",
-        "3 hours",
-        "17",
-        "Decomposition 8 · logic and conventions 6 · communication 3"
+        "2 hours 30",
+        "18",
+        "Decomposition 9 · logic and conventions 6 · communication 3"
        ],
        [
         "Task 4a · Developing the solution",
@@ -75,9 +75,9 @@ window.TLDATA.esp = {
        ],
        [
         "Task 4b · Reflective evaluation",
-        "1 hour 30",
+        "2 hours",
         "9",
-        "Programming outcomes 6 · future developments 3"
+        "Review of outcomes 6 · future developments 3"
        ]
       ],
       "foot": [
@@ -91,8 +91,8 @@ window.TLDATA.esp = {
     {
      "callout": {
       "kind": "warn",
-      "title": "If you used this site before October",
-      "text": "The old version of this page listed Task 1 as 18 marks, Task 3 as 2 hours 30 and 21 marks, Task 4b as 2 hours, and a 4-hour pre-release. Those figures came from the newer Digital Software Development papers, not yours. The table above is from your actual 19538 papers."
+      "title": "Corrected in October",
+      "text": "For a few days these pages showed the ESP for the older Digital Production, Design and Development course, whose papers were in your college files as practice. Your course is Digital Software Development, and the table above is from your DSD specification and Pearson's DSD sample mark scheme. Your college ran Task 4b as 1h 30 and a 3-hour pre-release in May 2026 — always go by the time printed on your own booklet."
      }
     }
    ]
@@ -102,7 +102,7 @@ window.TLDATA.esp = {
    "ic": "★",
    "blocks": [
     {
-     "p": "The A boundary in Summer 2025 was **69 out of 100**. You do not need full marks anywhere — you need to sit solidly in the upper band of most strands. This is one realistic way to reach about 73, with the biggest gains marked:"
+     "p": "Grade boundaries for your series are not in your files. On the predecessor course in 2025 an A needed **69 out of 100**, so aiming for about 70 is sensible. You do not need full marks anywhere — you need to sit in the upper band of most strands. One realistic route:"
     },
     {
      "table": {
@@ -119,9 +119,9 @@ window.TLDATA.esp = {
       "rows": [
        [
         "Task 1",
-        "14",
-        "19",
-        "The rationale averaged **2.63 out of 9** nationally. Reaching 6 is the cheapest 3 marks in the whole project"
+        "12",
+        "18",
+        "The rationale is 9 of the 18 and is where students score worst. Reaching 6 there is the cheapest gain in the project"
        ],
        [
         "Task 2",
@@ -132,7 +132,7 @@ window.TLDATA.esp = {
        [
         "Task 3",
         "12",
-        "17",
+        "18",
         "Decompose through named functions, validate every input, count text rather than summing it"
        ],
        [
@@ -145,12 +145,12 @@ window.TLDATA.esp = {
         "Task 4b",
         "6",
         "9",
-        "Judge against the brief, do not narrate. Most students score low here"
+        "Judge against the system and user requirements, do not narrate"
        ]
       ],
       "foot": [
        "Total",
-       "73",
+       "71",
        "100",
        "Comfortably over 69"
       ]
@@ -159,9 +159,12 @@ window.TLDATA.esp = {
    ]
   },
   {
-   "h": "What the examiner said the whole cohort should fix",
+   "h": "What examiners told the 2025 cohort to fix",
    "ic": "!",
    "blocks": [
+    {
+     "p": "From the Summer 2025 examiner report on the predecessor course's ESP — the same five tasks, so the same advice applies to yours:"
+    },
     {
      "ul": [
       "Plan in **short sprints** and think about how modules depend on each other — especially where **integration testing** fits.",
@@ -180,10 +183,11 @@ window.TLDATA.esp = {
    "blocks": [
     {
      "ul": [
-      "Every assessed task is sat under supervised conditions in its own session.",
-      "**You cannot take pre-release notes into the supervised sessions.** Whatever you learn in the pre-release has to be in your head or your fingers.",
-      "Work is kept securely between sessions. Save files with the exact naming convention printed in each booklet — submission-format problems rose this series.",
-      "Hand in clean source files that run in any Python IDE. One student's Task 2 code would not run because their editor had inserted extra characters."
+      "The assessed tasks are sat under supervised conditions over several sessions, up to 14 hours 30 minutes in total.",
+      "**No internet access** in the assessed tasks, and **no AI or other tool designed to prepare a response**.",
+      "**You cannot take your pre-release notes into the supervised sessions.** Whatever you learn in the pre-release has to be in your head or your fingers.",
+      "Your evidence is a portfolio submitted electronically. Save files with the exact naming convention printed in each booklet.",
+      "Hand in clean source files that run in any Python IDE. One 2025 student's code would not run because their editor had inserted extra characters."
      ]
     }
    ]
@@ -197,15 +201,15 @@ window.TLDATA.esp = {
    "summary": "Meet the scenario, explore any data or code, rehearse the libraries. Not marked, but it sets up every task.",
    "facts": [
     [
-     "about 6h",
-     "suggested"
+     "up to 4h",
+     "recommended"
     ],
     [
      "0",
      "marks"
     ],
     [
-     "teams of up to 6",
+     "groups of up to 6",
      ""
     ]
    ],
@@ -215,7 +219,7 @@ window.TLDATA.esp = {
      "ic": "◎",
      "blocks": [
       {
-       "p": "You get the business scenario before the assessed tasks. You can work in a team of up to six, and you may investigate both in and outside supervised sessions. Your centre schedules at least six hours."
+       "p": "You get the business scenario before the assessed tasks. You work in groups of up to six, may use the internet, and may investigate both in and outside supervised sessions. Pearson recommends no more than four hours in total; your college ran it as a 3-hour session."
       },
       {
        "callout": {
@@ -227,7 +231,7 @@ window.TLDATA.esp = {
      ]
     },
     {
-     "h": "How to spend the six hours",
+     "h": "How to spend the time",
      "ic": "✓",
      "blocks": [
       {
@@ -267,12 +271,12 @@ window.TLDATA.esp = {
      ""
     ],
     [
-     "19",
+     "18",
      "marks"
     ],
     [
-     "rationale mean 2.63/9",
-     "nationally"
+     "rationale: 9 of the 18",
+     ""
     ]
    ],
    "parts": [
@@ -305,23 +309,28 @@ window.TLDATA.esp = {
         "rows": [
          [
           "Gantt chart",
-          "6",
-          "Tasks in a thoroughly logical, efficient order using a suitable SDLC model, with accurate timescales and people assigned effectively throughout"
+          "3",
+          "Tasks in a thoroughly logical and efficient order using a suitable project management methodology, giving thoroughly accurate timescales"
          ],
          [
-          "Resource and cost plan",
-          "4",
-          "Every resource present and every cost accurate, giving an accurate total"
+          "Project costings",
+          "3",
+          "Fully accurate costs added to the plan, giving an accurate estimate"
+         ],
+         [
+          "Resource allocation",
+          "3",
+          "Team members assigned to tasks effectively, consistently"
          ],
          [
           "Rationale",
           "9",
-          "Thorough, perceptive reasoning about cost, risk and benefit; order and timing; selection and allocation of staff; dependencies and prerequisites"
+          "Thorough, perceptive reasoning about the order and timing of tasks, the allocation of team members, potential benefits and risks, and the impact of decisions on timings and costs"
          ]
         ],
         "foot": [
          "Total",
-         "19",
+         "18",
          ""
         ]
        }
@@ -367,7 +376,7 @@ window.TLDATA.esp = {
        "callout": {
         "kind": "bad",
         "title": "The most common error",
-        "text": "Working out wages as **total project hours × each person's rate**. Wages are **the hours that person actually works × their rate**, worked out per person and then added up."
+        "text": "Working out wages from the length of the whole project. Your mark scheme is explicit: staff costs use **only the days or hours that person actually works**, × their rate, worked out per person and then added up."
        }
       },
       {
@@ -401,10 +410,10 @@ window.TLDATA.esp = {
      "ic": "✎",
      "blocks": [
       {
-       "p": "Nationally this averaged **2.63 out of 9**, the weakest part of the whole ESP. The reason is almost always the same: students describe what is on the Gantt chart. The marker can already see the chart. They want to know **why**, and what it cost or risked."
+       "p": "On the predecessor course in 2025 the rationale averaged **2.63 out of 9** nationally — the weakest part of the whole ESP. The reason is almost always the same: students describe what is on the Gantt chart. The marker can already see the chart. They want to know **why**, and what it cost or risked."
       },
       {
-       "p": "Cover all four strands by name, and for every notable decision write four things:"
+       "p": "Your mark scheme names four things to consider: the **order and timing of tasks**, the **allocation of team members**, the **potential benefits and risks**, and the **impact of your decisions on timings and costs**. Cover all four, and for every notable decision write:"
       },
       {
        "ol": [
@@ -418,7 +427,7 @@ window.TLDATA.esp = {
        "code": {
         "title": "Sentence frames",
         "lang": "text",
-        "src": "ORDER AND DEPENDENCIES\nI scheduled the database before the booking and CRM modules because both read and\nwrite to it. If the database slips, both modules stall, so I put 3 days of\ncontingency on it and started the front-end screens in parallel, which do not\nneed live data.\n\nSELECTION AND ALLOCATION\nI paired the junior developer with the senior on the payments module rather than\ngiving it to them alone. It costs about £1,900 more in senior hours, but payments\nis business-critical and the junior has no experience with it. The pairing also\ntrains them for the later modules they will own.\n\nCOST, RISK AND BENEFIT\nI chose the cloud server over the physical one. It costs £4,000 less in year 1 and\nremoves the need to hire technician time for hardware, although it adds a monthly\ncost that continues every year. Because the booking system is business-critical,\nthe provider's built-in redundancy reduces the risk of downtime.\n\nFEASIBILITY\nThe project makes a loss of about £___ in year 1, but the forecast revenue increase\nmeans it is back in profit by year 2, so it is worth doing provided the external\ncontractor's availability is secured in writing.",
+        "src": "ORDER AND TIMING\nI scheduled the database before the booking and CRM modules because both read and\nwrite to it. If the database slips, both modules stall, so I put 3 days of\ncontingency on it and started the front-end screens in parallel, which do not\nneed live data.\n\nALLOCATION OF TEAM MEMBERS\nI paired the junior developer with the senior on the payments module rather than\ngiving it to them alone. It costs about £1,900 more in senior hours, but payments\nis business-critical and the junior has no experience with it. The pairing also\ntrains them for the later modules they will own.\n\nBENEFITS AND RISKS\nI chose the cloud server over the physical one. It costs £4,000 less in year 1 and\nremoves the need to hire technician time for hardware, although it adds a monthly\ncost that continues every year. Because the booking system is business-critical,\nthe provider's built-in redundancy reduces the risk of downtime.\n\nIMPACT ON TIMINGS AND COSTS\nThe project makes a loss of about £___ in year 1, but the forecast revenue increase\nmeans it is back in profit by year 2, so it is worth doing provided the external\ncontractor's availability is secured in writing.",
         "note": "Invented figures. Replace them with the scenario's numbers — the structure is what earns the marks."
        }
       }
@@ -499,12 +508,12 @@ window.TLDATA.esp = {
         "rows": [
          [
           "Use of testing to identify defects",
-          "8",
-          "Tests that show detailed understanding of the requirements, a comprehensive range of normal, erroneous and extreme data, and the errors comprehensively found"
+          "9",
+          "Tests that show a thorough, detailed understanding of the requirements, a comprehensive range of tests, and the errors comprehensively found"
          ],
          [
           "Understanding of the testing process",
-          "4",
+          "3",
           "A log that shows clearly how each problem was found and how it was fixed"
          ],
          [
@@ -743,11 +752,11 @@ window.TLDATA.esp = {
    "summary": "Algorithm designs in pseudocode or flowcharts for a program that analyses a CSV file.",
    "facts": [
     [
-     "3 hours",
+     "2 hours 30",
      ""
     ],
     [
-     "17",
+     "18",
      "marks"
     ],
     [
@@ -785,8 +794,8 @@ window.TLDATA.esp = {
         "rows": [
          [
           "Decomposition of the problem",
-          "8",
-          "A thorough, detailed breakdown that fully covers the inputs, processes and outputs"
+          "9",
+          "A thorough, detailed breakdown that comprehensively covers the inputs, processes and outputs"
          ],
          [
           "Application of logical thinking and conventions",
@@ -801,7 +810,7 @@ window.TLDATA.esp = {
         ],
         "foot": [
          "Total",
-         "17",
+         "18",
          ""
         ]
        }
@@ -813,7 +822,7 @@ window.TLDATA.esp = {
      "ic": "◉",
      "blocks": [
       {
-       "p": "Weaker answers just read columns in by their headings without thinking about what the values mean. Before you design anything, write a line for each column:"
+       "p": "Weaker answers just read columns in by their headings without thinking about what the values mean. Your sample paper's data needed dates parsing and a date range from the user, so expect date handling. Before you design anything, write a line for each column:"
       },
       {
        "code": {
@@ -849,11 +858,11 @@ window.TLDATA.esp = {
      ]
     },
     {
-     "h": "Pseudocode — your spec's exact conventions",
+     "h": "Pseudocode — one consistent style",
      "ic": "≡",
      "blocks": [
       {
-       "p": "Use these keywords consistently. Mixing in Python syntax costs convention marks."
+       "p": "Your DSD mark scheme does **not** require a particular pseudocode style — a Python-like approach is accepted. What the convention marks look for is **internal consistency and clarity**: key command words in capitals, indentation to show what sits inside what, sensible names. The style below (from the predecessor course's appendix) is a clean one to adopt. Pick one style and never mix two."
       },
       {
        "table": {
@@ -1025,7 +1034,7 @@ window.TLDATA.esp = {
          "Every loop can end",
          "What happens with no data or no results is designed",
          "Data is actually loaded from the file, not just imported libraries",
-         "One set of conventions used consistently, no Python syntax"
+         "One pseudocode style used consistently — capitalised keywords, indentation"
         ]
        }
       }
@@ -1138,7 +1147,7 @@ window.TLDATA.esp = {
        "callout": {
         "kind": "bad",
         "title": "Do not build a login",
-        "text": "The examiner repeated it again: **a login function earns no security marks** and eats the time you need for the marks that are available."
+        "text": "The 2025 examiner report said it again: **a login function earns no security marks** and eats the time you need. Your DSD mark scheme's security list is the same as theirs — globals, data frames, error handling — and has no login in it."
        }
       },
       {
@@ -1303,7 +1312,7 @@ window.TLDATA.esp = {
    "summary": "Judge how well your Task 4a program meets the brief and the users, then justify what to build next.",
    "facts": [
     [
-     "1h 30m",
+     "2 hours",
      ""
     ],
     [
@@ -1328,9 +1337,9 @@ window.TLDATA.esp = {
         ],
         "rows": [
          [
-          "Programming outcomes",
+          "Review of outcomes",
           "6",
-          "Judgements that are comprehensively supported, showing detailed understanding of how well the program met the brief and the users' needs"
+          "Judgements that are comprehensively supported, showing detailed understanding of how well the solution met the system requirements and the user requirements"
          ],
          [
           "Future developments",

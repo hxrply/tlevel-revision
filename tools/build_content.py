@@ -99,7 +99,7 @@ def check_spec(name, spec, page_lists, expected_total):
 
 
 check_spec("ESP", ESP, [ESP["pages"]], 100)
-check_spec("OS", OS, [OS["tasks"], OS["skills"]], 145)
+check_spec("OS", OS, [OS["tasks"], OS["areas"], OS["skills"]], 144)
 
 # The per-task mark breakdowns must agree with the hub table.
 def task_totals(spec, pages):
@@ -111,14 +111,12 @@ def task_totals(spec, pages):
     return out
 
 esp_pages = task_totals(ESP, ESP["pages"])
-for pid, expect in {"t1": 19, "t2": 21, "t3": 17, "t4a": 34, "t4b": 9}.items():
+for pid, expect in {"t1": 18, "t2": 21, "t3": 18, "t4a": 34, "t4b": 9}.items():   # DSD Nov 2025 mark scheme
     if esp_pages.get(pid) != expect:
         fail(f"ESP {pid}: breakdown totals {esp_pages.get(pid)}, expected {expect}")
 
-os_pages = task_totals(OS, OS["tasks"])
-for pid, expect in {"t1": 58, "t2": 48, "t3a": 24, "t3b": 15}.items():
-    if os_pages.get(pid) != expect:
-        fail(f"OS {pid}: breakdown totals {os_pages.get(pid)}, expected {expect}")
+# OS marks are awarded per performance outcome, not per task, so the hub's
+# outcome table (checked above against 144) is the only total to reconcile.
 
 if errors:
     print("Content check FAILED:")
@@ -146,10 +144,10 @@ def emit(filename, varname, obj, src, desc):
 
 
 for args in (
-    ("esp.js", "esp", ESP, "esp_content.py", "Employer Set Project, paper 19538."),
-    ("os.js", "os", OS, "os_content.py", "Occupational Specialism, paper 19540."),
+    ("esp.js", "esp", ESP, "esp_content.py", "Employer Set Project — T Level in Digital Software Development."),
+    ("os.js", "os", OS, "os_content.py", "Occupational Specialism — Digital Software Development."),
 ):
     path, size = emit(*args)
     print(f"wrote {os.path.relpath(path, ROOT)}  ({size:,} bytes)")
 
-print("Content checks passed: ESP 100 marks, OS 145 marks, every breakdown reconciles.")
+print("Content checks passed: ESP 100 marks (18+21+18+34+9), OS 144 marks across six outcomes.")
