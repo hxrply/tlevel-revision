@@ -747,4 +747,7 @@ body.drawer-open { overflow: hidden; }
   }
   .topbar { padding-top: max(10px, env(safe-area-inset-top)); }
   .sidebar { padding-top: max(20px, env(safe-area-inset-top)); }
+  /* breadcrumbs are text-sized on desktop; give thumbs a bigger target */
+  .crumbs { gap: 2px; }
+  .crumbs button { padding: 9px 6px; margin: -4px 0; }
 }

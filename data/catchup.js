@@ -10,7 +10,7 @@
 window.TLDATA = window.TLDATA || {};
 
 window.TLDATA.catchup = {
-  intro: 'Everything from Day 17 onward, compressed. A missed day is recoverable in about twenty minutes here rather than the full hour: the facts that actually carry marks, the confusions that cost them, and five written questions. Do the reading, do the checkpoint from memory, then write the questions on paper and send them to be marked.',
+  intro: 'Everything from Day 17 onward, compressed. A missed day is recoverable in about twenty minutes here rather than the full hour: the facts that actually carry marks, the confusions that cost them, and five written questions. Do the reading, do the checkpoint from memory, then type your answers in the boxes and send them to be marked.',
   howto: 'Order matters. Read the core section once. Close it and do the checkpoint from memory - that retrieval step is what moves material, and skipping it is what produced a 0 out of 2 on the business sectors twenty minutes after reading the table. Then write the questions. Reveal a model answer only after you have written something, even if what you write is wrong.',
 
   days: [

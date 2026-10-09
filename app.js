@@ -2347,6 +2347,11 @@
     if (show !== toTopShown) { toTopShown = show; var b = $('#toTop'); if (b) b.hidden = !show; }
   }, { passive: true });
 
+  /* "Press /" means nothing on a touchscreen, and the long hint gets cut off. */
+  if (window.matchMedia && matchMedia('(max-width: 560px)').matches) {
+    $('#search').setAttribute('placeholder', 'Search notes and key words');
+  }
+
   /* The phone's status bar and browser chrome match the page background. */
   function setThemeColour() {
     var m = $('meta[name="theme-color"]');
