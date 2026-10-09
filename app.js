@@ -36,6 +36,7 @@
       /* The redesign made the beige theme the default. Anyone still on the
          old dark default is moved to it once; choosing dark again sticks. */
       if (saved.themeV !== 2) { saved.theme = 'light'; saved.themeV = 2; }
+      if (saved.theme === 'dark') saved.theme = 'cool';   /* the dark theme was replaced */
       ['ans', 'marks', 'history'].forEach(function (k) {
         if (!saved.written[k]) saved.written[k] = base.written[k];
       });
@@ -246,6 +247,81 @@
     try { ok = document.execCommand('copy'); } catch (err) {}
     ta.remove();
     done(ok);
+  }
+
+  /* ── Read-up help ─────────────────────────────────────────────────
+     Every question on the site gets a button that opens the notes for its
+     topic in a panel over the page, so a quiz or a half-written answer is
+     not lost. Quiz, written practice and flashcards already know their
+     topic. Tutor-notes and catch-up questions share one numbering, so they
+     are mapped here by question number. */
+  var QTOPIC = (function () {
+    var m = {};
+    function set(topic, from, to) { for (var n = from; n <= (to || from); n++) m[n] = topic; }
+    set('1.1', 1, 3); set('2.6', 4); set('1.3', 5, 7); set('2.6', 8); set('1.3', 9, 15); set('2.6', 16); set('1.3', 17);
+    set('2.11', 18, 21); set('2.12', 22, 26);
+    set('3.1', 27, 28); set('3.2', 29, 30); set('3.1', 31);
+    set('4.1', 32, 36); set('4.2', 37, 40);
+    set('2.10', 41); set('2.12', 42); set('1.3', 43); set('2.2', 44); set('2.11', 45); set('2.6', 46); set('3.1', 47);
+    set('5.1', 54, 55); set('5.2', 56); set('5.1', 57); set('5.4', 58, 59); set('5.3', 60, 61);
+    set('5.4', 62, 66); set('6.1', 67, 68); set('6.2', 69, 71);
+    set('6.4', 72); set('6.3', 73, 74); set('6.4', 75, 76); set('6.5', 77, 81);
+    set('5.3', 82, 84); set('5.1', 85); set('5.4', 86);
+    set('7.2', 87); set('7.1', 88, 89); set('7.2', 90, 91); set('7.3', 92, 101);
+    set('7.4', 102, 103); set('7.5', 104); set('7.4', 105); set('7.5', 106);
+    set('8.2', 107, 109); set('8.1', 110); set('8.2', 111); set('8.4', 112, 113); set('8.3', 114, 116);
+    set('5.4', 117); set('8.4', 118); set('7.5', 119); set('8.4', 120); set('7.4', 121);
+    return m;
+  })();
+
+  function topicById(id) {
+    var hit = null;
+    AREAS.forEach(function (a) { a.topics.forEach(function (t) { if (t.id === id) hit = { area: a, topic: t }; }); });
+    return hit;
+  }
+
+  /* ref is a topic id such as "2.10", or "ESP" / "OS" for the project questions. */
+  function helpBtn(ref) {
+    if (ref === 'ESP' || ref === 'OS') {
+      return '<div class="help-row"><button class="help-btn" type="button" data-go="' + ref.toLowerCase() + '">' +
+        '<span aria-hidden="true">📖</span><span class="ht">Read up: ' + (ref === 'ESP' ? 'Employer Set Project' : 'Occupational Specialism') + '</span></button></div>';
+    }
+    var hit = ref && topicById(ref);
+    if (!hit) return '';
+    return '<div class="help-row"><button class="help-btn" type="button" data-help="' + hit.topic.id + '" aria-haspopup="dialog">' +
+      '<span aria-hidden="true">📖</span><span class="ht">Read up: ' + hit.topic.id + ' ' + esc(hit.topic.title) + '</span></button></div>';
+  }
+
+  var helpReturnFocus = null;
+  function openHelp(id, trigger) {
+    var hit = topicById(id);
+    if (!hit) return;
+    var t = hit.topic, a = hit.area;
+    $('#helpWhere').textContent = 'Core Paper ' + a.paper + ' · ' + a.num + '. ' + a.title;
+    $('#helpBody').innerHTML =
+      '<h2 id="helpTitle"><span class="tid">' + t.id + '</span>' + esc(t.title) + '</h2>' +
+      '<section class="part"><h3 class="part-h"><span class="ic" aria-hidden="true">✓</span>What you must know</h3>' +
+      '<ul class="clean">' + t.must.map(function (x) { return '<li>' + fmt(x) + '</li>'; }).join('') + '</ul></section>' +
+      (t.terms && t.terms.length
+        ? '<section class="part"><h3 class="part-h"><span class="ic" aria-hidden="true">◆</span>Key words</h3>' + blockHTML({ kw: t.terms }) + '</section>'
+        : '');
+    $('#helpFoot').innerHTML = '<button class="btn btn-accent btn-sm" data-open="' + a.id + '/' + t.id + '">Open the full topic page</button>' +
+      (currentView() === 'quiz' ? '<span class="small muted">This leaves the quiz.</span>' : '');
+    $('#helpBackdrop').hidden = false;
+    $('#helpDrawer').hidden = false;
+    $('#helpBody').scrollTop = 0;
+    document.body.classList.add('drawer-open');
+    helpReturnFocus = trigger || null;
+    $('#helpClose').focus();
+  }
+  function closeHelp(restoreFocus) {
+    var d = $('#helpDrawer');
+    if (!d || d.hidden) return;
+    d.hidden = true;
+    $('#helpBackdrop').hidden = true;
+    document.body.classList.remove('drawer-open');
+    if (restoreFocus && helpReturnFocus && document.body.contains(helpReturnFocus)) helpReturnFocus.focus();
+    helpReturnFocus = null;
   }
 
   /* ── Navigation ────────────────────────────────────────────────── */
@@ -778,7 +854,7 @@
           '<div class="tnote-head"><span class="qn">Q' + q.n + '</span>' +
           '<span class="pill">' + esc(q.cmd) + '</span><span class="small muted">' + q.marks + ' marks</span>' +
           '<span style="margin-left:auto" data-custatus="' + q.n + '">' + cuStatus(q) + '</span></div>' +
-          '<div class="qq">' + esc(q.q) + '</div>';
+          '<div class="qq">' + esc(q.q) + '</div>' + helpBtn(QTOPIC[q.n]);
 
         if (mk && mk.q.how) h += '<div class="tnote-how"><b>How to answer</b><br>' + esc(mk.q.how) + '</div>';
         if (mk && mk.q.got) {
@@ -855,7 +931,7 @@
                  : '<span class="pill" style="margin-left:auto">not attempted</span>') +
           '</div>' +
           '<div class="qq">' + esc(q.q) + '</div>' +
-          (q.code ? '<pre>' + esc(q.code) + '</pre>' : '') +
+          (q.code ? '<pre>' + esc(q.code) + '</pre>' : '') + helpBtn(QTOPIC[q.n]) +
           '<div class="tnote-how"><b>How to answer</b><br>' + esc(q.how) + '</div>' +
           '<div class="btn-row"><button class="btn btn-sm" data-reveal="1">Model answer</button></div>' +
           '<div class="qa">' +
@@ -1047,6 +1123,7 @@
     p.traces.forEach(function (t, i) {
       h += '<section class="panel qbox" style="margin-bottom:12px;border-left-width:3px">' +
         '<div class="qq">' + esc(t.q) + '</div><pre>' + esc(t.code) + '</pre>' +
+        helpBtn(/sort|search|binary|bubble|merge|linear/i.test(t.q + t.code) ? '2.11' : /\bdef\b/.test(t.code) ? '2.7' : '2.6') +
         '<button class="btn btn-sm" data-reveal="1">Show answer</button>' +
         '<div class="qa">' + esc(t.a) + '</div></section>';
     });
@@ -1144,7 +1221,7 @@
     AREAS.forEach(function (a) {
       a.topics.forEach(function (t) {
         (t.terms || []).forEach(function (x) {
-          out.push({ id: a.id + '|' + x.t, front: x.t, back: x.d, src: 'P' + a.paper + ' · ' + t.id + ' ' + t.title, area: a.id });
+          out.push({ id: a.id + '|' + x.t, front: x.t, back: x.d, src: 'P' + a.paper + ' · ' + t.id + ' ' + t.title, area: a.id, topic: t.id });
         });
       });
     });
@@ -1188,7 +1265,7 @@
       '<button class="btn btn-accent" data-card="got">✓ Got it</button>' +
       '<button class="btn" data-card="skip">Skip →</button>' +
       '<span class="small muted">' + (cards.i + 1) + ' / ' + cards.deck.length +
-      ' · box ' + (state.box[c.id] || 0) + '</span></div>';
+      ' · box ' + (state.box[c.id] || 0) + '</span></div>' + helpBtn(c.topic);
     return h;
   };
 
@@ -1212,7 +1289,7 @@
         }
         return '<button class="opt' + cls + '" data-opt="' + i + '"' + (quiz.answered ? ' disabled' : '') + '>' +
           String.fromCharCode(65 + i) + '. ' + esc(opt) + '</button>';
-      }).join('');
+      }).join('') + helpBtn(q.t);
 
     if (quiz.answered) {
       h += '<div class="explain"><b>' + (quiz.picked === q.ans ? 'Correct.' : 'Not quite.') + '</b> ' + esc(q.why) + '</div>';
@@ -1359,7 +1436,7 @@
         h += '<section class="panel" style="margin-bottom:10px"><b>' + esc(q.q) + '</b>' +
           '<div class="small" style="margin-top:6px;color:var(--green)">Correct: ' + esc(q.o[q.ans]) + '</div>' +
           '<div class="small muted" style="margin-top:4px">' + esc(q.why) + '</div>' +
-          '<div class="small muted" style="margin-top:6px">' + esc(labelFor(q.area)) + ' · ' + esc(q.t) + '</div></section>';
+          '<div class="small muted" style="margin-top:6px">' + esc(labelFor(q.area)) + ' · ' + esc(q.t) + '</div>' + helpBtn(q.t) + '</section>';
       });
     }
     return h;
@@ -1582,7 +1659,7 @@
           '<div class="task-head"><span class="pill p' + rec.area.paper + '">Paper ' + rec.area.paper + '</span>' +
           '<span class="small muted">' + esc(rec.area.num + '. ' + rec.area.title + ' · ' + rec.topic.id + ' ' + rec.topic.title) + '</span>' +
           '<span class="pill">' + rec.exam.marks + ' marks · ~' + mins + ' min</span></div>' +
-          markingPanelHTML(written.current) + '</section>';
+          helpBtn(rec.topic.id) + markingPanelHTML(written.current) + '</section>';
       }
     }
 
@@ -1818,6 +1895,7 @@
   var searchTerm = '';
 
   function render() {
+    closeHelp(false);
     codeStore = [];
     var v = currentView();
     var html = searchTerm ? searchView(searchTerm) : (views[v] || views.dash)();
@@ -1841,6 +1919,10 @@
   /* ── Events ────────────────────────────────────────────────────── */
   document.addEventListener('click', function (e) {
     var t = e.target;
+
+    if (t.closest('#helpClose') || t.id === 'helpBackdrop') { closeHelp(true); return; }
+    var helpOpen = t.closest('[data-help]');
+    if (helpOpen) { openHelp(helpOpen.getAttribute('data-help'), helpOpen); return; }
 
     var goBtn = t.closest('[data-go]');
     if (goBtn) {
@@ -1943,7 +2025,8 @@
       return;
     }
     if (t.closest('#themeBtn')) {
-      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      state.theme = state.theme === 'cool' ? 'light' : 'cool';
+      setThemeColour();
       document.documentElement.setAttribute('data-theme', state.theme);
       save();
       return;
@@ -2239,6 +2322,7 @@
   });
 
   document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !$('#helpDrawer').hidden) { closeHelp(true); return; }
     if (e.key === '/' && document.activeElement.id !== 'search') { e.preventDefault(); $('#search').focus(); return; }
     if (e.key === 'Escape' && document.activeElement.id === 'search') {
       $('#search').value = ''; searchTerm = ''; $('#search').blur(); render(); return;
@@ -2263,8 +2347,15 @@
     if (show !== toTopShown) { toTopShown = show; var b = $('#toTop'); if (b) b.hidden = !show; }
   }, { passive: true });
 
+  /* The phone's status bar and browser chrome match the page background. */
+  function setThemeColour() {
+    var m = $('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', state.theme === 'cool' ? '#EDF0F4' : '#F4ECDF');
+  }
+
   /* ── Boot ──────────────────────────────────────────────────────── */
   document.documentElement.setAttribute('data-theme', state.theme || 'light');
+  setThemeColour();
   if (!location.hash) location.hash = '#dash';
   render();
 })();

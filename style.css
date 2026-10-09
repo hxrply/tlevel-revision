@@ -51,36 +51,36 @@
   --mono: "Cascadia Code", Consolas, "SFMono-Regular", Menlo, monospace;
 }
 
-/* Dark: cocoa rather than black, keeping the pink headings. */
-html[data-theme="dark"] {
-  --bg: #1F1A1D;
-  --bg-2: #241E21;
-  --panel: #2A2327;
-  --panel-2: #322A2E;
-  --line: #3E3439;
-  --line-strong: #4D4147;
-  --text: #F3ECE4;
-  --dim: #B8ADA4;
+/* Second theme: light grey and light blue. The variable names stay "pink"
+   so every component follows the theme without its own overrides; here they
+   hold blues. #1F5FA8 is 5.2:1 or better on every surface below. */
+html[data-theme="cool"] {
+  --bg: #EDF0F4;
+  --bg-2: #E3E8EF;
+  --panel: #FFFFFF;
+  --panel-2: #F5F7FA;
+  --line: #D9DFE7;
+  --line-strong: #C3CCD8;
+  --text: #1A1E24;
+  --dim: #56606D;
 
-  --pink: #F48FB5;
-  --pink-ink: #F7A3C3;
-  --pink-soft: #3A2830;
-  --pink-line: #5A3A47;
+  --pink: #1F5FA8;
+  --pink-ink: #154A85;
+  --pink-soft: #E3EEFB;
+  --pink-line: #BCD3EE;
 
-  --green: #7FD3A3;
-  --green-soft: #1F3328;
-  --amber: #F2C26B;
-  --amber-soft: #3A2F1C;
-  --red: #F49A92;
-  --red-soft: #3D2523;
+  --code-bg: #1E2733;
+  --code-text: #E8EEF6;
+  --code-dim: #9FB0C4;
 
-  --code-bg: #171316;
-
-  --shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.25);
-  --shadow-lift: 0 2px 4px rgba(0,0,0,.3), 0 14px 30px rgba(0,0,0,.35);
+  --shadow: 0 1px 2px rgba(25, 40, 60, .05), 0 6px 20px rgba(25, 40, 60, .07);
+  --shadow-lift: 0 2px 4px rgba(25, 40, 60, .06), 0 12px 28px rgba(25, 40, 60, .11);
 }
+html[data-theme="cool"] .codefig figcaption { background: #2A3646; }
 
 * { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 body {
   margin: 0;
@@ -97,14 +97,17 @@ a { color: var(--pink); }
 ::selection { background: var(--pink-soft); }
 
 /* ── Layout ───────────────────────────────────────────────────────── */
-.shell { display: grid; grid-template-columns: 262px minmax(0, 1fr); min-height: 100vh; }
+.shell { display: grid; grid-template-columns: 262px minmax(0, 1fr); min-height: 100vh; min-height: 100dvh; }
 
 .sidebar {
   background: var(--bg-2);
   border-right: 1px solid var(--line);
   padding: 20px 14px 40px;
-  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  position: sticky; top: 0; height: 100vh; height: 100dvh; overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;               /* Firefox */
 }
+.sidebar::-webkit-scrollbar { display: none; }   /* Chrome, Edge, Safari */
 
 .brand { display: flex; align-items: center; gap: 10px; padding: 0 8px 2px; }
 .brand-mark {
@@ -114,7 +117,6 @@ a { color: var(--pink); }
   font-family: var(--mono); font-weight: 700; font-size: 13px;
   box-shadow: 0 4px 12px color-mix(in srgb, var(--pink) 35%, transparent);
 }
-html[data-theme="dark"] .brand-mark { color: #2A1720; }
 .brand-name { font-weight: 800; color: var(--pink); letter-spacing: .005em; line-height: 1.2; }
 .brand-sub { padding: 6px 8px 16px; font-size: 12px; color: var(--dim); line-height: 1.4; }
 
@@ -197,7 +199,6 @@ hr, .divider { border: 0; border-top: 1px solid var(--line); margin: 22px 0; }
 }
 .btn-accent { background: var(--pink); border-color: var(--pink); color: #fff; }
 .btn-accent:hover { background: var(--pink-ink); border-color: var(--pink-ink); color: #fff; }
-html[data-theme="dark"] .btn-accent, html[data-theme="dark"] .btn-accent:hover { color: #2A1720; }
 .btn-sm { padding: 5px 12px; font-size: 13px; }
 .btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
@@ -216,7 +217,6 @@ code, .mono { font-family: var(--mono); font-size: 13px; }
   background: var(--pink-soft); color: var(--pink-ink);
   padding: 1px 6px; border-radius: 6px; font-size: 12.5px;
 }
-html[data-theme="dark"] :not(pre) > code { color: var(--pink); }
 
 pre {
   background: var(--code-bg); color: var(--code-text);
@@ -296,7 +296,6 @@ ul.clean li::marker { color: var(--pink); }
   padding: 9px 15px; font: inherit; font-weight: 800; font-size: 13px;
   box-shadow: var(--shadow-lift); cursor: pointer;
 }
-html[data-theme="dark"] .to-top { color: #2A1720; }
 .to-top[hidden] { display: none; }
 .chip:hover { border-color: var(--pink); color: var(--pink); }
 .chip .cid { color: var(--pink); font-family: var(--mono); font-size: 12px; }
@@ -354,7 +353,6 @@ html[data-theme="dark"] .to-top { color: #2A1720; }
   padding: 10px 13px; background: var(--panel-2);
 }
 .kw b { display: block; color: var(--pink-ink); }
-html[data-theme="dark"] .kw b { color: var(--pink); }
 .kw span { font-size: 14px; }
 
 /* Callouts */
@@ -363,7 +361,6 @@ html[data-theme="dark"] .kw b { color: var(--pink); }
   border: 1px solid var(--pink-line); background: var(--pink-soft); font-size: 14.5px;
 }
 .callout b:first-child { color: var(--pink-ink); }
-html[data-theme="dark"] .callout b:first-child { color: var(--pink); }
 .callout.warn { background: var(--amber-soft); border-color: color-mix(in srgb, var(--amber) 30%, transparent); }
 .callout.warn b:first-child { color: var(--amber); }
 .callout.bad { background: var(--red-soft); border-color: color-mix(in srgb, var(--red) 30%, transparent); }
@@ -380,7 +377,6 @@ html[data-theme="dark"] .callout b:first-child { color: var(--pink); }
   background: #3A3035; color: var(--code-text);
   padding: 7px 10px 7px 15px; font-size: 12.5px; font-weight: 700;
 }
-html[data-theme="dark"] .codefig figcaption { background: #241D21; }
 .codefig figcaption .lang {
   font-family: var(--mono); font-size: 11px; color: var(--code-dim);
   background: rgba(255,255,255,.07); border-radius: 999px; padding: 1px 8px; margin-left: 6px;
@@ -447,7 +443,6 @@ html[data-theme="dark"] .codefig figcaption { background: #241D21; }
 .conf button.on[data-v="1"] { background: var(--red); border-color: var(--red); color: #fff; }
 .conf button.on[data-v="2"] { background: var(--amber); border-color: var(--amber); color: #fff; }
 .conf button.on[data-v="3"] { background: var(--green); border-color: var(--green); color: #fff; }
-html[data-theme="dark"] .conf button.on { color: #1F1A1D; }
 
 .sub-h {
   font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em;
@@ -598,7 +593,6 @@ input[type=checkbox] { accent-color: var(--pink); }
 .tnote .qq { font-weight: 800; margin-bottom: 10px; }
 .tnote-how { font-size: 14.5px; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--pink-soft); border: 1px solid var(--pink-line); margin-bottom: 10px; }
 .tnote-how b { color: var(--pink-ink); }
-html[data-theme="dark"] .tnote-how b { color: var(--pink); }
 .tnote .qa { margin-top: 12px; }
 .tnote .qa p { margin: 6px 0 0; }
 .tnote-cost { margin-top: 12px; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--red-soft); border: 1px solid color-mix(in srgb, var(--red) 25%, transparent); font-size: 14.5px; }
@@ -702,4 +696,55 @@ html[data-theme="dark"] .tnote-how b { color: var(--pink); }
   .topic-body, .area-body, .qa { display: block !important; }
   body { background: #fff; color: #000; }
   .panel, .topic-card { box-shadow: none; }
+}
+
+/* ── Read-up help: a button on every question, opening the topic's notes
+   in a panel over the page so a quiz or answer in progress is not lost ── */
+.help-btn {
+  display: inline-flex; align-items: center; gap: 6px; max-width: 100%;
+  background: var(--pink-soft); color: var(--pink-ink); border: 1px solid var(--pink-line);
+  border-radius: 999px; padding: 5px 13px; font: inherit; font-size: 13px; font-weight: 800;
+  cursor: pointer; text-align: left;
+}
+.help-btn:hover { background: var(--pink); border-color: var(--pink); color: #fff; }
+.help-btn .ht { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.help-row { margin-top: 10px; }
+
+.drawer-backdrop { position: fixed; inset: 0; z-index: 60; background: rgba(30, 25, 25, .38); }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 61;
+  width: min(500px, 100%); display: flex; flex-direction: column;
+  background: var(--panel); border-radius: 22px 0 0 22px; box-shadow: var(--shadow-lift);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.drawer[hidden], .drawer-backdrop[hidden] { display: none; }
+.drawer-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 12px 14px 12px 22px; border-bottom: 1px solid var(--line);
+  font-size: 13px; font-weight: 700; color: var(--dim);
+}
+.drawer-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
+.drawer-body h2 { display: flex; gap: 10px; align-items: center; margin: 0; padding: 18px 22px 4px; font-size: 19px; }
+.drawer-body h2 .tid {
+  font-family: var(--mono); font-size: 13px; background: var(--pink-soft); color: var(--pink);
+  border-radius: 10px; padding: 3px 9px;
+}
+.drawer-foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 14px 22px; border-top: 1px solid var(--line); }
+body.drawer-open { overflow: hidden; }
+
+@media (max-width: 560px) {
+  /* a bottom sheet on phones, easy to reach with a thumb */
+  .drawer { top: auto; left: 0; width: 100%; height: 88vh; height: 88dvh; border-radius: 22px 22px 0 0; }
+  .drawer-body h2 { padding: 16px 16px 4px; }
+  .drawer-foot { padding: 12px 16px; }
+}
+
+/* ── Phones with notches and home bars ───────────────────────────── */
+@media (max-width: 880px) {
+  .main {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+  .topbar { padding-top: max(10px, env(safe-area-inset-top)); }
+  .sidebar { padding-top: max(20px, env(safe-area-inset-top)); }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "T Level Digital — Production, Design & Development",
+  "short_name": "T Level",
+  "description": "Revision for Core Papers 1 and 2, the Employer Set Project and the Occupational Specialism.",
+  "start_url": "./#dash",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F4ECDF",
+  "theme_color": "#F4ECDF",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

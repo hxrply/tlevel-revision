@@ -2,13 +2,21 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4ECDF">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="T Level">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="description" content="Revision for the Pearson T Level in Digital Production, Design and Development: Core Papers 1 and 2 (19536, 19537), the Employer Set Project (19538) and the Occupational Specialism (19540). Notes, key words, worked code, quizzes and progress tracking, all stored on your device.">
 <title>T Level Digital — Production, Design &amp; Development</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
-<link rel="stylesheet" href="style.css?v=28">
+<link rel="stylesheet" href="style.css?v=29">
 </head>
 <body>
 
@@ -24,7 +32,7 @@
     <nav class="nav" id="nav"></nav>
 
     <div class="nav-group-label">Settings</div>
-    <button class="nav-btn" id="themeBtn"><span class="ico">◐</span> Theme</button>
+    <button class="nav-btn" id="themeBtn"><span class="ico">◐</span> Switch theme</button>
     <button class="nav-btn" id="resetBtn"><span class="ico">⟲</span> Reset progress</button>
   </aside>
 
@@ -40,22 +48,30 @@
     <button class="to-top" id="toTop" type="button" hidden>↑ Top</button>
   </main>
 
+  <!-- Read-up panel: a topic's notes over the current page -->
+  <div class="drawer-backdrop" id="helpBackdrop" hidden></div>
+  <aside class="drawer" id="helpDrawer" role="dialog" aria-modal="true" aria-labelledby="helpTitle" hidden>
+    <div class="drawer-head"><span id="helpWhere"></span><button class="btn btn-sm" id="helpClose" type="button">✕ Close</button></div>
+    <div class="drawer-body" id="helpBody"></div>
+    <div class="drawer-foot" id="helpFoot"></div>
+  </aside>
+
 </div>
 
 <!-- ?v= is bumped on every deploy so phones and browsers do not serve a
      stale cached copy of the content or the app. -->
-<script src="data/core-p1.js?v=28"></script>
-<script src="data/core-p2.js?v=28"></script>
-<script src="data/esp.js?v=28"></script>
-<script src="data/os.js?v=28"></script>
-<script src="data/quiz.js?v=28"></script>
-<script src="data/extras.js?v=28"></script>
-<script src="data/technique.js?v=28"></script>
-<script src="data/marking.js?v=28"></script>
-<script src="data/tutor.js?v=28"></script>
-<script src="data/plan.js?v=28"></script>
-<script src="data/catchup.js?v=28"></script>
-<script src="data/tutornotes.js?v=28"></script>
-<script src="app.js?v=28"></script>
+<script src="data/core-p1.js?v=29"></script>
+<script src="data/core-p2.js?v=29"></script>
+<script src="data/esp.js?v=29"></script>
+<script src="data/os.js?v=29"></script>
+<script src="data/quiz.js?v=29"></script>
+<script src="data/extras.js?v=29"></script>
+<script src="data/technique.js?v=29"></script>
+<script src="data/marking.js?v=29"></script>
+<script src="data/tutor.js?v=29"></script>
+<script src="data/plan.js?v=29"></script>
+<script src="data/catchup.js?v=29"></script>
+<script src="data/tutornotes.js?v=29"></script>
+<script src="app.js?v=29"></script>
 </body>
 </html>
