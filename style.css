@@ -141,9 +141,11 @@ a { color: var(--pink); }
   border-radius: 999px; padding: 0 8px;
 }
 
+/* Fills the screen on a PC. The cap only bites on very wide monitors, and
+   then the column is centred rather than pinned left with a gap beside it. */
 .main {
-  width: 100%; max-width: 1240px;
-  padding: 26px clamp(18px, 3vw, 52px) 90px;
+  width: 100%; max-width: 1880px; margin: 0 auto;
+  padding: 26px clamp(18px, 2.6vw, 56px) 90px;
 }
 
 /* ── Topbar ───────────────────────────────────────────────────────── */
@@ -750,4 +752,15 @@ body.drawer-open { overflow: hidden; }
   /* breadcrumbs are text-sized on desktop; give thumbs a bigger target */
   .crumbs { gap: 2px; }
   .crumbs button { padding: 9px 6px; margin: -4px 0; }
+}
+
+/* ── Wide screens: use the width instead of stretching lines ─────────
+   Long lists split into columns and prose keeps a readable measure, so a
+   1920-pixel monitor is filled without 250-character lines. */
+@media (min-width: 1400px) {
+  .topic-card .part > ul.clean,
+  .drawer-body .part > ul.clean { column-width: 34em; column-gap: 48px; }
+  .topic-card .part > ul.clean > li { break-inside: avoid; }
+  .part > p, .callout, .lede, .note { max-width: 120ch; }
+  .hub-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
 }

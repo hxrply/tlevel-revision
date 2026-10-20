@@ -267,7 +267,7 @@ window.TLDATA.catchup = {
     },
 
     {
-      day: 22, plan: 'Week 4, Day 1', title: 'Hardware and software', area: '7.1 and 7.2', mins: 22,
+      day: 22, plan: 'Week 4, Day 1', title: 'Hardware and software', area: '7.1 and 7.2', mins: 35,
       why: 'Area 7 opens Paper 2 territory you have not touched yet. Hardware questions are usually match-to-scenario, which is a format that rewards a justification habit you already have.',
       core: [
         { h: 'Processor and memory - the characteristics that justify a choice',
@@ -308,7 +308,33 @@ window.TLDATA.catchup = {
         { n: 90, marks: 3, cmd: 'Explain', q: 'Explain what a batch operating system is and give one situation where it is appropriate.',
           a: 'A batch operating system runs jobs that have been queued and scheduled, processing them without any user interaction while they run (2). It suits high-volume repetitive processing where no decisions are needed during the run, such as an overnight payroll or billing run (1).' },
         { n: 91, marks: 3, cmd: 'Explain', q: 'Explain three features of an IDE that speed up development.',
-          a: 'Code editing features such as syntax highlighting and autocomplete reduce typing errors and catch syntax mistakes as the code is written rather than at run time (1). Debugging tools such as breakpoints, stepping through code and watching variables let a developer see the state of the program at the point a fault occurs instead of guessing (1). Integrated screen design tools and a built-in run and build process keep everything in one application, removing the time lost switching between separate editor, compiler and designer (1).' }
+          a: 'Code editing features such as syntax highlighting and autocomplete reduce typing errors and catch syntax mistakes as the code is written rather than at run time (1). Debugging tools such as breakpoints, stepping through code and watching variables let a developer see the state of the program at the point a fault occurs instead of guessing (1). Integrated screen design tools and a built-in run and build process keep everything in one application, removing the time lost switching between separate editor, compiler and designer (1).' },
+        { n: 122, marks: 1, cmd: 'State', q: 'State what is meant by an embedded device.',
+          a: 'A computer built into a product to do one dedicated job (1), such as the controller in a washing machine or a router.' },
+        { n: 123, marks: 3, cmd: 'State', q: 'State three characteristics of a processor that affect its performance.',
+          a: 'The number of cores (1); the clock speed (1); the cache size (1).' },
+        { n: 124, marks: 1, cmd: 'State', q: 'State what cache memory is.',
+          a: 'A small amount of very fast memory close to the CPU that holds frequently used data and instructions, so the CPU waits less for RAM (1).' },
+        { n: 125, marks: 2, cmd: 'Give', q: 'Give one advantage and one disadvantage of a magnetic hard disk drive (HDD) compared with a solid state drive (SSD).',
+          a: 'Advantage: cheaper per GB, so higher capacity for the money (1). Disadvantage: it has moving parts, so it is slower and more easily damaged (1).' },
+        { n: 126, marks: 1, cmd: 'State', q: 'State what ROM holds in a computer.',
+          a: 'Firmware, such as the boot instructions that start the computer (1).' },
+        { n: 127, marks: 2, cmd: 'State', q: 'State two uses of a GPU.',
+          a: 'Rendering graphics (1); highly parallel processing such as AI and machine learning (1).' },
+        { n: 128, marks: 2, cmd: 'Give', q: 'Give one advantage and one disadvantage of liquid cooling compared with air cooling.',
+          a: 'Advantage: better heat transfer and quieter under load (1). Disadvantage: more expensive, with a risk of leaks (1).' },
+        { n: 129, marks: 2, cmd: 'State', q: 'State what is meant by time-slicing and by an interrupt.',
+          a: 'Time-slicing: each process gets a small slice of processor time in turn (1). Interrupt: a signal that makes the processor suspend the current task to deal with something urgent (1).' },
+        { n: 130, marks: 2, cmd: 'State', q: 'State which type of operating system guarantees a response within a strict time limit, and give one place it is used.',
+          a: 'A real-time operating system, RTOS (1); used in medical devices or industrial control systems (1).' },
+        { n: 131, marks: 3, cmd: 'Identify', q: 'Identify three utility programs and state what each one does.',
+          a: 'Any three: file management organises, moves and searches files (1); a defragmenter reorganises fragmented files on a magnetic drive to speed access (1); compression reduces file size for storage or transfer (1); a package manager installs, updates and removes software (1); anti-malware or a firewall protects the system (1); backup software makes scheduled copies for recovery (1).' },
+        { n: 132, marks: 2, cmd: 'Explain', q: 'Explain why a defragmenter should not be used on an SSD.',
+          a: 'An SSD has no moving parts, so fragmented files do not slow access down (1), and defragmenting causes unnecessary writes, which shortens its life because an SSD has a limited number of write cycles (1).' },
+        { n: 133, marks: 2, cmd: 'State', q: 'State two ways a mobile device differs from a personal computer.',
+          a: 'It is portable and uses touch input (1); it is limited by battery life and processing power, so it uses a low-power processor and a mobile OS optimised for battery (1).' },
+        { n: 134, marks: 2, cmd: 'Give', q: 'Give one example of an input device and one of an output device, other than a keyboard and a monitor.',
+          a: 'Input: a mouse, scanner or sensor (1). Output: a printer, speaker or actuator (1).' }
       ]
     },
 

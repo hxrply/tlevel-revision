@@ -1,13 +1,25 @@
 /* Self-marking engine.
    This is a static site — there is no AI here. It cannot understand prose.
    What it does do, honestly and deterministically:
-     1. splits the model answer into marking points and looks for the language
-        of each one in your answer, so you can see what you probably hit
-     2. runs structural checks that genuinely predict levels-based marks:
-        contextualisation, developed explanations, balance, and a conclusion
+     1. splits the model answer into marking points and looks for the key
+        terms of each one in your answer, so you can see what you probably hit
+     2. runs structural checks that suit the command word: recall questions
+        are checked for the number of items asked for, explanations for
+        development, extended answers for balance and a conclusion
      3. makes YOU confirm the final mark, which is the bit that actually
         teaches you the mark scheme
-   Treat the automatic part as a prompt for self-marking, not as an examiner. */
+   Treat the automatic part as a prompt for self-marking, not as an examiner.
+
+   Matching rules (each one fixes a way the first version went wrong):
+     * acronyms count — RAM, ROM, SSD, CPU, GPU, IDE, LAN, VPN, SQL, API, OS…
+       The first version dropped every word under four letters.
+     * words are compared by a light stemmer plus a close-prefix rule, never by
+       a bare five-letter prefix — that treated internet, interrupt and
+       interpreter as the same word.
+     * "read only" matches "read-only", "non volatile" matches "non-volatile".
+     * a term preceded by not / no / never / cannot does not count as a hit.
+     * words that appear in almost every answer (data, system, user…) are
+       ignored, so they cannot inflate a match. */
 
 window.TLMARK = (function () {
   'use strict';
@@ -15,47 +27,120 @@ window.TLMARK = (function () {
   var STOP = ('a an and are as at be been being but by can could for from had has have he her his ' +
     'how i if in into is it its may might more most must no not of on or other our out over own she ' +
     'should so some such than that the their them then there these they this those to too up use used ' +
-    'using was we were what when where which while who will with would you your it\'s also each any all ' +
-    'both very much many one two three first second').split(' ');
+    'using was we were what when where which while who will with would you your also each any all ' +
+    'both very much many one two three four five first second third does do done get gets got make makes ' +
+    'made like just only well way ways able need needs etc example eg such called known').split(' ');
+
+  /* In this subject these appear in nearly every answer, so they say nothing
+     about whether a particular marking point was hit. */
+  var GENERIC = ('data system systems user users information computer computers program programs ' +
+    'organisation organisations business company software hardware device devices process processes ' +
+    'provide provides allow allows allowed thing things people time used means mean because').split(' ');
+
+  var NEGATORS = ['not', 'no', 'never', 'cannot', 'cant', 'isnt', 'doesnt', 'dont', 'without', 'wont', 'neither', 'nor'];
+
+  /* Small synonym groups: every word maps to the group's first word. */
+  var SYN = {};
+  [['fast', 'quick', 'rapid', 'speedy'], ['cheap', 'inexpensive', 'affordable', 'lowcost'],
+   ['expensive', 'costly', 'dear', 'pricey'], ['store', 'save', 'hold', 'keep'],
+   ['remove', 'delete', 'erase'], ['error', 'bug', 'fault', 'mistake', 'defect'],
+   ['permanent', 'persistent'], ['increase', 'raise', 'boost'],
+   ['reduce', 'lower', 'decrease'], ['translate', 'convert'], ['whole', 'entire']
+  ].forEach(function (g) { g.forEach(function (w) { SYN[w] = g[0]; }); });
 
   var CONNECTIVES = ['however', 'whereas', 'although', 'in contrast', 'on the other hand', 'conversely',
     'despite', 'nevertheless', 'alternatively', 'by comparison', 'while'];
-
   var CONCLUSION = ['overall', 'in conclusion', 'on balance', 'therefore', 'to conclude', 'i would recommend',
     'the best option', 'most appropriate', 'most suitable', 'in summary'];
-
   var DEVELOP = ['because', 'which means', 'so that', 'this means', 'resulting in', 'leading to',
-    'this leads to', 'as a result', 'therefore', 'which allows', 'so the', 'meaning that'];
-
+    'this leads to', 'as a result', 'therefore', 'which allows', 'so the', 'meaning that', 'so it', 'so they', 'so you'];
   var POSITIVE = ['benefit', 'advantage', 'improves', 'improve', 'allows', 'faster', 'cheaper', 'reduces',
     'increases', 'saves', 'efficient', 'strength'];
-
   var NEGATIVE = ['drawback', 'disadvantage', 'risk', 'however', 'cost', 'limitation', 'weakness', 'slower',
     'expensive', 'problem', 'downside', 'fails'];
 
-  function words(text) {
-    return String(text).toLowerCase().replace(/[^a-z0-9\s'-]/g, ' ').split(/\s+/).filter(Boolean);
+  var RECALL = ['state', 'identify', 'give', 'name', 'list', 'define', 'what', 'which', 'outline'];
+  var NUMBERS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+
+  /* ── Text handling ─────────────────────────────────────────────── */
+  function normalise(text) {
+    return String(text).toLowerCase()
+      .replace(/[‘’`]/g, "'")
+      .replace(/\bnon[\s-]+/g, 'non')            /* non volatile, non-volatile → nonvolatile */
+      .replace(/([a-z0-9])-([a-z0-9])/g, '$1$2')  /* read-only → readonly */
+      .replace(/'/g, '')                         /* doesn't → doesnt */
+      .replace(/[^a-z0-9\s]/g, ' ');
   }
-  function stem(w) { return w.length > 5 ? w.slice(0, 5) : w; }
-  function contentWords(text) {
-    var seen = {}, out = [];
-    words(text).forEach(function (w) {
-      if (w.length < 4 || STOP.indexOf(w) !== -1) return;
-      var s = stem(w);
-      if (!seen[s]) { seen[s] = 1; out.push(s); }
+  function tokens(text) { return normalise(text).split(/\s+/).filter(Boolean); }
+
+  function canon(w) {
+    if (SYN[w]) return SYN[w];
+    var suffixes = ['ings', 'ing', 'edly', 'ed', 'ers', 'er', 'est', 'ies', 'es', 's', 'ly'];
+    for (var i = 0; i < suffixes.length; i++) {
+      var s = suffixes[i];
+      if (w.length - s.length >= 4 && w.slice(-s.length) === s) {
+        w = w.slice(0, -s.length) + (s === 'ies' ? 'y' : '');
+        break;
+      }
+    }
+    return SYN[w] || w;
+  }
+  function sameWord(a, b) {
+    if (a === b) return true;
+    var short = a.length <= b.length ? a : b, long = short === a ? b : a;
+    /* "cache" / "caches", "compile" / "compiler": a near-complete prefix only */
+    return short.length >= 4 && long.indexOf(short) === 0 && long.length - short.length <= 2;
+  }
+
+  /* Acronyms written in capitals in the model answer are always key terms. */
+  function acronymsIn(text) {
+    var out = {};
+    (String(text).match(/\b[A-Z][A-Z0-9]{1,5}s?\b/g) || []).forEach(function (a) {
+      out[a.toLowerCase().replace(/s$/, '')] = 1;
     });
     return out;
   }
-  function countPhrases(text, list) {
-    var lower = ' ' + String(text).toLowerCase() + ' ';
-    var hits = [];
-    list.forEach(function (p) { if (lower.indexOf(p) !== -1) hits.push(p); });
-    return hits;
+
+  function keyTerms(pointText) {
+    var acr = acronymsIn(pointText), seen = {}, out = [];
+    tokens(pointText).forEach(function (w) {
+      var bare = w.replace(/s$/, '');
+      var isAcr = !!acr[bare] || !!acr[w];
+      if (!isAcr && (w.length < 4 || STOP.indexOf(w) !== -1 || GENERIC.indexOf(w) !== -1)) return;
+      var c = isAcr ? bare : canon(w);
+      if (!isAcr && GENERIC.indexOf(c) !== -1) return;
+      if (!seen[c]) { seen[c] = 1; out.push({ c: c, word: w }); }
+    });
+    return out;
   }
 
-  /* Split a model answer into marking points. Model answers in this site mark
-     each creditable point with "(1)" or "(2)"; where they do not (the levels-
-     based extended answers) we fall back to sentences as indicative content. */
+  /* The answer's words, plus adjacent pairs joined ("read only" → "readonly"),
+     each remembering whether it was negated. */
+  function answerIndex(answer) {
+    var t = tokens(answer), idx = [];
+    function negatedAt(i) {
+      for (var k = Math.max(0, i - 2); k < i; k++) if (NEGATORS.indexOf(t[k]) !== -1) return true;
+      return false;
+    }
+    t.forEach(function (w, i) {
+      var neg = negatedAt(i);
+      idx.push({ c: canon(w), raw: w, neg: neg });
+      if (i + 1 < t.length) idx.push({ c: canon(w + t[i + 1]), raw: w + t[i + 1], neg: neg });
+    });
+    return idx;
+  }
+  function found(key, idx) {
+    for (var i = 0; i < idx.length; i++) {
+      var e = idx[i];
+      if (!e.neg && (sameWord(key.c, e.c) || sameWord(key.c, e.raw))) return true;
+    }
+    return false;
+  }
+
+  /* ── Marking points ────────────────────────────────────────────── */
+  /* Model answers mark each creditable point with "(1)" or "(2)"; where they
+     do not (levels-based extended answers) sentences are used as indicative
+     content. */
   function derivePoints(modelAnswer) {
     var a = String(modelAnswer);
     if (/\(\d\)/.test(a)) {
@@ -76,97 +161,112 @@ window.TLMARK = (function () {
     return exam.marks >= 6 && !/\(\d\)/.test(exam.a);
   }
 
-  /* Match each marking point against the student's answer. */
   function matchPoints(answer, points) {
-    var ansStems = {};
-    words(answer).forEach(function (w) { ansStems[stem(w)] = 1; });
-
+    var idx = answerIndex(answer);
     return points.map(function (p) {
-      var keys = contentWords(p.text);
+      var keys = keyTerms(p.text);
       if (!keys.length) return { point: p, hit: 'unknown', ratio: 0, missing: [] };
-      var found = 0, missing = [];
-      keys.forEach(function (k) { if (ansStems[k]) found++; else missing.push(k); });
-      var ratio = found / keys.length;
-      var hit = ratio >= 0.34 ? 'likely' : ratio >= 0.17 ? 'partial' : 'missing';
-      return { point: p, hit: hit, ratio: ratio, missing: missing.slice(0, 6) };
+      var hits = 0, missing = [];
+      keys.forEach(function (k) { if (found(k, idx)) hits++; else missing.push(k.word); });
+      /* A long marking point is usually paraphrased: four or five of its key
+         terms is a strong signal, so the bar is capped rather than a fixed share. */
+      var need = Math.min(keys.length, Math.max(keys.length <= 2 ? 1 : 2, Math.min(5, Math.ceil(keys.length * 0.4))));
+      var hit = hits >= need ? 'likely' : hits >= Math.max(1, Math.ceil(need / 2)) ? 'partial' : 'missing';
+      return { point: p, hit: hit, ratio: hits / keys.length, missing: missing.slice(0, 6) };
     });
   }
 
-  /* Words from the question stem that represent the scenario. Used to check
-     contextualisation, which is the single biggest differentiator between a
-     Level 1 and a Level 3 answer. */
+  /* ── Structural checks, chosen by command word ─────────────────── */
+  function commandOf(question) {
+    var first = tokens(question)[0] || '';
+    return RECALL.indexOf(first) !== -1 ? 'recall' : first;
+  }
+  function itemsAskedFor(question) {
+    var m = normalise(question).match(/\b(one|two|three|four|five|six|seven|eight|nine|ten)\b/);
+    return m ? NUMBERS[m[1]] : 0;
+  }
+  function itemsGiven(answer) {
+    return String(answer).split(/[\n;,•]|\.\s|\band\b/).filter(function (s) { return s.trim().length > 1; }).length;
+  }
   function scenarioTerms(question) {
-    return contentWords(question).filter(function (w) {
-      return ['expla', 'descr', 'evalu', 'discu', 'ident', 'state', 'justi', 'analy', 'compa',
-        'marks', 'quest', 'answe', 'given', 'follo', 'shoul', 'would', 'could'].indexOf(w) === -1;
+    return keyTerms(question).map(function (k) { return k.c; }).filter(function (w) {
+      return ['explain', 'describe', 'evaluate', 'discus', 'discuss', 'identify', 'state', 'justify', 'analyse',
+        'compare', 'mark', 'question', 'answer', 'give', 'follow', 'should', 'would', 'could', 'difference', 'between'].indexOf(w) === -1;
     }).slice(0, 12);
+  }
+  function countPhrases(text, list) {
+    var lower = ' ' + String(text).toLowerCase() + ' ';
+    return list.filter(function (p) { return lower.indexOf(p) !== -1; });
   }
 
   function analyse(answer, exam) {
-    var wordCount = words(answer).length;
+    var wordCount = tokens(answer).length;
     var levels = isLevelsBased(exam);
-    var expected = levels ? exam.marks * 28 : exam.marks * 16;
-
-    var scen = scenarioTerms(exam.q);
-    var ansStems = {};
-    words(answer).forEach(function (w) { ansStems[stem(w)] = 1; });
-    var scenHits = scen.filter(function (s) { return ansStems[s]; });
-
-    var connectives = countPhrases(answer, CONNECTIVES);
-    var conclusion = countPhrases(answer, CONCLUSION);
-    var develops = countPhrases(answer, DEVELOP);
-    var pos = countPhrases(answer, POSITIVE);
-    var neg = countPhrases(answer, NEGATIVE);
-
+    var cmd = commandOf(exam.q);
     var checks = [];
-    checks.push({
-      k: 'Length', ok: wordCount >= expected * 0.6,
-      msg: wordCount >= expected * 0.6
-        ? wordCount + ' words — a reasonable length for ' + exam.marks + ' marks.'
-        : 'Only ' + wordCount + ' words. For ' + exam.marks + ' marks aim for roughly ' + expected +
-          '. Short answers are the most common reason marks are left on the table.'
-    });
-    checks.push({
-      k: 'Contextualisation', ok: scenHits.length >= Math.min(3, scen.length),
-      msg: scenHits.length >= Math.min(3, scen.length)
-        ? 'You referred to the scenario (' + scenHits.slice(0, 5).join(', ') + ').'
-        : 'Weak link to the scenario. An extended answer that never names the organisation or system in the question is capped at Level 1. Try to work in: ' + scen.slice(0, 5).join(', ') + '.'
-    });
-    checks.push({
-      k: 'Developed points', ok: develops.length >= 2,
-      msg: develops.length >= 2
-        ? 'Good — you used linking language (' + develops.slice(0, 3).join(', ') + ') so points are being developed.'
-        : 'Few developed explanations. Use "because", "which means", "so that" to force the second and third mark out of each point — the examiner\'s most common criticism is answers that stop one step early.'
-    });
 
-    if (levels) {
+    if (cmd === 'recall' && !levels) {
+      /* State / identify / give: the marks are for the items, not the prose. */
+      var asked = itemsAskedFor(exam.q), given = itemsGiven(answer);
+      if (asked) {
+        checks.push({
+          k: 'Items', ok: given >= asked,
+          msg: given >= asked
+            ? 'You gave ' + given + ' item' + (given === 1 ? '' : 's') + ' — the question asks for ' + asked + '.'
+            : 'The question asks for ' + asked + ' and this reads as ' + given + '. A State question gives a mark per correct item, so a missing item is a missing mark.'
+        });
+      }
+    } else {
+      var expected = levels ? exam.marks * 28 : exam.marks * 12;
+      var develops = countPhrases(answer, DEVELOP);
       checks.push({
-        k: 'Balance', ok: connectives.length >= 1 && pos.length >= 1 && neg.length >= 1,
-        msg: (connectives.length >= 1 && pos.length >= 1 && neg.length >= 1)
-          ? 'Both sides are present, which you need for Level 2 and above.'
-          : 'This looks one-sided. Skewing wholly towards advantages or wholly towards drawbacks caps you at Level 1 or 2. Add a "however…" paragraph.'
+        k: 'Length', ok: wordCount >= expected * 0.5,
+        msg: wordCount >= expected * 0.5
+          ? wordCount + ' words — a reasonable length for ' + exam.marks + ' marks.'
+          : 'Only ' + wordCount + ' words. For ' + exam.marks + ' marks aim for roughly ' + expected + '.'
       });
+      var needDev = levels ? 2 : Math.max(1, Math.floor(exam.marks / 2));
       checks.push({
-        k: 'Conclusion', ok: conclusion.length >= 1,
-        msg: conclusion.length >= 1
-          ? 'A conclusion is present (' + conclusion[0] + ').'
-          : 'No conclusion detected. An extended response without a supported conclusion cannot reach Level 3. End with "Overall…" and a recommendation that follows from your points.'
+        k: 'Developed points', ok: develops.length >= needDev,
+        msg: develops.length >= needDev
+          ? 'Good — linking language (' + develops.slice(0, 3).join(', ') + ') develops your points.'
+          : 'Each point needs its "so what". Use "because", "which means" or "so that" to earn the second mark of each point.'
       });
+      var scen = scenarioTerms(exam.q);
+      if (levels || (exam.marks >= 4 && scen.length >= 4)) {
+        var idx = answerIndex(answer);
+        var scenHits = scen.filter(function (s) { return found({ c: s }, idx); });
+        var enough = scenHits.length >= Math.min(3, scen.length);
+        checks.push({
+          k: 'Contextualisation', ok: enough,
+          msg: enough
+            ? 'You referred to the scenario (' + scenHits.slice(0, 5).join(', ') + ').'
+            : 'Weak link to the scenario in the question. Name the organisation or system and apply each point to it.'
+        });
+      }
+      if (levels) {
+        var connectives = countPhrases(answer, CONNECTIVES), pos = countPhrases(answer, POSITIVE), neg = countPhrases(answer, NEGATIVE);
+        var balanced = connectives.length >= 1 && pos.length >= 1 && neg.length >= 1;
+        checks.push({ k: 'Balance', ok: balanced,
+          msg: balanced ? 'Both sides are present, which you need for Level 2 and above.'
+                        : 'This looks one-sided. An answer with only advantages or only drawbacks is capped low. Add a "however…" paragraph.' });
+        var conclusion = countPhrases(answer, CONCLUSION);
+        checks.push({ k: 'Conclusion', ok: conclusion.length >= 1,
+          msg: conclusion.length >= 1 ? 'A conclusion is present (' + conclusion[0] + ').'
+                                      : 'No conclusion detected. End with "On balance… because… provided that…".' });
+      }
     }
 
     var passed = checks.filter(function (c) { return c.ok; }).length;
     var estimate = null;
     if (levels) {
       var lvl = passed >= 5 ? 3 : passed >= 3 ? 2 : 1;
-      var band = lvl === 3
-        ? Math.ceil(exam.marks * 0.75) + '–' + exam.marks
-        : lvl === 2
-          ? Math.ceil(exam.marks * 0.42) + '–' + Math.floor(exam.marks * 0.7)
-          : '1–' + Math.floor(exam.marks * 0.36);
+      var band = lvl === 3 ? Math.ceil(exam.marks * 0.75) + '–' + exam.marks
+        : lvl === 2 ? Math.ceil(exam.marks * 0.42) + '–' + Math.floor(exam.marks * 0.7)
+        : '1–' + Math.floor(exam.marks * 0.36);
       estimate = { level: lvl, band: band };
     }
-
-    return { wordCount: wordCount, levels: levels, checks: checks, estimate: estimate, passed: passed };
+    return { wordCount: wordCount, levels: levels, command: cmd, checks: checks, estimate: estimate, passed: passed };
   }
 
   function tips(analysis, matches) {
@@ -174,18 +274,15 @@ window.TLMARK = (function () {
     analysis.checks.forEach(function (c) { if (!c.ok) out.push(c.msg); });
     var missed = (matches || []).filter(function (m) { return m.hit === 'missing'; });
     if (missed.length) {
-      out.push('Marking points you do not appear to have covered: ' + missed.length + ' of ' +
-        matches.length + '. Read the model answer and note the wording it uses.');
+      out.push('Marking points not found in your answer: ' + missed.length + ' of ' + matches.length +
+        '. Check them against the model answer — the matcher looks for key terms, so a correct idea in very different words can be missed.');
     }
-    if (!out.length) out.push('Structurally this is a strong answer. Compare it line by line with the model answer and mark yourself honestly.');
+    if (analysis.command === 'recall') {
+      out.push('For a State question the exact term is the mark. Use the word the specification uses.');
+    }
+    if (!out.length) out.push('This covers the marking points the matcher can see. Compare it line by line with the model answer and mark yourself honestly.');
     return out;
   }
 
-  return {
-    derivePoints: derivePoints,
-    isLevelsBased: isLevelsBased,
-    matchPoints: matchPoints,
-    analyse: analyse,
-    tips: tips
-  };
+  return { derivePoints: derivePoints, isLevelsBased: isLevelsBased, matchPoints: matchPoints, analyse: analyse, tips: tips };
 })();
