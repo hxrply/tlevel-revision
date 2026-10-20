@@ -161,10 +161,16 @@ window.TLMARK = (function () {
     return exam.marks >= 6 && !/\(\d\)/.test(exam.a);
   }
 
-  function matchPoints(answer, points) {
+  /* Terms copied from the question ("RAM", "ROM" in "differences between RAM
+     and ROM") appear in every answer, right or wrong, so they are not evidence. */
+  function matchPoints(answer, points, question) {
     var idx = answerIndex(answer);
+    var inQuestion = {};
+    if (question) keyTerms(question).forEach(function (k) { inQuestion[k.c] = 1; });
     return points.map(function (p) {
-      var keys = keyTerms(p.text);
+      var all = keyTerms(p.text);
+      var keys = all.filter(function (k) { return !inQuestion[k.c]; });
+      if (!keys.length) keys = all;
       if (!keys.length) return { point: p, hit: 'unknown', ratio: 0, missing: [] };
       var hits = 0, missing = [];
       keys.forEach(function (k) { if (found(k, idx)) hits++; else missing.push(k.word); });
@@ -233,7 +239,10 @@ window.TLMARK = (function () {
           : 'Each point needs its "so what". Use "because", "which means" or "so that" to earn the second mark of each point.'
       });
       var scen = scenarioTerms(exam.q);
-      if (levels || (exam.marks >= 4 && scen.length >= 4)) {
+      /* only questions that describe an organisation or situation have a scenario to apply */
+      var hasScenario = /^(a|an)\s/i.test(exam.q.trim()) ||
+        /(company|business|college|school|hospital|retailer|organisation|charity|council|shop|firm|manufacturer|bank|surgery|clinic|centre)/i.test(exam.q);
+      if (levels || (exam.marks >= 4 && hasScenario && scen.length >= 3)) {
         var idx = answerIndex(answer);
         var scenHits = scen.filter(function (s) { return found({ c: s }, idx); });
         var enough = scenHits.length >= Math.min(3, scen.length);

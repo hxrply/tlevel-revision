@@ -1522,7 +1522,7 @@
     var pts = TLMARK.derivePoints(rec.exam.a);
     marked[qid] = {
       analysis: TLMARK.analyse(text, rec.exam),
-      matches: TLMARK.matchPoints(text, pts),
+      matches: TLMARK.matchPoints(text, pts, rec.exam.q),
       points: pts
     };
     /* pre-tick the points the engine thinks you hit, for you to correct */
