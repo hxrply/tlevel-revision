@@ -35,7 +35,8 @@ window.TLMARK = (function () {
      about whether a particular marking point was hit. */
   var GENERIC = ('data system systems user users information computer computers program programs ' +
     'organisation organisations business company software hardware device devices process processes ' +
-    'provide provides allow allows allowed thing things people time used means mean because').split(' ');
+    'provide provides allow allows allowed thing things people time used means mean because ' +
+    'appropriate suitable better best option choice whereas').split(' ');
 
   var NEGATORS = ['not', 'no', 'never', 'cannot', 'cant', 'isnt', 'doesnt', 'dont', 'without', 'wont', 'neither', 'nor'];
 
@@ -174,9 +175,9 @@ window.TLMARK = (function () {
       if (!keys.length) return { point: p, hit: 'unknown', ratio: 0, missing: [] };
       var hits = 0, missing = [];
       keys.forEach(function (k) { if (found(k, idx)) hits++; else missing.push(k.word); });
-      /* A long marking point is usually paraphrased: four or five of its key
-         terms is a strong signal, so the bar is capped rather than a fixed share. */
-      var need = Math.min(keys.length, Math.max(keys.length <= 2 ? 1 : 2, Math.min(5, Math.ceil(keys.length * 0.4))));
+      /* A long marking point is usually answered in a few words: a quarter of
+         its key terms (capped at four) is a strong signal that the point was made. */
+      var need = Math.min(keys.length, Math.max(keys.length <= 2 ? 1 : 2, Math.min(4, Math.ceil(keys.length * 0.25))));
       var hit = hits >= need ? 'likely' : hits >= Math.max(1, Math.ceil(need / 2)) ? 'partial' : 'missing';
       return { point: p, hit: hit, ratio: hits / keys.length, missing: missing.slice(0, 6) };
     });
