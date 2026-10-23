@@ -671,6 +671,94 @@ window.TLDATA.tutorNotes = {
           got: '2/2', cost: 'Both correct.' }
       ]
     }
+,
+
+    {
+      day: 23, date: '23 Oct', topic: 'Content area 7.3 part 1 - Network types, topologies and models (quick-fire recall)',
+      score: '15/30',
+      questions: [
+
+        { n: 135, marks: 2, cmd: 'State', q: 'State what PAN stands for and give one example.',
+          how: 'The expansion is worth a mark on its own, so it must be exact. P is Personal.',
+          answer: 'Personal area network, such as Bluetooth headphones connected to a phone.',
+          got: '0/2', cost: 'Private area network is the wrong word - it is Personal. Used by one person is the right idea, but no example was given for the second mark.' },
+
+        { n: 136, marks: 3, cmd: 'State', q: 'State what LAN, MAN and WAN stand for.',
+          how: 'Three exact expansions. M is for Metropolitan - a town or city.',
+          answer: 'Local area network; metropolitan area network; wide area network.',
+          got: '2/3', cost: 'LAN and WAN correct. MAN is metropolitan, not multiple - think of a network that covers a city.' },
+
+        { n: 137, marks: 1, cmd: 'State', q: 'State the largest example of a WAN.',
+          how: 'The internet - the network itself. The World Wide Web is a service that runs on it.',
+          answer: 'The internet.',
+          got: '0/1', cost: 'The World Wide Web is not a network - it is the collection of web pages carried over the internet. Email and online games also use the internet without being the web.' },
+
+        { n: 138, marks: 2, cmd: 'State', q: 'State what a VPN does.',
+          how: 'Two parts: an encrypted tunnel across a public network, and the remote user appears to be on the private network.',
+          answer: 'It creates an encrypted tunnel across a public network, so a remote user appears to be on the private LAN.',
+          got: '1/2', cost: 'Appearing to be somewhere else scored. The mark that was missed is the encryption - the tunnel means intercepted traffic cannot be read, which is why businesses use VPNs.' },
+
+        { n: 139, marks: 2, cmd: 'Give', q: 'Give one advantage and one disadvantage of fibre-optic cable compared with copper cable.',
+          how: 'Advantage: very high bandwidth over long distances, immune to interference. Disadvantage: expensive, fragile, needs skilled installation.',
+          answer: 'Advantage: very high bandwidth over long distances, and immune to interference. Disadvantage: expensive and fragile, and needs skilled installation.',
+          got: '2/2', cost: 'Both correct.' },
+
+        { n: 140, marks: 2, cmd: 'Give', q: 'Give two disadvantages of a wireless connection.',
+          how: 'Three to choose from: shared bandwidth, interference and walls, security exposure. Two different points, not one said twice.',
+          answer: 'Any two: bandwidth is shared between users; interference and obstruction from walls; greater security exposure.',
+          got: '1/2', cost: 'A weaker, fluctuating signal is the interference point and scored once. Both halves of the answer said the same thing, so the second mark needed a different point - shared bandwidth or security.' },
+
+        { n: 141, marks: 2, cmd: 'State', q: 'State the difference between a router and a switch.',
+          how: 'Router between networks, switch within one network.',
+          answer: 'A router connects different networks and routes packets between them. A switch connects devices within one LAN and forwards data only to the intended device.',
+          got: '2/2', cost: 'Correct - around the network versus out of the network is exactly the difference.' },
+
+        { n: 142, marks: 2, cmd: 'State', q: 'In a star topology, state what happens if one cable fails, and what happens if the central switch fails.',
+          how: 'One cable: one device. Central switch: everything.',
+          answer: 'One cable: only that one device loses its connection. Central switch: the whole network goes down.',
+          got: '2/2', cost: 'Both right. Say that device rather than that branch - branches belong to a tree topology.' },
+
+        { n: 143, marks: 2, cmd: 'Give', q: 'Give one advantage and one disadvantage of a mesh topology.',
+          how: 'Advantage: several routes, so no single point of failure. Disadvantage: expensive and complex.',
+          answer: 'Advantage: highly resilient, with several routes and no single point of failure. Disadvantage: expensive and complex to set up.',
+          got: '1/2', cost: 'The disadvantage scored. No advantage was given - the whole point of a mesh is that data can take another route if a link fails.' },
+
+        { n: 144, marks: 1, cmd: 'State', q: 'State what is meant by a tree topology.',
+          how: 'Groups of star networks connected in a hierarchy.',
+          answer: 'Groups of star networks connected in a hierarchy.',
+          got: '1/1', cost: 'The hierarchy and the knock-on effect of a higher node failing were both right.' },
+
+        { n: 145, marks: 2, cmd: 'State', q: 'State the difference between physical topology and logical topology.',
+          how: 'Physical is the cables. Logical is the path the data takes.',
+          answer: 'Physical topology is how the devices are actually cabled. Logical topology is the path the data actually takes.',
+          got: '0/2', cost: 'Not known yet. Physical means the real cables you could touch; logical means the route the data follows, which can be different.' },
+
+        { n: 146, marks: 2, cmd: 'Give', q: 'Give one advantage and one disadvantage of a client-server network.',
+          how: 'Think of the college network: you log in anywhere, your files live on a server, IT backs them up. That is client-server.',
+          answer: 'Advantage: security, backup and administration are centralised. Disadvantage: costly, and the server is a single point of failure.',
+          got: '0/2', cost: 'Client-side cheating in games is a different meaning of client. A client-server network is one where central servers hold the files and services and every computer connects to them, like a college network.' },
+
+        { n: 147, marks: 2, cmd: 'Give', q: 'Give one advantage and one disadvantage of a peer-to-peer network.',
+          how: 'Two laptops at home sharing a folder - no server. Cheap and simple, but nothing central.',
+          answer: 'Advantage: cheap and simple for a small number of devices. Disadvantage: no central backup or security, and it slows down as it grows.',
+          got: '0/2', cost: 'Not known yet. Peer-to-peer is the opposite of client-server: every device shares its own files, so there is no server to pay for but nothing is backed up or secured centrally.' },
+
+        { n: 148, marks: 1, cmd: 'State', q: 'State what is meant by a thin client.',
+          how: 'Thin because it does very little itself - the server does the work.',
+          answer: 'A device that does very little processing itself, with the work done on a server.',
+          got: '0/1', cost: 'Not known yet. The word thin is the clue: almost no processing on the device.' },
+
+        { n: 149, marks: 2, cmd: 'State', q: 'State two benefits of connecting computers in a network.',
+          how: 'Sharing, central backup and security, communication, central accounts.',
+          answer: 'Any two: sharing files, printers and internet access; centralised backup, security and updates; communication and collaboration; central user account management.',
+          got: '2/2', cost: 'Both correct - communication and sharing printers.' },
+
+        { n: 150, marks: 2, cmd: 'State', q: 'State two drawbacks of connecting computers in a network.',
+          how: 'Two different drawbacks: failure affects many, malware spreads, cost, security risk, congestion.',
+          answer: 'Any two: cost of hardware and expertise; malware can spread between devices; a server or link failure affects many users; more access points means more security risk; slows down when congested.',
+          got: '1/2', cost: 'One failure stopping everyone scored. A second, different drawback was needed - malware spreading between computers is the easiest to remember.' }
+      ]
+    }
 
 
   ]
