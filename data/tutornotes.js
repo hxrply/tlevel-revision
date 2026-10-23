@@ -602,7 +602,7 @@ window.TLDATA.tutorNotes = {
 
     {
       day: 22, date: '23 Oct', topic: 'Content area 7.1 and 7.2 - Hardware and software (quick-fire recall)',
-      score: '9/23',
+      score: '9/25',
       questions: [
 
         { n: 122, marks: 1, cmd: 'State', q: 'State what is meant by an embedded device.',
