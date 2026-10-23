@@ -598,6 +598,79 @@ window.TLDATA.tutorNotes = {
           cost: 'The accessibility point was a genuine drawback of the format with its consequence, and scored. The first point - competitors being able to see company data - is a drawback of publishing the data at all, in any format, so it did not answer the question. The two the mark scheme expects are lost detail and misleading design such as truncated axes.' }
       ]
     }
+,
+
+    {
+      day: 22, date: '23 Oct', topic: 'Content area 7.1 and 7.2 - Hardware and software (quick-fire recall)',
+      score: '9/23',
+      questions: [
+
+        { n: 122, marks: 1, cmd: 'State', q: 'State what is meant by an embedded device.',
+          how: 'Two parts: a computer built into a product, and it does one dedicated job. Give an example to be safe.',
+          answer: 'A computer built into a product to do one dedicated job, such as the controller in a washing machine or a router.',
+          got: '0/1', cost: 'Described code that never updates - that is closer to firmware. An embedded device is defined by being built in and doing one job.' },
+
+        { n: 123, marks: 3, cmd: 'State', q: 'State three characteristics of a processor that affect its performance.',
+          how: 'Three words to learn as a set: cores, clock speed, cache.',
+          answer: 'The number of cores; the clock speed; the cache size.',
+          got: '0/3', cost: 'Cooling, power and compatibility are not processor characteristics in the specification. Cores, clock speed and cache are the three that are always asked.' },
+
+        { n: 124, marks: 1, cmd: 'State', q: 'State what cache memory is.',
+          how: 'Three ideas in one sentence: small, very fast, next to the CPU - holding the data it uses most.',
+          answer: 'A small amount of very fast memory close to the CPU that holds frequently used data and instructions, so the CPU waits less for RAM.',
+          got: '0/1', cost: 'Short term and fast recall is close, but it describes RAM just as well. The mark is for small, very fast and close to the CPU.' },
+
+        { n: 125, marks: 2, cmd: 'Give', q: 'Give one advantage and one disadvantage of a magnetic hard disk drive (HDD) compared with a solid state drive (SSD).',
+          how: 'HDD wins on price per GB and capacity. It loses on speed and durability, because it has moving parts.',
+          answer: 'Advantage: cheaper per GB, so higher capacity for the money. Disadvantage: it has moving parts, so it is slower and more easily damaged.',
+          got: '1/2', cost: 'Slower was right. More durable is the wrong way round - an HDD has a spinning platter and a moving read head, so it is the more fragile of the two.' },
+
+        { n: 126, marks: 1, cmd: 'State', q: 'State what ROM holds in a computer.',
+          how: 'The question asks what it holds, not what it is like: firmware, such as the boot instructions.',
+          answer: 'Firmware, such as the boot instructions that start the computer.',
+          got: '0/1', cost: 'Doesnt get deleted is right about ROM (it is non-volatile) but answers what ROM is like, not what it holds.' },
+
+        { n: 127, marks: 2, cmd: 'State', q: 'State two uses of a GPU.',
+          how: 'Graphics, and highly parallel work such as AI and machine learning.',
+          answer: 'Rendering graphics; highly parallel processing such as AI and machine learning.',
+          got: '1/2', cost: 'Images scored as graphics. Code and tasks are too vague for the second mark - the specific use is highly parallel work such as AI.' },
+
+        { n: 128, marks: 2, cmd: 'Give', q: 'Give one advantage and one disadvantage of liquid cooling compared with air cooling.',
+          how: 'Advantage: moves heat away better and is quieter under load. Disadvantage: costs more and can leak.',
+          answer: 'Advantage: better heat transfer and quieter under load. Disadvantage: more expensive, with a risk of leaks.',
+          got: '2/2', cost: 'Both scored. The real reason liquid is more effective is that liquid carries heat away better than air - dust is a side issue.' },
+
+        { n: 129, marks: 2, cmd: 'State', q: 'State what is meant by time-slicing and by an interrupt.',
+          how: 'Time-slicing is about sharing: each process gets a small turn. An interrupt is a signal that something urgent needs dealing with now.',
+          answer: 'Time-slicing: each process gets a small slice of processor time in turn. Interrupt: a signal that makes the processor suspend the current task to deal with something urgent.',
+          got: '1/2', cost: 'Pauses a process scored for the interrupt. Time-slicing does not make processes faster - it shares the processor so several programs appear to run at once.' },
+
+        { n: 130, marks: 2, cmd: 'State', q: 'State which type of operating system guarantees a response within a strict time limit, and give one place it is used.',
+          how: 'Real-time OS. The clue is in the question: strict time limit means real time.',
+          answer: 'A real-time operating system (RTOS), used in medical devices or industrial control systems.',
+          got: '0/2', cost: 'Not known yet. Learn it as: real-time OS - guaranteed response - medical and industrial.' },
+
+        { n: 131, marks: 3, cmd: 'Identify', q: 'Identify three utility programs and state what each one does.',
+          how: 'A utility looks after the computer rather than doing the users work. Six to choose from.',
+          answer: 'Any three: file management organises, moves and searches files; a defragmenter reorganises fragmented files on a magnetic drive to speed access; compression reduces file size; a package manager installs, updates and removes software; anti-malware or a firewall protects the system; backup software makes scheduled copies for recovery.',
+          got: '0/3', cost: 'Left blank. Anti-malware and backup are utilities you already use - start from what a computer needs to look after itself.' },
+
+        { n: 132, marks: 2, cmd: 'Explain', q: 'Explain why a defragmenter should not be used on an SSD.',
+          how: 'Two reasons, one mark each: it does not help (no moving parts), and it does harm (extra writes wear the SSD out).',
+          answer: 'An SSD has no moving parts, so fragmented files do not slow access down, and defragmenting causes unnecessary writes, which shortens its life because an SSD has a limited number of write cycles.',
+          got: '0/2', cost: 'Right direction but no reason given. Both reasons come from facts you know: no moving parts, and limited write cycles.' },
+
+        { n: 133, marks: 2, cmd: 'State', q: 'State two ways a mobile device differs from a personal computer.',
+          how: 'Portable and touch, but limited by battery and processing power.',
+          answer: 'It is portable and uses touch input; it is limited by battery life and processing power, so it uses a low-power processor and a mobile OS.',
+          got: '2/2', cost: 'Both scored - less processing power and portable.' },
+
+        { n: 134, marks: 2, cmd: 'Give', q: 'Give one example of an input device and one of an output device, other than a keyboard and a monitor.',
+          how: 'One of each. Sensors and actuators are the examples that show you know embedded systems.',
+          answer: 'Input: a mouse, scanner, microphone or sensor. Output: a printer, speaker or actuator.',
+          got: '2/2', cost: 'Both correct.' }
+      ]
+    }
 
 
   ]
