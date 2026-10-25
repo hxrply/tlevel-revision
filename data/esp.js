@@ -1182,6 +1182,13 @@ window.TLDATA.esp = {
      "ic": "∑",
      "blocks": [
       {
+       "callout": {
+        "kind": "tip",
+        "title": "Short version",
+        "text": "The **Toolkit** page (the last page in this section) has the six pandas patterns on one screen, plus the input loop to learn by heart."
+       }
+      },
+      {
        "code": {
         "title": "Count a text column — value_counts",
         "lang": "python",
@@ -1435,6 +1442,160 @@ window.TLDATA.esp = {
          "At least two future developments, each specific and justified",
          "Nothing about time management or effort"
         ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "kit",
+   "code": "Toolkit",
+   "title": "Python and pandas you must know cold",
+   "summary": "The six pandas patterns, the validated input loop, the counting pseudocode, and a template for every ESP task.",
+   "facts": [
+    [
+     "6",
+     "pandas patterns"
+    ],
+    [
+     "5",
+     "task templates"
+    ]
+   ],
+   "parts": [
+    {
+     "h": "The six pandas patterns",
+     "ic": "∑",
+     "blocks": [
+      {
+       "p": "You do not need all of pandas. These six patterns cover almost every Task 4a requirement. Type them out from memory until you can do it without looking."
+      },
+      {
+       "code": {
+        "title": "The six patterns",
+        "lang": "python",
+        "src": "import pandas as pd\nimport matplotlib.pyplot as plt\n\n# 1. LOAD the file into a data frame (a table)\nsales = pd.read_csv(\"sales.csv\")\n\n# 2. ONE COLUMN: the data frame, then the column name in square brackets\nsales[\"Product\"]\n\n# 3. COUNT text — how many times each product appears\nsales[\"Product\"].value_counts()          # text gets COUNTED, never sum()\n\n# 4. TOTAL or AVERAGE numbers, per group\nsales.groupby(\"Region\")[\"Price\"].sum()   # total price per region\nsales.groupby(\"Region\")[\"Price\"].mean()  # average price per region\n\n# 5. FILTER rows — only the North region\nnorth = sales[sales[\"Region\"] == \"North\"]\n\n# 6. GRAPH it, with a title and both axis labels\nsales[\"Product\"].value_counts().plot(kind=\"bar\", title=\"Sales per product\")\nplt.xlabel(\"Product\")\nplt.ylabel(\"Number sold\")\nplt.show()"
+       }
+      },
+      {
+       "p": "**Read pattern 4 aloud:** take *sales*, group it **by** Region, look at the Price column, and **sum** it. Every groupby reads the same way."
+      },
+      {
+       "callout": {
+        "kind": "tip",
+        "title": "The decision rule",
+        "list": [
+         "Is the column **text** — product names, regions, issue types? **Count** it with `value_counts()`.",
+         "Is it **numbers** — price, days, quantity? **Sum** it or **average** it with `sum()` or `mean()`."
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "h": "The validated input loop",
+     "ic": "↻",
+     "blocks": [
+      {
+       "p": "This exact block earns robustness marks in every Task 4a. Learn it as one piece."
+      },
+      {
+       "code": {
+        "title": "Keep asking until the input is valid",
+        "lang": "python",
+        "src": "while True:\n    choice = input(\"Choose 1-5: \")\n    if choice.isdigit() and 1 <= int(choice) <= 5:\n        choice = int(choice)\n        break\n    print(\"Please enter a whole number from 1 to 5\")"
+       }
+      },
+      {
+       "ul": [
+        "`while True` — **keep asking** until the input is valid.",
+        "`choice.isdigit()` — **is it a whole number?** Letters and blanks are rejected without crashing.",
+        "`1 <= int(choice) <= 5` — **is it in range?**",
+        "The message tells the user exactly what to type — that is the user-experience mark."
+       ]
+      }
+     ]
+    },
+    {
+     "h": "The counting pattern — Task 3",
+     "ic": "≡",
+     "blocks": [
+      {
+       "code": {
+        "title": "Count the records that match",
+        "lang": "pseudocode",
+        "src": "FUNCTION CountNorth (Records)\n    SET Count TO 0\n    FOR EACH Record FROM Records DO\n        IF Record.Region = \"North\" THEN\n            SET Count TO Count + 1\n        END IF\n    END FOREACH\n    RETURN Count\nEND FUNCTION"
+       }
+      },
+      {
+       "p": "Every counting algorithm has the same three parts: **start at 0**, **loop and add 1 when it matches**, **return**. Make the value you are matching a parameter and the same function counts any region."
+      }
+     ]
+    },
+    {
+     "h": "Boundary test data — Task 2",
+     "ic": "↔",
+     "blocks": [
+      {
+       "p": "Boundary data is **one below the limit, the limit itself, and one above** — not just any small and large number."
+      },
+      {
+       "table": {
+        "cols": [
+         "Requirement",
+         "Boundary test data",
+         "Not boundary data"
+        ],
+        "rows": [
+         [
+          "18 or over is an adult",
+          "17, 18, 19",
+          "10, 40 — these are normal data"
+         ],
+         [
+          "Up to and including 5 kg is the cheapest band",
+          "4.9, 5.0, 5.1",
+          "2, 8"
+         ],
+         [
+          "Menu choices 1 to 5",
+          "0, 1, 5, 6",
+          "3"
+         ]
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "h": "The evaluation sentence — Task 4b",
+     "ic": "⚖",
+     "blocks": [
+      {
+       "p": "Three parts every time: **the requirement → how well it is met → the evidence.** Never the story of what you did next."
+      },
+      {
+       "code": {
+        "title": "Story versus evaluation",
+        "lang": "text",
+        "src": "STORY (scores nothing)\nI decided to create a menu so the user can choose where to go. After\nimplementing it I tested it, and once it worked I started on the next task.\n\nEVALUATION (scores)\nThe brief required users to choose a report easily. My menu meets this well:\nit rejects letters and numbers outside 1 to 4 with a clear message, which\ntest 3 in my log confirms."
+       }
+      }
+     ]
+    },
+    {
+     "h": "Costing a person — Task 1",
+     "ic": "£",
+     "blocks": [
+      {
+       "p": "Cost = **the hours that person actually works × their rate.** Never the length of the whole project."
+      },
+      {
+       "code": {
+        "title": "Worked example",
+        "lang": "text",
+        "src": "A junior is paid £20 an hour and works 6 days of 7.5 hours on a 30-day project.\n\n  6 days × 7.5 hours = 45 hours\n  45 hours × £20     = £900\n\nWRONG: 30 days × 7.5 × £20 = £4,500 — costing them for days they are not working."
        }
       }
      ]
