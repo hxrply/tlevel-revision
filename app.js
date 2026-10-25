@@ -271,7 +271,8 @@
     set('7.4', 102, 103); set('7.5', 104); set('7.4', 105); set('7.5', 106);
     set('8.2', 107, 109); set('8.1', 110); set('8.2', 111); set('8.4', 112, 113); set('8.3', 114, 116);
     set('5.4', 117); set('8.4', 118); set('7.5', 119); set('8.4', 120); set('7.4', 121);
-    set('7.1', 122, 128); set('7.2', 129, 132); set('7.1', 133, 134); set('7.3', 135, 150);
+    set('7.1', 122, 128); set('7.2', 129, 132); set('7.1', 133, 134); set('7.3', 135, 166);
+    m[167] = 'esp/t2'; m[168] = 'esp/t4a'; m[169] = 'esp/t4a'; m[170] = 'esp/t3'; m[171] = 'esp/t1'; m[172] = 'esp/t4b';
     return m;
   })();
 
@@ -283,6 +284,17 @@
 
   /* ref is a topic id such as "2.10", or "ESP" / "OS" for the project questions. */
   function helpBtn(ref) {
+    /* project questions point at the matching ESP or OS page */
+    var route = /^(esp|os)\/[a-z0-9]+$/.test(ref || '') ? ref : null;
+    if (route) {
+      var bits = route.split('/'), src = bits[0] === 'esp' ? D.esp.pages : D.os.tasks.concat(D.os.areas, D.os.skills);
+      var pg = src.filter(function (x) { return x.id === bits[1]; })[0];
+      if (pg) {
+        return '<div class="help-row"><button class="help-btn" type="button" data-go="' + route + '">' +
+          '<span aria-hidden="true">📖</span><span class="ht">Read up: ' + (bits[0] === 'esp' ? 'ESP ' : '') +
+          esc(pg.code) + ' — ' + esc(pg.title) + '</span></button></div>';
+      }
+    }
     if (ref === 'ESP' || ref === 'OS') {
       return '<div class="help-row"><button class="help-btn" type="button" data-go="' + ref.toLowerCase() + '">' +
         '<span aria-hidden="true">📖</span><span class="ht">Read up: ' + (ref === 'ESP' ? 'Employer Set Project' : 'Occupational Specialism') + '</span></button></div>';
@@ -762,6 +774,7 @@
         lastDay = x.d.day;
       }
       out.push('Q' + x.q.n + ' [' + x.q.marks + ' marks, ' + x.q.cmd + '] ' + x.q.q);
+      if (x.q.code) x.q.code.forEach(function (line) { out.push('    ' + line); });
       cuAns(x.q.n).trim().split(/\r?\n/).forEach(function (line) { out.push('> ' + line); });
       out.push('');
     });
@@ -855,7 +868,9 @@
           '<div class="tnote-head"><span class="qn">Q' + q.n + '</span>' +
           '<span class="pill">' + esc(q.cmd) + '</span><span class="small muted">' + q.marks + ' marks</span>' +
           '<span style="margin-left:auto" data-custatus="' + q.n + '">' + cuStatus(q) + '</span></div>' +
-          '<div class="qq">' + esc(q.q) + '</div>' + helpBtn(QTOPIC[q.n]);
+          '<div class="qq">' + esc(q.q) + '</div>' +
+          (q.code ? '<pre><code>' + esc(q.code.join(String.fromCharCode(10))) + '</code></pre>' : '') +
+          helpBtn(QTOPIC[q.n]);
 
         if (mk && mk.q.how) h += '<div class="tnote-how"><b>How to answer</b><br>' + esc(mk.q.how) + '</div>';
         if (mk && mk.q.got) {
