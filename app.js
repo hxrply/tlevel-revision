@@ -755,7 +755,12 @@
       d.core.forEach(function (c) {
         out.push('');
         out.push('-- ' + c.h + ' --');
-        c.b.forEach(function (b) { out.push('  * ' + b); });
+        function plain(x) { return x.replace(/\*\*/g, ''); }
+        if (c.rows) {
+          out.push('  ' + plain(c.cols.join(' | ')));
+          c.rows.forEach(function (r) { out.push('  ' + plain(r.join(' | '))); });
+        }
+        (c.b || []).forEach(function (b) { out.push('  * ' + plain(b)); });
       });
       out.push('');
       out.push('-- TRAPS --');
@@ -783,21 +788,21 @@
     return out.join(L);
   }
 
-  /* A catch-up question and a tutor-notes question are the same question seen
-     from two sides: the catch-up card is the material, the notes entry is the
-     marking record. Match on the question number so a mark only ever lives in
-     one place and the two can never drift apart. */
-  function markedQ(n) {
-    var notes = D.tutorNotes;
-    for (var i = 0; i < notes.sessions.length; i++) {
-      var qs = notes.sessions[i].questions;
-      for (var j = 0; j < qs.length; j++) {
-        if (qs[j].n === n) return { q: qs[j], day: notes.sessions[i].day };
-      }
-    }
-    return null;
-  }
-
+  /* A catch-up question and a tutor-notes question are the same question seen
+     from two sides: the catch-up card is the material, the notes entry is the
+     marking record. Match on the question number so a mark only ever lives in
+     one place and the two can never drift apart. */
+  function markedQ(n) {
+    var notes = D.tutorNotes;
+    for (var i = 0; i < notes.sessions.length; i++) {
+      var qs = notes.sessions[i].questions;
+      for (var j = 0; j < qs.length; j++) {
+        if (qs[j].n === n) return { q: qs[j], day: notes.sessions[i].day };
+      }
+    }
+    return null;
+  }
+
   /* ── Catch-up answers ─────────────────────────────────────────────
      Answers are typed under each question and kept on this device. The
      site has no server, so nobody else can read them: "Send for marking"
@@ -929,8 +934,15 @@
 
       h += '<div class="cu-sec"><p><b>Why this one matters.</b> ' + esc(d.why) + '</p></div>';
       d.core.forEach(function (c) {
-        h += '<div class="cu-sec"><h4>' + esc(c.h) + '</h4><ul class="clean">' +
-          c.b.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') + '</ul></div>';
+        h += '<div class="cu-sec"><h4>' + esc(c.h) + '</h4>';
+        if (c.rows) {
+          h += '<table class="mtable"><thead><tr>' + c.cols.map(function (x) { return '<th>' + fmt(x) + '</th>'; }).join('') +
+            '</tr></thead><tbody>' + c.rows.map(function (r) {
+              return '<tr>' + r.map(function (x) { return '<td>' + fmt(x) + '</td>'; }).join('') + '</tr>';
+            }).join('') + '</tbody></table>';
+        }
+        if (c.b) h += '<ul class="clean">' + c.b.map(function (b) { return '<li>' + fmt(b) + '</li>'; }).join('') + '</ul>';
+        h += '</div>';
       });
       h += '<div class="cu-sec"><div class="callout bad"><b>Traps</b><ul>' +
         d.traps.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>' +
