@@ -349,6 +349,34 @@
     m[246] = 'esp/kit';
     m[247] = 'esp/kit';
     m[248] = 'esp/t4a';
+    m[321] = '2.4';
+    m[322] = '2.4';
+    m[323] = '2.7';
+    m[324] = '2.1';
+    m[325] = '2.7';
+    m[326] = '2.2';
+    m[327] = '2.8';
+    m[328] = '2.6';
+    m[329] = '2.10';
+    m[330] = '2.6';
+    m[331] = '1.1';
+    m[332] = '2.3';
+    m[333] = '1.2';
+    m[334] = '2.8';
+    m[335] = '2.10';
+    m[336] = '2.2';
+    m[337] = '1.1';
+    m[340] = 'esp/kit';
+    m[341] = 'esp/kit';
+    m[342] = 'esp/kit';
+    m[343] = 'esp/kit';
+    m[344] = '7.4';
+    m[345] = '7.4';
+    m[346] = '7.4';
+    m[347] = '7.4';
+    m[348] = '7.4';
+    m[349] = '7.4';
+    m[350] = '7.4';
     return m;
   })();
 
@@ -741,14 +769,18 @@
 
   /* Catch-up — condensed recovery for missed plan days */
   var CATCH = D.catchup;
+  /* Claude tutor sessions (data/cututor.js): the info sheets and questions from
+     chat sessions, in the same shape as a catch-up day, with day ids T1, T2... */
+  var TUTOR = CATCH.tutor || [];
+  function cuAllDays() { return TUTOR.concat(CATCH.days); }
 
   function catchupToText() {
     var L = String.fromCharCode(10);
     var out = ['T LEVEL DIGITAL — CATCH-UP', '', CATCH.intro, '', CATCH.howto, ''];
-    CATCH.days.forEach(function (d) {
+    cuAllDays().forEach(function (d) {
       out.push('');
       out.push('==================================================');
-      out.push('DAY ' + d.day + ' — ' + d.title + '  (' + d.plan + ', area ' + d.area + ', ~' + d.mins + ' min)');
+      out.push((d.tutor ? 'CLAUDE TUTOR ' : 'DAY ') + d.day + ' — ' + d.title + '  (' + d.plan + ', ' + d.area + ', ~' + d.mins + ' min)');
       out.push('==================================================');
       out.push('');
       out.push('WHY IT MATTERS: ' + d.why);
@@ -756,18 +788,26 @@
         out.push('');
         out.push('-- ' + c.h + ' --');
         function plain(x) { return x.replace(/\*\*/g, ''); }
+        if (c.p) out.push('  ' + plain(c.p));
         if (c.rows) {
           out.push('  ' + plain(c.cols.join(' | ')));
           c.rows.forEach(function (r) { out.push('  ' + plain(r.join(' | '))); });
         }
+        (c.code || []).forEach(function (line) { out.push('    ' + line); });
         (c.b || []).forEach(function (b) { out.push('  * ' + plain(b)); });
       });
-      out.push('');
-      out.push('-- TRAPS --');
-      d.traps.forEach(function (t) { out.push('  ! ' + t); });
-      out.push('');
-      out.push('-- CHECKPOINT (from memory, no notes) --');
-      out.push('  ' + d.check);
+      if (d.traps.length) {
+        out.push('');
+        out.push('-- TRAPS --');
+        d.traps.forEach(function (t) { out.push('  ! ' + t.replace(/\*\*/g, '')); });
+      }
+      if (d.check) {
+        out.push('');
+        out.push('-- CHECKPOINT (from memory, no notes) --');
+        out.push('  ' + d.check);
+      }
+      if (d.see) out.push('', '-- QUESTIONS: ' + d.see.replace(/\*\*/g, ''));
+      if (!d.qs.length) return;
       out.push('');
       out.push('-- QUESTIONS --');
       d.qs.forEach(function (q) {
@@ -814,12 +854,12 @@
   function hasAns(n) { return !!cuAns(n).trim(); }
   function cuFind(n) {
     var hit = null;
-    CATCH.days.forEach(function (d) { d.qs.forEach(function (q) { if (String(q.n) === String(n)) hit = { d: d, q: q }; }); });
+    cuAllDays().forEach(function (d) { d.qs.forEach(function (q) { if (String(q.n) === String(n)) hit = { d: d, q: q }; }); });
     return hit;
   }
   function cuPending() {
     var out = [];
-    CATCH.days.forEach(function (d) {
+    cuAllDays().forEach(function (d) {
       d.qs.forEach(function (q) { if (!isScored(q.n) && hasAns(q.n)) out.push({ d: d, q: q }); });
     });
     return out;
@@ -851,7 +891,7 @@
     var lastDay = null;
     pending.forEach(function (x) {
       if (x.d.day !== lastDay) {
-        out.push('== Day ' + x.d.day + ' · ' + x.d.title + ' ==', '');
+        out.push('== ' + (x.d.tutor ? 'Claude tutor ' : 'Day ') + x.d.day + ' · ' + x.d.title + ' ==', '');
         lastDay = x.d.day;
       }
       out.push('Q' + x.q.n + ' [' + x.q.marks + ' marks, ' + x.q.cmd + '] ' + x.q.q);
@@ -881,9 +921,11 @@
 
   views.catchup = function () {
     var totalQ = 0, answered = 0, markedQs = 0, doneDays = 0, totalMins = 0;
-    CATCH.days.forEach(function (d) {
-      totalMins += d.mins;
-      if (state.catchup.done['d' + d.day]) doneDays++;
+    cuAllDays().forEach(function (d) {
+      if (!d.tutor) {
+        totalMins += d.mins;
+        if (state.catchup.done['d' + d.day]) doneDays++;
+      }
       d.qs.forEach(function (q) {
         totalQ++;
         if (isScored(q.n)) markedQs++;
@@ -911,43 +953,71 @@
       '<div class="btn-row"><button class="btn btn-sm" id="exportCatchup">Download as text file</button>' +
       '<span class="small muted">Every day, question and model answer as plain text.</span></div></section></article>';
 
+    if (TUTOR.length) {
+      h += '<div class="section-label">Claude tutor</div>' +
+        '<p class="small muted" style="margin:-4px 0 12px">Every info sheet and question set from your chat sessions, newest first. ' +
+        'Questions here are answered and sent for marking exactly like the days below.</p>';
+      TUTOR.slice().reverse().forEach(function (d, i) { h += cuDayHTML(d, i === 0); });
+    }
+
     h += '<div class="section-label">Days</div>';
 
+    /* open the first day that still has work in it */
+    var settled = function (x) { return state.catchup.done['d' + x.day] || x.qs.every(function (q) { return markedQ(q.n); }); };
     CATCH.days.forEach(function (d, di) {
-      var done = !!state.catchup.done['d' + d.day];
-      var dayGot = 0, dayPoss = 0, dayMarked = 0;
-      d.qs.forEach(function (q) {
-        var mk = markedQ(q.n);
-        if (mk && mk.q.got) { dayMarked++; dayGot += parseInt(mk.q.got, 10) || 0; dayPoss += mk.q.marks; }
-      });
-      /* open the first day that still has work in it */
-      var settled = function (x) { return state.catchup.done['d' + x.day] || x.qs.every(function (q) { return markedQ(q.n); }); };
-      var firstOpen = !settled(d) && CATCH.days.slice(0, di).every(settled);
+      h += cuDayHTML(d, !settled(d) && CATCH.days.slice(0, di).every(settled));
+    });
 
-      h += '<section class="panel area-card' + (firstOpen ? ' open' : '') + '" data-area="cu' + d.day + '">' +
-        '<div class="area-head"><div class="n">' + d.day + '</div>' +
-        '<div style="flex:1"><h3>' + esc(d.title) + (done ? ' <span class="pill ok">done</span>' : '') + '</h3>' +
-        '<div class="small muted">' + esc(d.plan) + ' · content area ' + esc(d.area) + ' · about ' + d.mins + ' min · ' +
-        '<span data-cuday="' + d.day + '">' + cuDayCount(d) + '</span>' +
-        (dayMarked ? ' · scored ' + dayGot + '/' + dayPoss : '') + '</div></div>' +
-        '<div class="chev">›</div></div><div class="area-body">';
+    var pend = cuPending().length;
+    h += '<div class="sendbar" id="cuBar"' + (pend ? '' : ' hidden') + '>' +
+      '<span class="grow"><b id="cuCount">' + pend + ' answer' + (pend === 1 ? '' : 's') + '</b> ready to be marked</span>' +
+      '<button class="btn btn-accent btn-sm" id="cuSend" type="button">Send for marking</button></div>';
+    return h;
+  };
 
-      h += '<div class="cu-sec"><p><b>Why this one matters.</b> ' + esc(d.why) + '</p></div>';
-      d.core.forEach(function (c) {
-        h += '<div class="cu-sec"><h4>' + esc(c.h) + '</h4>';
-        if (c.rows) {
-          h += '<table class="mtable"><thead><tr>' + c.cols.map(function (x) { return '<th>' + fmt(x) + '</th>'; }).join('') +
-            '</tr></thead><tbody>' + c.rows.map(function (r) {
-              return '<tr>' + r.map(function (x) { return '<td>' + fmt(x) + '</td>'; }).join('') + '</tr>';
-            }).join('') + '</tbody></table>';
-        }
-        if (c.b) h += '<ul class="clean">' + c.b.map(function (b) { return '<li>' + fmt(b) + '</li>'; }).join('') + '</ul>';
-        h += '</div>';
-      });
-      h += '<div class="cu-sec"><div class="callout bad"><b>Traps</b><ul>' +
-        d.traps.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>' +
-        '<div class="callout"><b>Checkpoint — close the page and write this from memory</b><br>' + esc(d.check) + '</div></div>';
+  /* One info section: a table, a code sample and/or bullet points. */
+  function cuCoreHTML(c) {
+    var h = '<div class="cu-sec"><h4>' + esc(c.h) + '</h4>';
+    if (c.p) h += '<p>' + fmt(c.p) + '</p>';
+    if (c.rows) {
+      h += '<table class="mtable"><thead><tr>' + c.cols.map(function (x) { return '<th>' + fmt(x) + '</th>'; }).join('') +
+        '</tr></thead><tbody>' + c.rows.map(function (r) {
+          return '<tr>' + r.map(function (x) { return '<td>' + fmt(x) + '</td>'; }).join('') + '</tr>';
+        }).join('') + '</tbody></table>';
+    }
+    if (c.code) h += '<pre><code>' + esc(c.code.join(String.fromCharCode(10))) + '</code></pre>';
+    if (c.b) h += '<ul class="clean">' + c.b.map(function (b) { return '<li>' + fmt(b) + '</li>'; }).join('') + '</ul>';
+    return h + '</div>';
+  }
 
+  /* A catch-up day or a Claude tutor session — they share one shape. */
+  function cuDayHTML(d, open) {
+    var done = !!state.catchup.done['d' + d.day];
+    var dayGot = 0, dayPoss = 0, dayMarked = 0;
+    d.qs.forEach(function (q) {
+      var mk = markedQ(q.n);
+      if (mk && mk.q.got) { dayMarked++; dayGot += parseInt(mk.q.got, 10) || 0; dayPoss += mk.q.marks; }
+    });
+    var h = '<section class="panel area-card' + (open ? ' open' : '') + '" data-area="cu' + d.day + '">' +
+      '<div class="area-head"><div class="n">' + d.day + '</div>' +
+      '<div style="flex:1"><h3>' + esc(d.title) + (done ? ' <span class="pill ok">done</span>' : '') + '</h3>' +
+      '<div class="small muted">' + esc(d.plan) + ' · ' + (d.tutor ? '' : 'content area ') + esc(d.area) + ' · about ' + d.mins + ' min' +
+      (d.qs.length ? ' · <span data-cuday="' + d.day + '">' + cuDayCount(d) + '</span>' : '') +
+      (dayMarked ? ' · scored ' + dayGot + '/' + dayPoss : '') + '</div></div>' +
+      '<div class="chev">›</div></div><div class="area-body">';
+
+    h += '<div class="cu-sec"><p><b>' + (d.tutor ? 'What this session is for.' : 'Why this one matters.') + '</b> ' + esc(d.why) + '</p></div>';
+    d.core.forEach(function (c) { h += cuCoreHTML(c); });
+    if (d.traps.length || d.check) {
+      h += '<div class="cu-sec">' +
+        (d.traps.length ? '<div class="callout bad"><b>Traps</b><ul>' +
+          d.traps.map(function (t) { return '<li>' + fmt(t) + '</li>'; }).join('') + '</ul></div>' : '') +
+        (d.check ? '<div class="callout"><b>Checkpoint — close the page and write this from memory</b><br>' + esc(d.check) + '</div>' : '') +
+        '</div>';
+    }
+    if (d.see) h += '<div class="cu-sec"><div class="callout"><b>Questions</b><br>' + fmt(d.see) + '</div></div>';
+
+    if (d.qs.length) {
       h += '<div class="cu-sec"><h4>Questions</h4>';
       d.qs.forEach(function (q) {
         var mk = markedQ(q.n);
@@ -984,18 +1054,12 @@
         h += '</div>';
       });
       h += '</div>';
+    }
 
-      h += '<div class="cu-sec"><label class="chk-day"><input type="checkbox" data-cudone="d' + d.day + '"' +
-        (done ? ' checked' : '') + '> Mark day ' + d.day + ' as done</label></div>';
-      h += '</div></section>';
-    });
-
-    var pend = cuPending().length;
-    h += '<div class="sendbar" id="cuBar"' + (pend ? '' : ' hidden') + '>' +
-      '<span class="grow"><b id="cuCount">' + pend + ' answer' + (pend === 1 ? '' : 's') + '</b> ready to be marked</span>' +
-      '<button class="btn btn-accent btn-sm" id="cuSend" type="button">Send for marking</button></div>';
-    return h;
-  };
+    h += '<div class="cu-sec"><label class="chk-day"><input type="checkbox" data-cudone="d' + d.day + '"' +
+      (done ? ' checked' : '') + '> Mark ' + (d.tutor ? 'session ' : 'day ') + d.day + ' as done</label></div>';
+    return h + '</div></section>';
+  }
 
   views.notes = function () {
     var qTotal = 0, attempted = 0;

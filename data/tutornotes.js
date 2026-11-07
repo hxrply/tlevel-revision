@@ -1178,6 +1178,44 @@ window.TLDATA.tutorNotes = {
           answer: 'Benefits: visual and needs no code knowledge, so the client can follow it; can be traced to find logic errors before coding. Drawbacks: becomes huge and hard to follow for complex algorithms; slow to draw and update when the design changes.',
           got: '2/4', cost: 'Readable by non-coders and showing the steps both count. Assigning tasks to people is not what a flowchart is for. Use the real drawbacks: it gets huge for complex algorithms, and it is slow to update.' }
       ]
+    },
+
+    {
+      day: 'T', date: '27 Oct', topic: 'Claude tutor - pandas filtering and cloud service models (answered in chat)', score: '12/13',
+      questions: [
+        { n: 340, marks: 2, cmd: 'Write', q: 'Keep only the tickets where Issue Type is Login, stored as logins.',
+          how: 'Same filter pattern as North.',
+          answer: 'logins = tickets[tickets["Issue Type"] == "Login"]',
+          got: '2/2', cost: 'Correct column, ==, quotes around the text and saved to logins.' },
+        { n: 341, marks: 2, cmd: 'Write', q: 'Keep only the tickets that took more than 3 days, stored as slow.',
+          how: 'Filter, not groupby; no quotes round a number.',
+          answer: 'slow = tickets[tickets["Days To Resolve"] > 3]',
+          got: '1/2', cost: 'First try used groupby, which is for totals per group. Second try was the right filter but missed slow = at the front, so the result is thrown away.' },
+        { n: 344, marks: 1, cmd: 'Identify', q: 'Spotify - IaaS, PaaS or SaaS?',
+          how: 'Do you just log in?',
+          answer: 'SaaS',
+          got: '1/1', cost: 'Correct.' },
+        { n: 345, marks: 1, cmd: 'Identify', q: 'A company rents empty servers from AWS and installs its own Linux and database.',
+          how: 'They give you the machine only.',
+          answer: 'IaaS',
+          got: '1/1', cost: 'Correct.' },
+        { n: 346, marks: 1, cmd: 'Identify', q: 'A developer uploads website code and the provider runs it.',
+          how: 'Tools to build on.',
+          answer: 'PaaS',
+          got: '1/1', cost: 'Correct.' },
+        { n: 347, marks: 1, cmd: 'Identify', q: 'Microsoft Teams - IaaS, PaaS or SaaS?',
+          how: 'Do you just log in?',
+          answer: 'SaaS',
+          got: '1/1', cost: 'Correct.' },
+        { n: 348, marks: 3, cmd: 'State', q: 'State what IaaS, PaaS and SaaS stand for.',
+          how: 'Each one as a Service.',
+          answer: 'Infrastructure as a Service; Platform as a Service; Software as a Service.',
+          got: '3/3', cost: 'All three. Spell it Infrastructure, and write as a Service each time in the exam.' },
+        { n: 349, marks: 2, cmd: 'State', q: 'A games studio wants no servers to maintain but writes its own game code. Which model and why?',
+          how: 'Model plus a reason tied to the scenario.',
+          answer: 'PaaS (1), because the provider manages the servers and OS while the developers still write their own code (1).',
+          got: '2/2', cost: 'Right model and a reason that fits the scenario.' }
+      ]
     }
 
   ]
