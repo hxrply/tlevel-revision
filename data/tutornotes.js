@@ -1219,7 +1219,7 @@ window.TLDATA.tutorNotes = {
     },
 
     {
-      day: 'T8', date: '11 Nov', topic: 'Claude tutor - ESP Task 1 rationale paragraphs', score: '9/14',
+      day: 'T8', date: '11 Nov', topic: 'Claude tutor - ESP Task 1 rationale paragraphs', score: '10/14',
       questions: [
         { n: 351, marks: 3, cmd: 'Write', q: 'Ironvale. The plan finishes in week 12 but the client asked for 10 weeks. Write the deadline paragraph.',
           how: 'Not achievable + a reason with facts from the scenario + what would have to change or a recommended deadline.',
@@ -1228,7 +1228,7 @@ window.TLDATA.tutorNotes = {
         { n: 352, marks: 3, cmd: 'Write', q: 'Ironvale. Write a rationale paragraph justifying who builds the User Interface module.',
           how: 'Decision with the right name + reason from their profile + cost or risk and how it is handled.',
           answer: 'Callum Reyes builds the User Interface because he has front-end and UI design skills and has built two websites, and at £30 an hour he is the cheapest developer. He has limited experience and no back-end knowledge, so Dana Whitfield reviews his work, which adds a little cost but reduces faults.',
-          got: '1/3', cost: 'The reason fits, but the name is wrong - the front-end developer is Callum Reyes. Names and job titles must match the scenario exactly. Add his cost (£30 an hour, the cheapest) and a risk: he is junior, so someone reviews his work.' },
+          got: '2/3', cost: 'Right decision and a reason that fits the front-end developer (you used your own name as a placeholder - in the real task the staff profiles are in front of you, so always use their exact names). For the third mark add his cost (£30 an hour, the cheapest) and a risk: he is junior, so someone reviews his work.' },
         { n: 353, marks: 3, cmd: 'Write', q: 'Ironvale. The network engineer is away in weeks 4 and 5. Write a rationale paragraph explaining how your plan deals with this.',
           how: 'Which tasks go first + why the timing works + a risk and how it is handled.',
           answer: 'Marcus Lindqvist does the infrastructure upgrade (49 hours) and the server (21 hours) in weeks 1 and 2 - exactly two weeks of his time - so the hardware is ready before he leaves and module deployment is not held up. If the LAN event overruns, his absence could grow, so hardware testing is planned with slack after week 5.',
