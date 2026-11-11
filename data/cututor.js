@@ -1089,5 +1089,215 @@ window.TLDATA.catchup.tutor = [
     "a": "Decomposition, abstraction, pattern recognition and algorithmic thinking, each with what it does (1 each)."
    }
   ]
+ },
+ {
+  "day": "T8",
+  "tutor": true,
+  "plan": "Claude tutor · 11 Nov",
+  "title": "ESP Task 1 - easy marks people miss, and writing the rationale",
+  "area": "ESP Task 1",
+  "mins": 25,
+  "why": "You can already build the Gantt chart. The marks people drop are in the details the examiner checks and in the rationale, which is 9 of the 18 marks - half the task.",
+  "core": [
+   {
+    "h": "Where the 18 marks are",
+    "cols": [
+     "Part",
+     "Marks",
+     "What moves you up a band"
+    ],
+    "rows": [
+     [
+      "Gantt chart",
+      "3",
+      "Tasks in a logical, efficient order with accurate timings"
+     ],
+     [
+      "Project costings",
+      "3",
+      "Fully accurate costs"
+     ],
+     [
+      "Resource allocation",
+      "3",
+      "The right person on every task, nobody double-booked"
+     ],
+     [
+      "**Rationale**",
+      "**9**",
+      "**Thorough** reasons for the order of tasks, who does what, risks and benefits, and the impact on time and cost"
+     ]
+    ]
+   },
+   {
+    "h": "Gantt chart - easy marks people miss",
+    "b": [
+     "**Break big modules into phases** - develop, unit test, fix faults - instead of one long bar. Sprints or Agile phases are fine if you say why.",
+     "**Plan the minor faults** - every module gets the stated number of minor faults, each with its fix-and-regression time. This is the most commonly forgotten block of hours.",
+     "**Plan the major faults** - up to the stated maximum, placed at integration testing or deployment, where big faults usually appear.",
+     "**Create the test plan BEFORE any testing**, user acceptance testing near the end, staff training after deployment.",
+     "**Integration testing only once a second module is finished** - there is nothing to integrate with before that.",
+     "**Deploy each module** - deployment hours are per module, not once.",
+     "**Only ONE back-up option** - install the cloud OR the NAS, never both, and justify it.",
+     "**Show the staff absence** - nothing assigned to that person in those weeks, and their work moved around it.",
+     "**Dependencies** - the back-end database first, the user interface alongside it, the website and app near the end.",
+     "**Run tasks at the same time** where they do not depend on each other, so nobody sits idle.",
+     "**Round hours up to whole days** (hours ÷ 7) and say it builds in a little contingency."
+    ]
+   },
+   {
+    "h": "Costings - easy marks people miss",
+    "b": [
+     "**Staff cost = hours they actually work × their rate.** Never the length of the whole project.",
+     "**Pay the project manager (you) for every working day** of the project - often left out altogether.",
+     "**Start from the current annual costs** - project costs are on top of them, not instead of them.",
+     "**One-off costs go in the project year only**; ongoing costs repeat every year; a monthly back-up cost is × 12.",
+     "**Three-year profit**: apply each year’s income increase, and **carry the loss or profit forward** into the next year.",
+     "**Over-allocating** two people to a major fault costs more - say so, and say the money is saved if it is not needed."
+    ]
+   },
+   {
+    "h": "Why the rationale drops marks",
+    "b": [
+     "It **describes the Gantt chart** row by row (\"then I did the UI\") instead of **justifying** decisions.",
+     "It gives reasons with **no link to the scenario** - no staff names, skills, hours or costs.",
+     "It never says whether the **deadline is achievable**.",
+     "It misses one of the four things the grid asks for: **order and timing, staff allocation, risks and benefits, impact on time and cost**."
+    ]
+   },
+   {
+    "h": "The rationale structure - four headed sections",
+    "cols": [
+     "Section",
+     "What it must answer"
+    ],
+    "rows": [
+     [
+      "1. Timescale and order of tasks",
+      "Is the deadline achievable? Why is each big task where it is - what depends on what?"
+     ],
+     [
+      "2. Staff allocation",
+      "Why each person is on their tasks - skills, experience, cost, availability"
+     ],
+     [
+      "3. Risks and benefits",
+      "What could go wrong, how the plan reduces it, and what the plan gains"
+     ],
+     [
+      "4. Costs, affordability and resources",
+      "Total cost, profit or loss over three years, the back-up choice"
+     ]
+    ]
+   },
+   {
+    "h": "The paragraph formula - use it for every decision",
+    "cols": [
+     "Step",
+     "Sentence starter"
+    ],
+    "rows": [
+     [
+      "**Decision**",
+      "I scheduled / I allocated / I chose..."
+     ],
+     [
+      "**Reason from the scenario**",
+      "because [name] has [skill or experience] / because [module] depends on..."
+     ],
+     [
+      "**Impact on time or cost**",
+      "This adds / saves [hours, days or £]..."
+     ],
+     [
+      "**Risk and how it is handled**",
+      "The risk is... so I have..."
+     ]
+    ]
+   },
+   {
+    "h": "Weak paragraph versus strong paragraph",
+    "code": [
+     "WEAK (describes, no reasons from the scenario)",
+     "I put the database first because it is important. Then I did",
+     "the user interface and after that the other modules.",
+     "",
+     "STRONG (decision -> reason -> impact -> risk)",
+     "I scheduled the Player and Coach Database first, in weeks 1 to 3,",
+     "because Match Analysis, Practice Schedules and the Wellbeing",
+     "module all read from it - starting them earlier would mean rework.",
+     "Ifeoma Bello leads it because she has four years building player",
+     "statistics databases. As she is new to the company, Dana Whitfield",
+     "reviews her code in week 1. This adds 14 hours (£1,260) but stops",
+     "faults spreading into every module that depends on the database."
+    ]
+   },
+   {
+    "h": "The deadline paragraph - never leave it out",
+    "code": [
+     "The plan finishes in week 12, two weeks after the 10-week deadline.",
+     "The total work is about 1,030 hours across four people, and the",
+     "dependencies on the database mean the modules cannot all run at once.",
+     "Meeting 10 weeks would mean the data engineer working unsupervised",
+     "from day one and cutting testing contingency, which raises the risk",
+     "of faults reaching Ironvale. I recommend agreeing a 12-week deadline."
+    ]
+   },
+   {
+    "h": "Checklist before you hand it in",
+    "b": [
+     "Have I said whether the deadline is achievable, with a reason?",
+     "Has **every** member of staff got a reason for their tasks, using their skills or experience?",
+     "Have I named at least three risks - small team, staff absence, new employee, junior developer, dependency on the database - each with how I handle it?",
+     "Have I given numbers - hours, days, £ - for the impact of my big decisions?",
+     "Have I justified the back-up choice with more than price - offsite, reliability, scalability, sensitive data?",
+     "Have I stated the total cost and the profit or loss over three years?"
+    ]
+   }
+  ],
+  "traps": [
+   "**Describing is not justifying.** \"Then I did the UI\" scores nothing; \"I built the UI alongside the database because it depends on it least\" scores.",
+   "**Costing staff for the whole project length** is the most common costings error.",
+   "**Forgetting the minor faults** throws every timing out by days."
+  ],
+  "check": "Write the four rationale headings and the four steps of the paragraph formula from memory.",
+  "see": "",
+  "qs": [
+   {
+    "n": 351,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Ironvale practice. The plan finishes in week 12 but the client asked for 10 weeks. Write the deadline paragraph for your rationale.",
+    "a": "States it is not achievable (1); gives a reason from the scenario such as the total hours, the dependencies or the network engineer absence (1); says what would have to change or recommends a new deadline, with the risk (1)."
+   },
+   {
+    "n": 352,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Ironvale practice. Write a rationale paragraph justifying who builds the User Interface module.",
+    "a": "Decision: Callum Reyes (1). Reason: front-end and UI design skills, built two websites, cheapest at £30 an hour (1). Risk and handling: limited experience, so Dana Whitfield reviews his work, adding a little cost but reducing faults (1)."
+   },
+   {
+    "n": 353,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Ironvale practice. Marcus Lindqvist, the network engineer, is away in weeks 4 and 5. Write a rationale paragraph explaining how your plan deals with this.",
+    "a": "Decision: infrastructure (49 hours) and the server (21 hours) in weeks 1 and 2 (1). Reason: exactly two weeks of his time, so the hardware is ready before he leaves and deployment is not held up (1). Risk: if the LAN event overruns his absence could grow, so hardware testing is planned with slack after week 5 (1)."
+   },
+   {
+    "n": 354,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Ironvale practice. Write a rationale paragraph justifying your choice of back-up system using more than cost.",
+    "a": "Choice stated (1). A reason beyond price - offsite copy survives a fire or theft, scales as data grows, provider handles redundancy; or for NAS, data stays under Ironvale control (1). Linked to the scenario - player data including under-18s is sensitive, and the cost difference is small over three years (1)."
+   },
+   {
+    "n": 355,
+    "marks": 2,
+    "cmd": "Calculate",
+    "q": "Ironvale practice. A 12-week project, 5 working days a week. Calculate the project manager cost at £230 a day, and state the mistake people make with it.",
+    "a": "60 days × £230 = £13,800 (1). The mistake is leaving the project manager out, or only paying for the days they work on tasks - they are paid for every day of the project (1)."
+   }
+  ]
  }
 ];
