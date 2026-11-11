@@ -1216,6 +1216,32 @@ window.TLDATA.tutorNotes = {
           answer: 'PaaS (1), because the provider manages the servers and OS while the developers still write their own code (1).',
           got: '2/2', cost: 'Right model and a reason that fits the scenario.' }
       ]
+    },
+
+    {
+      day: 'T8', date: '11 Nov', topic: 'Claude tutor - ESP Task 1 rationale paragraphs', score: '9/14',
+      questions: [
+        { n: 351, marks: 3, cmd: 'Write', q: 'Ironvale. The plan finishes in week 12 but the client asked for 10 weeks. Write the deadline paragraph.',
+          how: 'Not achievable + a reason with facts from the scenario + what would have to change or a recommended deadline.',
+          answer: 'The plan finishes in week 12, two weeks after the 10-week deadline. About 1,030 hours of work across four people, the dependency on the database and the network engineer absence mean the modules cannot all run at once. Meeting 10 weeks would mean cutting testing and supervising the new data engineer less, raising the risk of faults, so I recommend agreeing a 12-week deadline.',
+          got: '2/3', cost: 'You said it will not be met and gave a reason - a small team. To get the third mark, give the numbers (week 12, two weeks over, about 1,030 hours) and say what meeting 10 weeks would cost, then recommend a new deadline.' },
+        { n: 352, marks: 3, cmd: 'Write', q: 'Ironvale. Write a rationale paragraph justifying who builds the User Interface module.',
+          how: 'Decision with the right name + reason from their profile + cost or risk and how it is handled.',
+          answer: 'Callum Reyes builds the User Interface because he has front-end and UI design skills and has built two websites, and at £30 an hour he is the cheapest developer. He has limited experience and no back-end knowledge, so Dana Whitfield reviews his work, which adds a little cost but reduces faults.',
+          got: '1/3', cost: 'The reason fits, but the name is wrong - the front-end developer is Callum Reyes. Names and job titles must match the scenario exactly. Add his cost (£30 an hour, the cheapest) and a risk: he is junior, so someone reviews his work.' },
+        { n: 353, marks: 3, cmd: 'Write', q: 'Ironvale. The network engineer is away in weeks 4 and 5. Write a rationale paragraph explaining how your plan deals with this.',
+          how: 'Which tasks go first + why the timing works + a risk and how it is handled.',
+          answer: 'Marcus Lindqvist does the infrastructure upgrade (49 hours) and the server (21 hours) in weeks 1 and 2 - exactly two weeks of his time - so the hardware is ready before he leaves and module deployment is not held up. If the LAN event overruns, his absence could grow, so hardware testing is planned with slack after week 5.',
+          got: '2/3', cost: 'Doing the server straight away is the right decision, and having someone ready to take over handles the risk. Add the infrastructure upgrade, and the reason the timing works: 49 + 21 = 70 hours, exactly two weeks, finished before he leaves.' },
+        { n: 354, marks: 3, cmd: 'Write', q: 'Ironvale. Write a rationale paragraph justifying your choice of back-up system using more than cost.',
+          how: 'Choice + a reason beyond price + linked to the scenario, ideally weighing up the other option.',
+          answer: 'I chose the NAS because Ironvale keeps control of its players data, which includes under-18s, and it costs £1,950 once compared with £4,860 for cloud over three years. Because a NAS is onsite, a fire or theft would destroy the back-up too, so a copy is taken offsite each week.',
+          got: '2/3', cost: 'Choosing the NAS for control of the data is a fair reason beyond cost. But saying it cannot be hacked is too strong - a NAS is onsite, so a fire or theft takes the back-up too. Link it to the scenario (sensitive player data, under-18s) and say how you would handle that weakness.' },
+        { n: 355, marks: 2, cmd: 'Calculate', q: 'Ironvale. 12 weeks, 5 days a week. Calculate the project manager cost at £230 a day, and state the common mistake.',
+          how: 'Working days × day rate, then the mistake.',
+          answer: '60 days × £230 = £13,800 (1). The mistake is leaving the project manager out, or counting the wrong days (1).',
+          got: '2/2', cost: 'Right answer, and paying for 7 days a week is a real mistake people make. Another is leaving the project manager out completely.' }
+      ]
     }
 
   ]
