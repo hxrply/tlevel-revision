@@ -1299,5 +1299,375 @@ window.TLDATA.catchup.tutor = [
     "a": "60 days × £230 = £13,800 (1). The mistake is leaving the project manager out, or only paying for the days they work on tasks - they are paid for every day of the project (1)."
    }
   ]
+ },
+ {
+  "day": "T9",
+  "tutor": true,
+  "plan": "Claude tutor · 11 Nov",
+  "title": "Day 28 - review: searching and sorting, 12-markers, Paper 2 sweep, ESP Tasks 1 to 3",
+  "area": "Papers 1 and 2, ESP",
+  "mins": 45,
+  "why": "Five days to the resits. This mixes the Paper 1 topic you have not practised yet (searching and sorting - your unanswered Q16), how to write the 9 and 12-mark Evaluate answers, a sweep of the Paper 2 lists, and the ESP skills that cost the most marks: error types, test log rows and pseudocode loops.",
+  "core": [
+   {
+    "h": "ESP Task 1 - what to work on next",
+    "b": [
+     "**Numbers in every paragraph** - hours, days or £. \"A bit longer\" scores less than \"two weeks over, at week 12\".",
+     "**A downside for every decision** and how you handle it. This is what band 3 calls perceptive.",
+     "**Say what you did NOT choose and why** - e.g. why not cloud, why not put Dana on the UI. Weighing options is evaluation.",
+     "**A costs paragraph**: total project cost, the loss in the project year, and when it is paid back over the three years.",
+     "**Timing in the 3 hours**: about 75 minutes on the Gantt chart, 30 on costs, 60 on the rationale, 15 to check.",
+     "**Practise one full rationale** with the Ironvale pack (esp revision folder) under a timer, then send it to be marked."
+    ]
+   },
+   {
+    "h": "Paper 1 - searching",
+    "cols": [
+     "",
+     "Linear search",
+     "Binary search"
+    ],
+    "rows": [
+     [
+      "How it works",
+      "Checks every item in turn from the start",
+      "Checks the middle item, throws away the half that cannot contain the target, repeats"
+     ],
+     [
+      "Must the data be sorted?",
+      "**No**",
+      "**Yes**"
+     ],
+     [
+      "Worst case, 1,000 items",
+      "1,000 comparisons",
+      "About 10"
+     ],
+     [
+      "Worst case, 5 million items",
+      "5 million comparisons",
+      "About 23"
+     ],
+     [
+      "Best for",
+      "Small or unsorted lists; simple to code",
+      "Large sorted lists searched often"
+     ]
+    ]
+   },
+   {
+    "h": "Paper 1 - sorting",
+    "cols": [
+     "",
+     "Bubble sort",
+     "Merge sort"
+    ],
+    "rows": [
+     [
+      "How it works",
+      "Compares **adjacent pairs** and **swaps** them if they are in the wrong order; repeats passes until a pass makes **no swaps**",
+      "**Splits** the list in half again and again until every list has one item, then **merges** pairs back together in order until one list is left"
+     ],
+     [
+      "Speed",
+      "Very slow on large lists",
+      "Much faster on large lists"
+     ],
+     [
+      "Memory",
+      "Sorts in place - very little extra memory",
+      "Needs extra memory for the merged lists"
+     ],
+     [
+      "Best for",
+      "Small or nearly sorted lists; easy to code",
+      "Large lists, e.g. millions of records"
+     ]
+    ]
+   },
+   {
+    "h": "How to write a 9 or 12-mark Evaluate",
+    "cols": [
+     "Part",
+     "What to write"
+    ],
+    "rows": [
+     [
+      "1. Context (one line)",
+      "What is being decided, using the scenario’s facts"
+     ],
+     [
+      "2. For (2 to 3 points)",
+      "Point → **because** → **which means** for this organisation"
+     ],
+     [
+      "3. Against (2 to 3 points)",
+      "Same pattern - every point tied to the scenario"
+     ],
+     [
+      "4. Weigh up",
+      "**However**, ... **outweighs** ... **because** ..."
+     ],
+     [
+      "5. Conclusion",
+      "A clear answer, with a condition: \"suitable, **provided that** ...\""
+     ]
+    ],
+    "b": [
+     "Mark bands rise on **analysis** (breaking it into parts), **application** (using the scenario) and **evaluation** (a supported conclusion).",
+     "A list of benefits and drawbacks with no conclusion stays in the middle band."
+    ]
+   },
+   {
+    "h": "Paper 2 - the list sweep",
+    "cols": [
+     "List",
+     "The items"
+    ],
+    "rows": [
+     [
+      "**PESTLE**",
+      "Political, Economic, Social, Technological, Legal, Environmental"
+     ],
+     [
+      "**SMARTER**",
+      "Specific, Measurable, Achievable, Realistic, Time-bound, Evaluated, Reviewed"
+     ],
+     [
+      "**Six Vs**",
+      "Volume, Variety, Variability, Velocity, Veracity, Value"
+     ],
+     [
+      "**Wrangling steps**",
+      "Structure, Clean, Validate, Enrich, Output"
+     ],
+     [
+      "**TCP/IP layers**",
+      "Application, Transport, Internet, Network (link)"
+     ],
+     [
+      "**OSI layers**",
+      "7 Application, 6 Presentation, 5 Session, 4 Transport, 3 Network, 2 Data Link, 1 Physical"
+     ],
+     [
+      "**RBAC / RuBAC**",
+      "Role-based: access depends on your job role. Rule-based: access depends on rules, e.g. time of day or location"
+     ],
+     [
+      "**CIA / IAAA**",
+      "Confidentiality, Integrity, Availability / Identification, Authentication, Authorisation, Accountability"
+     ]
+    ]
+   },
+   {
+    "h": "ESP Task 2 - the three error types",
+    "cols": [
+     "Type",
+     "What happens",
+     "Example"
+    ],
+    "rows": [
+     [
+      "**Syntax**",
+      "Breaks the rules of the language - the program will not run at all",
+      "`print(\"Hi\"` - missing bracket"
+     ],
+     [
+      "**Runtime**",
+      "Runs, then **crashes** part way through",
+      "`Total / 0` (ZeroDivisionError), `int(\"abc\")`, list index out of range"
+     ],
+     [
+      "**Logic**",
+      "Runs with no crash but gives the **wrong answer**",
+      "Dividing by 7 instead of 12; `>=` where it should be `>`"
+     ]
+    ]
+   },
+   {
+    "h": "ESP Task 2 - a test log row that scores",
+    "cols": [
+     "Description",
+     "Test data",
+     "Expected outcome",
+     "Actual outcome",
+     "Comments and actions"
+    ],
+    "rows": [
+     [
+      "Boundary test: maximum age accepted",
+      "25",
+      "Age accepted and the program asks for matches played",
+      "Rejected - \"cannot enter\"",
+      "Logic error on line 26: >= 25 should be > 25. Changed, re-tested: accepted. Pass"
+     ]
+    ],
+    "b": [
+     "Say **what kind** of test it is (normal, boundary, erroneous), give the **exact** data, and an expected outcome specific enough to check.",
+     "When it fails, record the **line**, the **fix** and the **re-test**."
+    ]
+   },
+   {
+    "h": "ESP Task 3 - the two pseudocode patterns",
+    "code": [
+     "REPEAT",
+     "    SEND \"Enter matches played (1-50)\" TO DISPLAY",
+     "    RECEIVE Matches FROM KEYBOARD",
+     "    IF Matches < 1 OR Matches > 50 THEN",
+     "        SEND \"Please enter a number from 1 to 50\" TO DISPLAY",
+     "    END IF",
+     "UNTIL Matches >= 1 AND Matches <= 50",
+     "",
+     "FUNCTION CountFirsts (Results)",
+     "    SET Count TO 0",
+     "    FOR EACH Result IN Results DO",
+     "        IF Result.Placement = \"1st\" THEN",
+     "            SET Count TO Count + 1",
+     "        END IF",
+     "    END FOR EACH",
+     "    RETURN Count",
+     "END FUNCTION"
+    ],
+    "b": [
+     "The loop repeats while the input is wrong - the same rule as the Python validation loop.",
+     "The counter starts at 0, adds 1 when it matches, and is returned **after** the loop."
+    ]
+   }
+  ],
+  "traps": [
+   "**Binary search needs sorted data** - always say it, it is the mark examiners look for first.",
+   "**Bubble sort compares neighbours**; merge sort splits then merges. Do not mix the two descriptions.",
+   "**A logic error does not crash.** If it crashes, it is runtime."
+  ],
+  "check": "Write the linear vs binary table, the bubble and merge descriptions, and PESTLE, SMARTER and the six Vs from memory.",
+  "see": "",
+  "qs": [
+   {
+    "n": 356,
+    "marks": 1,
+    "cmd": "State",
+    "q": "State one condition that must be true before a binary search can be used.",
+    "a": "The data must be sorted."
+   },
+   {
+    "n": 357,
+    "marks": 1,
+    "cmd": "State",
+    "q": "State the maximum number of comparisons a linear search makes on a list of 1,000 items.",
+    "a": "1,000"
+   },
+   {
+    "n": 358,
+    "marks": 2,
+    "cmd": "Explain",
+    "q": "Explain why a binary search is faster than a linear search on a large list.",
+    "a": "Each comparison halves the number of items left to search (1), so 1,000 items need about 10 comparisons instead of up to 1,000 (1)."
+   },
+   {
+    "n": 359,
+    "marks": 3,
+    "cmd": "Describe",
+    "q": "Describe how a bubble sort works.",
+    "a": "Compares adjacent pairs (1), swaps them if they are in the wrong order (1), and repeats passes until a pass makes no swaps (1)."
+   },
+   {
+    "n": 360,
+    "marks": 3,
+    "cmd": "Describe",
+    "q": "Describe how a merge sort works.",
+    "a": "Splits the list in half repeatedly (1) until each list has one item (1), then merges the lists back together in order until one sorted list is left (1)."
+   },
+   {
+    "n": 361,
+    "marks": 1,
+    "cmd": "Give",
+    "q": "Give one advantage of a bubble sort over a merge sort.",
+    "a": "Simpler to code, or uses very little extra memory."
+   },
+   {
+    "n": 362,
+    "marks": 1,
+    "cmd": "Give",
+    "q": "Give one advantage of a merge sort over a bubble sort.",
+    "a": "Much faster on large lists."
+   },
+   {
+    "n": 363,
+    "marks": 6,
+    "cmd": "Plan",
+    "q": "Plan (in bullet points) a 12-mark Evaluate answer: should an online game use a linear or a binary search to find a player in a leaderboard of 5 million records, where new players join every minute? Give two points for each side and a conclusion.",
+    "a": "Linear: works on unsorted data so new players can be added to the end; but up to 5 million comparisons, slow. Binary: about 23 comparisons; but data must be sorted, so new players must be inserted in order. Weigh: searches happen far more often than joins, so keeping it sorted is worth it. Conclusion: binary, provided each new record is inserted in the right place."
+   },
+   {
+    "n": 364,
+    "marks": 3,
+    "cmd": "State",
+    "q": "State what each letter of PESTLE stands for.",
+    "a": "Political, Economic, Social, Technological, Legal, Environmental (half a mark each)."
+   },
+   {
+    "n": 365,
+    "marks": 2,
+    "cmd": "State",
+    "q": "State what each letter of SMARTER stands for.",
+    "a": "Specific, Measurable, Achievable, Realistic, Time-bound, Evaluated, Reviewed."
+   },
+   {
+    "n": 366,
+    "marks": 3,
+    "cmd": "State",
+    "q": "State the six Vs of big data.",
+    "a": "Volume, Variety, Variability, Velocity, Veracity, Value (half a mark each)."
+   },
+   {
+    "n": 367,
+    "marks": 3,
+    "cmd": "State",
+    "q": "State the five data wrangling steps in order.",
+    "a": "Structure, Clean, Validate, Enrich, Output."
+   },
+   {
+    "n": 368,
+    "marks": 2,
+    "cmd": "State",
+    "q": "State the four layers of the TCP/IP model.",
+    "a": "Application, Transport, Internet, Network (link)."
+   },
+   {
+    "n": 369,
+    "marks": 2,
+    "cmd": "Explain",
+    "q": "Explain the difference between role-based and rule-based access control.",
+    "a": "Role-based gives access depending on the user job role (1); rule-based gives access depending on set rules such as time of day or location (1)."
+   },
+   {
+    "n": 370,
+    "marks": 3,
+    "cmd": "Identify",
+    "q": "Identify the type of error (syntax, runtime or logic) in each: A: print(\"Total\" - B: Average = Total / Count when Count is 0 - C: AverageRain = TotalRain / 7 for 12 months of data.",
+    "a": "A syntax (1); B runtime (1); C logic (1)."
+   },
+   {
+    "n": 371,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Write one test log row for testing the maximum age in the Academy Cup program (ages 16 to 25 allowed): the description, the test data and the expected outcome.",
+    "a": "Description: boundary test of the maximum age (1). Test data: 25 (1). Expected outcome: 25 is accepted and the program moves on to the next input (1)."
+   },
+   {
+    "n": 372,
+    "marks": 4,
+    "cmd": "Write",
+    "q": "Write pseudocode that asks for the number of matches played (1 to 50) and keeps asking until a valid number is entered.",
+    "a": "Loop (1); receive input (1); condition checks below 1 OR above 50 (1); error message and loop ends only when valid (1)."
+   },
+   {
+    "n": 373,
+    "marks": 4,
+    "cmd": "Write",
+    "q": "Write pseudocode for a function that counts how many records in Results have the Placement \"1st\" and returns the count.",
+    "a": "Count set to 0 (1); loop through every record (1); IF Placement = \"1st\" add 1 (1); return Count after the loop (1)."
+   }
+  ]
  }
 ];
