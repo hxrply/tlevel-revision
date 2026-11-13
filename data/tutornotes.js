@@ -1280,6 +1280,52 @@ window.TLDATA.tutorNotes = {
           answer: 'Linear: works on unsorted data so new players can be added to the end; but up to 5 million comparisons. Binary: about 23 comparisons; but the data must be kept sorted, so new players must be inserted in order. Weigh: searches happen far more often than joins. Conclusion: binary, provided each new record is inserted in the right place.',
           got: '2/6', cost: 'Binary being faster for 5 million records and a conclusion both count. But a growing list does NOT hurt binary search - doubling the list adds only ONE more comparison. The real cost of binary is that the list must stay SORTED, and the real point for linear is that new players can just be added to the end.' }
       ]
+    },
+
+    {
+      day: 'T9', date: '13 Nov', topic: 'Claude tutor - Day 28 part 2: Paper 2 lists and ESP', score: '9/29',
+      questions: [
+        { n: 364, marks: 3, cmd: 'State', q: 'State what each letter of PESTLE stands for.',
+          how: 'Six external factors - half a mark each.',
+          answer: 'Political, Economic, Social, Technological, Legal, Environmental.',
+          got: '0/3', cost: 'That is the PEEL paragraph structure from English, not PESTLE. PESTLE is the six external factors that trigger change: Political, Economic, Social, Technological, Legal, Environmental.' },
+        { n: 365, marks: 2, cmd: 'State', q: 'State what each letter of SMARTER stands for.',
+          how: 'SMART plus E and R.',
+          answer: 'Specific, Measurable, Achievable, Realistic, Time-bound, Evaluated, Reviewed.',
+          got: '0/2', cost: 'Not attempted. It is SMART (Specific, Measurable, Achievable, Realistic, Time-bound) plus Evaluated and Reviewed.' },
+        { n: 366, marks: 3, cmd: 'State', q: 'State the six Vs of big data.',
+          how: 'Half a mark each.',
+          answer: 'Volume, Variety, Variability, Velocity, Veracity, Value.',
+          got: '2/3', cost: 'Four of six. The two missing are Variability (how much its meaning or flow changes) and Value (how useful it is).' },
+        { n: 367, marks: 3, cmd: 'State', q: 'State the five data wrangling steps in order.',
+          how: 'Five steps, in order.',
+          answer: 'Structure, Clean, Validate, Enrich, Output.',
+          got: '0/3', cost: 'Not attempted. Use the hook Some Clever Vets Eat Oranges: Structure, Clean, Validate, Enrich, Output.' },
+        { n: 368, marks: 2, cmd: 'State', q: 'State the four layers of the TCP/IP model.',
+          how: 'Four layers, top to bottom.',
+          answer: 'Application, Transport, Internet, Network (link).',
+          got: '1/2', cost: 'Two of four. Add Application at the top and Network (link) at the bottom - hook: A TIN.' },
+        { n: 369, marks: 2, cmd: 'Explain', q: 'Explain the difference between role-based and rule-based access control.',
+          how: 'Role = job; rule = conditions.',
+          answer: 'Role-based gives access depending on the user job role (1); rule-based gives access depending on set rules such as time of day or location (1).',
+          got: '0/2', cost: 'Not attempted. The names give it away: ROLE-based goes by your job role; RULE-based goes by rules, such as only during working hours.' },
+        { n: 370, marks: 3, cmd: 'Identify', q: 'Identify the error type: A print("Total" - B Average = Total / Count when Count is 0 - C dividing by 7 for 12 months.',
+          how: 'Will not run = syntax. Crashes while running = runtime. Wrong answer = logic.',
+          answer: 'A syntax (1); B runtime (1); C logic (1).',
+          got: '1/3', cost: 'C is right. A is syntax - a missing bracket means it will not run at all. B is runtime - the code is valid, but dividing by 0 crashes it while it runs.' },
+        { n: 371, marks: 3, cmd: 'Write', q: 'Write one test log row for the maximum age (16 to 25 allowed): description, test data and expected outcome.',
+          how: 'Name the test type, give the exact value, say exactly what should happen.',
+          answer: 'Description: boundary test of the maximum age (1). Test data: 25 (1). Expected outcome: 25 is accepted and the program moves on to the next input (1).',
+          got: '1/3', cost: 'Boundary test is the right idea. A test log needs the exact data - 25 - and a specific expected outcome: 25 is accepted and the program asks for the next input.' },
+        { n: 372, marks: 4, cmd: 'Write', q: 'Write pseudocode that asks for the number of matches played (1 to 50) and keeps asking until a valid number is entered.',
+          how: 'A loop that only ends when the input is valid, with an error message.',
+          answer: 'REPEAT / RECEIVE Matches FROM KEYBOARD / IF Matches < 1 OR Matches > 50 THEN SEND error TO DISPLAY / UNTIL Matches >= 1 AND Matches <= 50',
+          got: '2/4', cost: 'The input and the OR condition are right. But it only asks again once - it needs a loop (REPEAT ... UNTIL or WHILE) so it keeps asking, and an error message telling the user what to type.' },
+        { n: 373, marks: 4, cmd: 'Write', q: 'Write pseudocode for a function that counts how many records in Results have the Placement 1st and returns the count.',
+          how: 'Counter to 0, loop every record, IF Placement = "1st" add 1, RETURN after the loop.',
+          answer: 'SET Count TO 0 / FOR EACH Result IN Results / IF Result.Placement = "1st" THEN SET Count TO Count + 1 / END FOR EACH / RETURN Count',
+          got: '2/4', cost: 'The IF and Count + 1 are right. Missing: SET Count TO 0 before the loop, a proper FOR EACH loop instead of SEARCH, and RETURN Count at the end. ELSE COUNT = COUNT is not needed.' }
+      ]
     }
 
   ]

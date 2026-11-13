@@ -1669,5 +1669,169 @@ window.TLDATA.catchup.tutor = [
     "a": "Count set to 0 (1); loop through every record (1); IF Placement = \"1st\" add 1 (1); return Count after the loop (1)."
    }
   ]
+ },
+ {
+  "day": "T10",
+  "tutor": true,
+  "plan": "Claude tutor · 13 Nov",
+  "title": "Memory hooks - Paper 2 lists, error types and pseudocode loops",
+  "area": "Paper 2 and ESP",
+  "mins": 15,
+  "why": "Day 28 showed the lists are the biggest gap: they are free marks if you know them and zero if you do not. Learn one hook per list, then write them all on a blank sheet.",
+  "core": [
+   {
+    "h": "One hook per list",
+    "cols": [
+     "List",
+     "Hook",
+     "The items"
+    ],
+    "rows": [
+     [
+      "**PESTLE** - what triggers change",
+      "PEST + LE",
+      "Political, Economic, Social, Technological, Legal, Environmental"
+     ],
+     [
+      "**SMARTER** - objectives",
+      "SMART + Evaluated, Reviewed",
+      "Specific, Measurable, Achievable, Realistic, Time-bound, Evaluated, Reviewed"
+     ],
+     [
+      "**Six Vs** - big data",
+      "How much, how many kinds, how changeable, how fast, how true, how useful",
+      "Volume, Variety, Variability, Velocity, Veracity, Value"
+     ],
+     [
+      "**Wrangling** - in order",
+      "**S**ome **C**lever **V**ets **E**at **O**ranges",
+      "Structure, Clean, Validate, Enrich, Output"
+     ],
+     [
+      "**TCP/IP** - top to bottom",
+      "**A TIN**",
+      "Application, Transport, Internet, Network"
+     ],
+     [
+      "**RBAC / RuBAC**",
+      "ROLE = your job; RULE = conditions",
+      "Role-based: by job role. Rule-based: by rules such as time of day or location"
+     ]
+    ],
+    "b": [
+     "**PEEL is not PESTLE.** PEEL is the English paragraph structure; PESTLE is the six external factors."
+    ]
+   },
+   {
+    "h": "Error types - one question each",
+    "cols": [
+     "Ask yourself",
+     "If yes, it is",
+     "Example"
+    ],
+    "rows": [
+     [
+      "Will it refuse to run at all?",
+      "**Syntax**",
+      "`print(\"Total\"`"
+     ],
+     [
+      "Does it run, then crash?",
+      "**Runtime**",
+      "dividing by 0, `int(\"abc\")`"
+     ],
+     [
+      "Does it run fine but give the wrong answer?",
+      "**Logic**",
+      "dividing by 7 for 12 months"
+     ]
+    ]
+   },
+   {
+    "h": "Pseudocode - keep asking until it is valid",
+    "code": [
+     "REPEAT",
+     "    RECEIVE Matches FROM KEYBOARD",
+     "    IF Matches < 1 OR Matches > 50 THEN",
+     "        SEND \"Enter a number from 1 to 50\" TO DISPLAY",
+     "    END IF",
+     "UNTIL Matches >= 1 AND Matches <= 50"
+    ],
+    "b": [
+     "A plain IF only asks once. You need a **loop** that keeps going until the input is valid, plus an error message."
+    ]
+   },
+   {
+    "h": "Pseudocode - count the matches",
+    "code": [
+     "FUNCTION CountFirsts (Results)",
+     "    SET Count TO 0",
+     "    FOR EACH Result IN Results DO",
+     "        IF Result.Placement = \"1st\" THEN",
+     "            SET Count TO Count + 1",
+     "        END IF",
+     "    END FOR EACH",
+     "    RETURN Count",
+     "END FUNCTION"
+    ],
+    "b": [
+     "Three parts every time: **start at 0**, **loop and add 1 when it matches**, **return after the loop**."
+    ]
+   }
+  ],
+  "traps": [],
+  "check": "On a blank sheet: PESTLE, SMARTER, the six Vs, the five wrangling steps, the four TCP/IP layers, and both pseudocode patterns.",
+  "see": "",
+  "qs": [
+   {
+    "n": 374,
+    "marks": 3,
+    "cmd": "State",
+    "q": "Re-test. State what PESTLE stands for.",
+    "a": "Political, Economic, Social, Technological, Legal, Environmental."
+   },
+   {
+    "n": 375,
+    "marks": 2,
+    "cmd": "State",
+    "q": "Re-test. State what SMARTER stands for.",
+    "a": "Specific, Measurable, Achievable, Realistic, Time-bound, Evaluated, Reviewed."
+   },
+   {
+    "n": 376,
+    "marks": 3,
+    "cmd": "State",
+    "q": "Re-test. State the six Vs of big data.",
+    "a": "Volume, Variety, Variability, Velocity, Veracity, Value."
+   },
+   {
+    "n": 377,
+    "marks": 3,
+    "cmd": "State",
+    "q": "Re-test. State the five data wrangling steps in order.",
+    "a": "Structure, Clean, Validate, Enrich, Output."
+   },
+   {
+    "n": 378,
+    "marks": 2,
+    "cmd": "State",
+    "q": "Re-test. State the four TCP/IP layers.",
+    "a": "Application, Transport, Internet, Network."
+   },
+   {
+    "n": 379,
+    "marks": 3,
+    "cmd": "Identify",
+    "q": "Re-test. Identify the error type: A Total = int(\"ten\") - B if Age >= 25 when 25 should be allowed - C for i in range(5) with no colon.",
+    "a": "A runtime (1); B logic (1); C syntax (1)."
+   },
+   {
+    "n": 380,
+    "marks": 4,
+    "cmd": "Write",
+    "q": "Re-test. Write pseudocode that keeps asking for a score from 0 to 100 until a valid one is entered, with an error message.",
+    "a": "Loop (1); input (1); condition Score < 0 OR Score > 100 (1); error message and ends only when valid (1)."
+   }
+  ]
  }
 ];
