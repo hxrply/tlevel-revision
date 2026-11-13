@@ -1242,6 +1242,44 @@ window.TLDATA.tutorNotes = {
           answer: '60 days × £230 = £13,800 (1). The mistake is leaving the project manager out, or counting the wrong days (1).',
           got: '2/2', cost: 'Right answer, and paying for 7 days a week is a real mistake people make. Another is leaving the project manager out completely.' }
       ]
+    },
+
+    {
+      day: 'T9', date: '13 Nov', topic: 'Claude tutor - Day 28 part 1: searching and sorting', score: '11/18',
+      questions: [
+        { n: 356, marks: 1, cmd: 'State', q: 'State one condition that must be true before a binary search can be used.',
+          how: 'One word: sorted.',
+          answer: 'The data must be sorted.',
+          got: '1/1', cost: 'Correct - in order means sorted.' },
+        { n: 357, marks: 1, cmd: 'State', q: 'State the maximum number of comparisons a linear search makes on a list of 1,000 items.',
+          how: 'Worst case = the item is last or not there at all.',
+          answer: '1,000',
+          got: '0/1', cost: 'The worst case is when the item is the last one, or is not in the list at all - then every one of the 1,000 items is checked.' },
+        { n: 358, marks: 2, cmd: 'Explain', q: 'Explain why a binary search is faster than a linear search on a large list.',
+          how: 'What it does + what that means in comparisons.',
+          answer: 'Each comparison halves the number of items left to search (1), so 1,000 items need about 10 comparisons instead of up to 1,000 (1).',
+          got: '1/2', cost: 'Splitting in half every time earns the first mark. Much faster just repeats the question - say what it means: far fewer comparisons, about 10 for 1,000 items instead of up to 1,000.' },
+        { n: 359, marks: 3, cmd: 'Describe', q: 'Describe how a bubble sort works.',
+          how: 'Adjacent pairs, swap, repeat until no swaps.',
+          answer: 'Compares adjacent pairs (1), swaps them if they are in the wrong order (1), and repeats passes until a pass makes no swaps (1).',
+          got: '3/3', cost: 'Full marks - adjacent pairs, swapping, and stopping when no swaps are needed. Use the word adjacent in the exam.' },
+        { n: 360, marks: 3, cmd: 'Describe', q: 'Describe how a merge sort works.',
+          how: 'Split down to single items, then merge back in order.',
+          answer: 'Splits the list in half repeatedly (1) until each list has one item (1), then merges the lists back together in order until one sorted list is left (1).',
+          got: '2/3', cost: 'Splitting and putting it back together in order both score. The missing mark: it keeps splitting until every list has ONE item - it does not sort pairs first.' },
+        { n: 361, marks: 1, cmd: 'Give', q: 'Give one advantage of a bubble sort over a merge sort.',
+          how: 'Simple, or low memory.',
+          answer: 'Simpler to code, or uses very little extra memory.',
+          got: '1/1', cost: 'Accepted. The safest answers are that it is simpler to code and uses less memory, because it sorts in place.' },
+        { n: 362, marks: 1, cmd: 'Give', q: 'Give one advantage of a merge sort over a bubble sort.',
+          how: 'Speed on big lists.',
+          answer: 'Much faster on large lists.',
+          got: '1/1', cost: 'Correct.' },
+        { n: 363, marks: 6, cmd: 'Plan', q: 'Plan a 12-mark Evaluate: linear or binary search for 5 million leaderboard records, with new players joining every minute.',
+          how: 'Two points each side, a weighing-up sentence and a conclusion with a condition.',
+          answer: 'Linear: works on unsorted data so new players can be added to the end; but up to 5 million comparisons. Binary: about 23 comparisons; but the data must be kept sorted, so new players must be inserted in order. Weigh: searches happen far more often than joins. Conclusion: binary, provided each new record is inserted in the right place.',
+          got: '2/6', cost: 'Binary being faster for 5 million records and a conclusion both count. But a growing list does NOT hurt binary search - doubling the list adds only ONE more comparison. The real cost of binary is that the list must stay SORTED, and the real point for linear is that new players can just be added to the end.' }
+      ]
     }
 
   ]
