@@ -1833,5 +1833,429 @@ window.TLDATA.catchup.tutor = [
     "a": "Loop (1); input (1); condition Score < 0 OR Score > 100 (1); error message and ends only when valid (1)."
    }
   ]
+ },
+ {
+  "day": "T11",
+  "tutor": true,
+  "plan": "Claude tutor · 15 Nov",
+  "title": "Understanding check - searching, sorting, testing, pseudocode and the lists",
+  "area": "Papers 1 and 2, ESP",
+  "mins": 30,
+  "why": "Built from your Day 28 answers. Instead of recall, these make you DO each idea once - trace a search, run a sort by hand, write a test row, fix a loop - so it sticks.",
+  "core": [
+   {
+    "h": "Why a growing list barely slows binary search",
+    "cols": [
+     "Items",
+     "Most comparisons"
+    ],
+    "rows": [
+     [
+      "8",
+      "3"
+     ],
+     [
+      "1,000",
+      "10"
+     ],
+     [
+      "1 million",
+      "20"
+     ],
+     [
+      "5 million",
+      "23"
+     ]
+    ],
+    "b": [
+     "Each comparison throws away half. Doubling the list adds **one** comparison - so binary’s real cost is keeping the list **sorted**, not its size."
+    ]
+   },
+   {
+    "h": "Binary search by hand - finding 18",
+    "code": [
+     "List:   [2, 5, 7, 9, 12, 15, 18, 21]   (indexes 0 to 7)",
+     "Check middle, index 3 -> 9.  18 is bigger, so throw away the left half.",
+     "Check middle of what is left, index 5 -> 15.  Bigger again, throw away left.",
+     "Check index 6 -> 18.  Found in 3 comparisons."
+    ]
+   },
+   {
+    "h": "Bubble sort, first pass by hand",
+    "code": [
+     "[5, 3, 8, 1]   compare 5 and 3 -> swap  -> [3, 5, 8, 1]",
+     "[3, 5, 8, 1]   compare 5 and 8 -> keep  -> [3, 5, 8, 1]",
+     "[3, 5, 8, 1]   compare 8 and 1 -> swap  -> [3, 5, 1, 8]",
+     "After one pass the biggest number has \"bubbled\" to the end."
+    ]
+   },
+   {
+    "h": "Merge sort by hand",
+    "code": [
+     "[6, 2, 9, 4]",
+     "split  -> [6, 2]  [9, 4]",
+     "split  -> [6] [2] [9] [4]      one item each",
+     "merge  -> [2, 6]  [4, 9]",
+     "merge  -> [2, 4, 6, 9]"
+    ]
+   },
+   {
+    "h": "Applying the lists, not just reciting them",
+    "b": [
+     "A new data protection law forces a change → **Legal**. A recession cuts spending → **Economic**.",
+     "Millions of posts a second → **Velocity**. Text, images and video → **Variety**. Fake posts → **Veracity**.",
+     "Access because you work in finance → **role-based**. Logins only allowed 8am to 6pm → **rule-based**."
+    ]
+   }
+  ],
+  "traps": [
+   "If the counter is SET TO 0 **inside** the loop, it resets every time and ends as 0 or 1.",
+   "A plain IF re-asks once; only a loop (REPEAT ... UNTIL or WHILE) keeps asking."
+  ],
+  "check": "Without looking: trace a binary search for 7 in [2, 5, 7, 9, 12, 15, 18, 21], and do the first pass of a bubble sort on [4, 1, 3, 2].",
+  "see": "",
+  "qs": [
+   {
+    "n": 381,
+    "marks": 2,
+    "cmd": "Explain",
+    "q": "Explain why doubling the size of a sorted list adds only one comparison to a binary search.",
+    "a": "Each comparison halves the list (1), so one extra comparison halves the doubled list back to the original size (1)."
+   },
+   {
+    "n": 382,
+    "marks": 3,
+    "cmd": "Show",
+    "q": "Show which items a binary search checks to find 7 in [2, 5, 7, 9, 12, 15, 18, 21]. Use the middle index rounded down.",
+    "a": "Index 3 → 9, too big, go left (1); index 1 → 5, too small, go right (1); index 2 → 7, found (1)."
+   },
+   {
+    "n": 383,
+    "marks": 3,
+    "cmd": "Show",
+    "q": "Show the first pass of a bubble sort on [4, 1, 3, 2].",
+    "a": "[1, 4, 3, 2] (swap 4 and 1) (1); [1, 3, 4, 2] (swap 4 and 3) (1); [1, 3, 2, 4] (swap 4 and 2) (1)."
+   },
+   {
+    "n": 384,
+    "marks": 3,
+    "cmd": "Show",
+    "q": "Show how a merge sort splits [7, 3, 8, 1] and merges it back together.",
+    "a": "Split into [7, 3] [8, 1] then [7] [3] [8] [1] (1); merge to [3, 7] [1, 8] (1); merge to [1, 3, 7, 8] (1)."
+   },
+   {
+    "n": 385,
+    "marks": 3,
+    "cmd": "Identify",
+    "q": "Give the error type and say how you know: A if x > 5 with no colon - B Total = 10 / 0 - C Area = Width + Height instead of Width * Height.",
+    "a": "A syntax - it will not run at all (1); B runtime - it runs then crashes (1); C logic - it runs but gives the wrong answer (1)."
+   },
+   {
+    "n": 386,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Write a test log row for the boundary of the under-18 practice limit (20 hours): description, test data and expected outcome.",
+    "a": "Boundary test of the under-18 practice limit (1); age 16 with 20 hours, and 20.1 hours (1); 20 hours is within the limit; 20.1 hours means not permitted (1)."
+   },
+   {
+    "n": 387,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Write a test log row for an erroneous input to matches played: description, test data and expected outcome.",
+    "a": "Erroneous test of matches played (1); \"ten\" (letters) (1); rejected with an error message and the user asked again, no crash (1)."
+   },
+   {
+    "n": 388,
+    "marks": 2,
+    "cmd": "Explain",
+    "q": "In a counting algorithm, SET Count TO 0 has been put INSIDE the loop. Explain what goes wrong.",
+    "a": "Count is reset to 0 on every pass of the loop (1), so it ends as 0 or 1 instead of the real total (1)."
+   },
+   {
+    "n": 389,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "This only asks once: IF Score < 0 OR Score > 100 THEN RECEIVE Score. Rewrite it so it keeps asking until the score is valid.",
+    "a": "REPEAT / RECEIVE Score / IF Score < 0 OR Score > 100 THEN SEND error / UNTIL Score >= 0 AND Score <= 100 - loop (1), condition (1), error message (1)."
+   },
+   {
+    "n": 390,
+    "marks": 2,
+    "cmd": "Identify",
+    "q": "Which PESTLE factor is each? A: a new data protection law forces a system change. B: a recession means customers spend less.",
+    "a": "A Legal (1); B Economic (1)."
+   },
+   {
+    "n": 391,
+    "marks": 3,
+    "cmd": "Identify",
+    "q": "Which of the six Vs does each describe? A: millions of posts every second. B: posts include text, images and video. C: some posts are fake.",
+    "a": "A Velocity (1); B Variety (1); C Veracity (1)."
+   },
+   {
+    "n": 392,
+    "marks": 2,
+    "cmd": "Identify",
+    "q": "Role-based or rule-based? A: a clerk can see invoices because they work in finance. B: staff can only log in between 8am and 6pm.",
+    "a": "A role-based (1); B rule-based (1)."
+   }
+  ]
+ },
+ {
+  "day": "T12",
+  "tutor": true,
+  "plan": "Claude tutor · 15 Nov",
+  "title": "ESP Task 1 on Wednesday - ordering, costs, shadowing and the rationale",
+  "area": "ESP Task 1",
+  "mins": 30,
+  "why": "A method to follow on the day, so the order of tasks, the cost plan and the rationale come out right whatever the scenario. No new practice tasks - just how to do it.",
+  "core": [
+   {
+    "h": "On the day - how to spend the 3 hours",
+    "cols": [
+     "Time",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "0:00 - 0:15",
+      "Read everything. Highlight: deadline, absences, fault rules, hours per day, every staff skill and rate."
+     ],
+     [
+      "0:15 - 1:30",
+      "Gantt chart, using the 8 steps below."
+     ],
+     [
+      "1:30 - 2:00",
+      "Cost plan and the three-year table."
+     ],
+     [
+      "2:00 - 2:50",
+      "Rationale - four headings, the paragraph formula."
+     ],
+     [
+      "2:50 - 3:00",
+      "Check: names spelt right, every task has a person, nothing before its prerequisite, files saved with the right names."
+     ]
+    ]
+   },
+   {
+    "h": "Ordering the Gantt chart - 8 steps",
+    "b": [
+     "**1. Convert hours to days**: hours ÷ 7, round up. Say rounding up builds in contingency.",
+     "**2. Block out absences first** - shade the weeks someone is away so you never give them work then.",
+     "**3. Hardware track** - give the network engineer infrastructure, server, hardware testing and ONE back-up install. Fit it around their absence.",
+     "**4. Back-end database first** - most modules depend on it. Give it to the database or data engineer.",
+     "**5. Run tracks side by side** - while the database is built: the UI (front-end developer), the test plan (senior), the hardware (network engineer).",
+     "**6. Every module follows the same chain**: develop → unit test → fix minor faults → integration test (once a second module is done) → deploy (only once the hardware is ready).",
+     "**7. Major faults** - put them at integration testing and deployment; consider two people on them.",
+     "**8. The end**: website and app → user acceptance testing → staff training. Then check nobody is double-booked or idle."
+    ]
+   },
+   {
+    "h": "The cost plan - set it out like this",
+    "cols": [
+     "",
+     "Project year",
+     "Year 1",
+     "Year 2",
+     "Year 3"
+    ],
+    "rows": [
+     [
+      "Income",
+      "current income",
+      "× (1 + first rise)",
+      "× (1 + second rise)",
+      "× (1 + third rise)"
+     ],
+     [
+      "Current costs",
+      "✓",
+      "✓",
+      "✓",
+      "✓"
+     ],
+     [
+      "One-off project costs (fee, equipment, server, licences, training)",
+      "✓",
+      "",
+      "",
+      ""
+     ],
+     [
+      "Project manager - every working day",
+      "✓",
+      "",
+      "",
+      ""
+     ],
+     [
+      "Staff - hours worked × rate",
+      "✓",
+      "",
+      "",
+      ""
+     ],
+     [
+      "Ongoing costs (hosting, maintenance, back-up)",
+      "from go-live",
+      "✓",
+      "✓",
+      "✓"
+     ],
+     [
+      "Profit or loss",
+      "income − costs",
+      "income − costs",
+      "income − costs",
+      "income − costs"
+     ],
+     [
+      "Running total",
+      "carried forward",
+      "+ previous",
+      "+ previous",
+      "+ previous"
+     ]
+    ],
+    "b": [
+     "Use spreadsheet formulas (e.g. =B2*1.06) so a change updates everything - and it shows your working.",
+     "**State your assumptions** in a note: whether the rises compound, when ongoing costs start, which back-up you chose.",
+     "Compare with doing nothing: current income − current costs is the profit WITHOUT the project. The benefit is how far above that you get."
+    ]
+   },
+   {
+    "h": "Worked example - Ironvale years 1 to 3 (NAS chosen)",
+    "cols": [
+     "",
+     "Year 1",
+     "Year 2",
+     "Year 3"
+    ],
+    "rows": [
+     [
+      "Income",
+      "468,400 × 1.06 = **496,504**",
+      "× 1.07 = **531,259**",
+      "× 1.10 = **584,385**"
+     ],
+     [
+      "Costs: current 351,750 + hosting 4,860 + maintenance 19,500",
+      "**376,110**",
+      "376,110",
+      "376,110"
+     ],
+     [
+      "Profit",
+      "**120,394**",
+      "**155,149**",
+      "**208,275**"
+     ],
+     [
+      "Profit with no project (468,400 − 351,750)",
+      "116,650",
+      "116,650",
+      "116,650"
+     ]
+    ],
+    "b": [
+     "So the project-year loss is paid back during year 1, and by year 3 the business makes about £92,000 a year more than without it.",
+     "Cloud back-up would add 135 × 12 = **£1,620** a year to every year’s costs."
+    ]
+   },
+   {
+    "h": "Shadowing and supervision - when it earns marks",
+    "cols": [
+     "Shadow or pair when...",
+     "Do not when..."
+    ],
+    "rows": [
+     [
+      "Someone is a **new employee** - unproven with this company, so a senior reviews their early work",
+      "An experienced person is working in their own speciality"
+     ],
+     [
+      "A **junior** is on something new to them (e.g. back-end, or an app with no app experience)",
+      "It doubles the cost of a long task for little risk reduction"
+     ],
+     [
+      "**Nobody has the skill** the task needs (e.g. no web developer) - pair the closest two",
+      "It would leave another track with nobody working on it"
+     ],
+     [
+      "A **handover** is needed before someone’s absence",
+      ""
+     ]
+    ],
+    "b": [
+     "Keep it **short and targeted**: a code review session or the first 1 to 2 days, not the whole module.",
+     "**Cost it**: the supervisor’s extra hours × their rate. E.g. Dana reviewing for 14 hours = 14 × £90 = **£1,260**.",
+     "In the rationale: who, why (the risk), for how long, the cost - and what it protects. That one paragraph covers staffing, risk AND cost."
+    ]
+   },
+   {
+    "h": "Rationale touch-ups - from your practice answers",
+    "cols": [
+     "You wrote",
+     "Touch it up to"
+    ],
+    "rows": [
+     [
+      "\"make the project take just a bit longer\"",
+      "\"The plan finishes in week 12, two weeks after the deadline, because...\" - **numbers**"
+     ],
+     [
+      "A reason but no downside",
+      "Add \"**The risk is... so I have...**\" to every decision"
+     ],
+     [
+      "\"way more secure... doesn’t have to worry about getting hacked\"",
+      "Balance it: \"it keeps data under our control, **but** it is onsite, so a fire would destroy it too, **so** a copy goes offsite weekly\""
+     ],
+     [
+      "Only the option you chose",
+      "\"**I considered** cloud, **but**...\" - weighing options is what band 3 calls perceptive"
+     ],
+     [
+      "Names from memory",
+      "Copy every **name and job title** from the booklet - it is in front of you"
+     ]
+    ]
+   },
+   {
+    "h": "The rationale skeleton to follow",
+    "b": [
+     "**1. Timescale and order** - deadline achievable or not (with numbers); why the database is first; how the absence is handled; where faults are planned.",
+     "**2. Staff allocation** - one short paragraph per person: tasks, the skill or experience that fits, cost, any shadowing.",
+     "**3. Risks and benefits** - at least three risks (small team, absence, new employee, junior, dependency on the database), each with how the plan reduces it.",
+     "**4. Costs and resources** - total project cost, project-year loss, when it is paid back, the three-year result; the back-up choice weighed both ways.",
+     "**Every paragraph**: decision → reason from the scenario → impact in hours or £ → risk and how you handle it."
+    ]
+   }
+  ],
+  "traps": [
+   "**Cost staff on hours worked**, not the project length - and pay the project manager for every working day.",
+   "**Only one back-up option** in the plan. Installing both throws the costs and timings out.",
+   "**Do not describe the chart** in the rationale. Justify it."
+  ],
+  "check": "Write the 8 ordering steps, the cost table rows and the four rationale headings from memory.",
+  "see": "",
+  "qs": [
+   {
+    "n": 393,
+    "marks": 3,
+    "cmd": "Rewrite",
+    "q": "Rewrite this so it would score: \"The client wanted 10 weeks but I made it take a bit longer so everything is done properly.\" Ironvale: plan ends week 12, about 1,030 hours, network engineer away weeks 4 and 5.",
+    "a": "Gives the numbers - week 12, two weeks over (1); a reason from the scenario - about 1,030 hours, the database dependency or the absence (1); a recommendation with the risk of the 10-week alternative (1)."
+   },
+   {
+    "n": 394,
+    "marks": 3,
+    "cmd": "Decide",
+    "q": "Should Ifeoma Bello, the new data engineer, be shadowed while she builds the database? Say who, for how long, the cost and why - as one rationale paragraph.",
+    "a": "Yes - Dana Whitfield reviews her work for the first week or a set number of hours (1); cost = hours × £90, e.g. 14 × 90 = £1,260 (1); because she is unproven at this company and every module depends on the database, so a fault there spreads everywhere (1)."
+   }
+  ]
  }
 ];
