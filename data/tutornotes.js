@@ -1326,6 +1326,24 @@ window.TLDATA.tutorNotes = {
           answer: 'SET Count TO 0 / FOR EACH Result IN Results / IF Result.Placement = "1st" THEN SET Count TO Count + 1 / END FOR EACH / RETURN Count',
           got: '2/4', cost: 'The IF and Count + 1 are right. Missing: SET Count TO 0 before the loop, a proper FOR EACH loop instead of SEARCH, and RETURN Count at the end. ELSE COUNT = COUNT is not needed.' }
       ]
+    },
+
+    {
+      day: 'T13', date: '16 Nov', topic: 'Claude tutor - ESP Task 1 lessons from the May plan', score: '2/8',
+      questions: [
+        { n: 395, marks: 3, cmd: 'Decide', q: 'The database engineer is away in weeks 2 and 3. Say what they do in week 1, what the rest of the team does in weeks 2 and 3, and the impact on the end date.',
+          how: 'Week 1 they front-load; the others work round the gap; say the impact in days.',
+          answer: 'Week 1: design the tables and agree the data structure with the team (1). Weeks 2 to 3: others build the UI, app and other modules against that agreed design with test data, with the SQL-skilled senior as cover (1). Impact: the absence stays off the critical path so the end date does not move (1).',
+          got: '1/3', cost: 'You answered the SERVER question (developers can work on their own machines - that part is right, so 1 mark for the team carrying on). But the question is about the DATABASE engineer being away, and the database is a prerequisite. You need: what they do in week 1 before leaving (design the tables so everyone codes against the same structure), and the impact on the end date in days.' },
+        { n: 396, marks: 2, cmd: 'Justify', q: 'Who should train the client staff - the senior engineer (95 an hour) or the junior (32 an hour, strong communication skills)? 28 hours. Justify with the profile and the cost.',
+          how: 'Match the task words to the profile words, then compare the cost.',
+          answer: 'The junior - her profile says she explains technical ideas to non-technical people (1). 28 x 32 = 896 instead of 28 x 95 = 2,660, saving 1,764 and freeing the senior for testing (1).',
+          got: '0/2', cost: 'Training staff is a COMMUNICATION task, not a seniority task. The junior profile says she explains technical things to non-technical people - that is exactly training. She is also 1,764 cheaper (896 vs 2,660), and the senior is then free for testing and major faults. Pick one answer - an examiner marks the first one.' },
+        { n: 397, marks: 3, cmd: 'Rewrite', q: 'Rewrite this so it would score: The project went 50,643 over budget but after that the company makes a stable and increasing profit.',
+          how: 'Project-year loss, compared with doing nothing, payback year and what it earns after.',
+          answer: 'The project year makes a loss rather than going over budget (1); each year compared with the 160,760 profit of doing nothing (1); pays back early in year 4 and then earns over 100k a year more than doing nothing (1).',
+          got: '1/3', cost: 'The payback in year 4 and the 100k a year are right - 1 mark. Still says budget - there was no budget, it is a LOSS in the project year. No comparison with doing nothing (160,760 a year). And never say guaranteed - it is a forecast, so say forecast or expected. Glenstar makes a profit every year anyway; what changes in year 4 is that the project has PAID FOR ITSELF.' }
+      ]
     }
 
   ]
