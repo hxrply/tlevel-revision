@@ -2257,5 +2257,178 @@ window.TLDATA.catchup.tutor = [
     "a": "Yes - Dana Whitfield reviews her work for the first week or a set number of hours (1); cost = hours × £90, e.g. 14 × 90 = £1,260 (1); because she is unproven at this company and every module depends on the database, so a fault there spreads everywhere (1)."
    }
   ]
+ },
+ {
+  "day": "T13",
+  "tutor": true,
+  "plan": "Claude tutor · 15 Nov",
+  "title": "ESP Task 1 - lessons from your May plan: who does what, absences, the server and the rationale",
+  "area": "ESP Task 1",
+  "mins": 25,
+  "why": "Built from your real May Task 1 plan and rationale. Your plan finished in week 16 against a 12-week deadline. Most of those 4 weeks came from ONE assumption, and the cost sheet had three small errors. Fix these and Wednesday looks very different.",
+  "core": [
+   {
+    "h": "The one assumption that cost you 4 weeks",
+    "b": [
+     "You assumed the developers **could not start the modules until the new server was installed**. The network engineer was away for weeks 1 and 2, so infrastructure and the server only finished at the **start of week 5** - and every module waited for it.",
+     "The database engineer did **nothing for the first 4 weeks**, even though the database is the thing every other module depends on.",
+     "**Developers write and unit test code on their own machines** (a development environment). The new server is only needed to **deploy** - and for hardware testing. So the server is a prerequisite for **deploy modules**, not for **develop module**.",
+     "Rationale line: \"The new server is only needed for deployment, so module development starts in week 1 on the team’s development machines while the network engineer is away. The server is installed in weeks 3 to 4, well before the modules are deployed.\""
+    ]
+   },
+   {
+    "h": "Who does what - match the task words to the profile words",
+    "cols": [
+     "Task words",
+     "Look for in the profile",
+     "Usually goes to"
+    ],
+    "rows": [
+     [
+      "database, back-end, data",
+      "SQL, back-end, databases, data protection",
+      "Database engineer"
+     ],
+     [
+      "infrastructure, server, hardware testing, NAS / cloud back-up, deploy",
+      "networks, infrastructure, servers, troubleshooting",
+      "Network engineer"
+     ],
+     [
+      "user interface, app, website",
+      "mobile app, front-end, UI",
+      "Whoever has app / front-end experience"
+     ],
+     [
+      "test plan, integration testing, major faults, code review",
+      "testing, code review, team leader",
+      "Senior engineer"
+     ],
+     [
+      "UAT, training staff",
+      "communication, explaining to non-technical people",
+      "The person with communication skills - often the cheaper junior"
+     ],
+     [
+      "a module named after a domain (health, monitoring, analysis)",
+      "previous experience in that domain",
+      "The person who has built that kind of system before"
+     ]
+    ],
+    "b": [
+     "Then check four things: **availability** (absences), **cost** (do not use a £95 senior where a £32 junior fits), **workload** (nobody idle for weeks, nobody double-booked) and **risk** (new employee or junior on a critical task = a review checkpoint).",
+     "Example from your plan: staff training went to the senior at £95 an hour (28 × 95 = **£2,660**). The junior’s profile says she explains technical things to non-technical people, and 28 × 32 = **£896** - a better fit and **£1,764 cheaper**. That one sentence is the kind of justification markers want."
+    ]
+   },
+   {
+    "h": "Someone is away - what to do",
+    "cols": [
+     "Step",
+     "What it looks like"
+    ],
+    "rows": [
+     [
+      "1. Shade the weeks first",
+      "Grey out their absence on the Gantt before you place anything"
+     ],
+     [
+      "2. Ask: does anything depend on their tasks?",
+      "Network engineer away → only deploy and hardware testing depend on him, so nothing early is blocked"
+     ],
+     [
+      "3. If they own a prerequisite, front-load it",
+      "Database engineer away in weeks 2 to 3 → in week 1 they design the tables and agree the data structure, so others can code against it"
+     ],
+     [
+      "4. Fill the gap with work that does not need them",
+      "UI, app, test plan and other modules carry on using test data"
+     ],
+     [
+      "5. Name a cover person for emergencies",
+      "The senior is expert in SQL, so she covers urgent database questions"
+     ],
+     [
+      "6. Say it in the rationale with the impact",
+      "\"This keeps the absence off the critical path, so it adds 0 days instead of 2 weeks.\""
+     ]
+    ]
+   },
+   {
+    "h": "Your cost sheet - three fixes",
+    "b": [
+     "**Hard-typed numbers went stale.** Your \"total plus manager\" cell was =SUM(77852+17600), but your staff total had changed to 81,198. Always use cell references: =D7+B17.",
+     "**Web hosting and app store fees (£5,320 a year) were missing** from years 1 to 3. Every ongoing cost goes in every year.",
+     "**\"Over budget\" is the wrong phrase** - there was no budget. Say \"the project year makes a loss of £X\", then **compare each year with doing nothing**.",
+     "With your own numbers, corrected: doing nothing makes **£160,760** a year. The project years make about **£164k, £210k and £266k**, so the extra profit is **+£3.5k, +£49k and +£105k**. That is £158k extra over 3 years against about £215k spent in the project year - so it **pays back early in year 4**, and keeps earning over £100k a year more after that. That sentence is the \"affordability\" point."
+    ]
+   },
+   {
+    "h": "Your rationale - keep vs change",
+    "cols": [
+     "Keep",
+     "Change"
+    ],
+    "rows": [
+     [
+      "A paragraph per person with a bullet list of their tasks",
+      "Add a **reason from their profile** to every task, and the cost of anything unusual"
+     ],
+     [
+      "Admitting the plan missed the deadline",
+      "Say **by how much** (week 16, 4 weeks late), **why** in one cause, and what you did to reduce it"
+     ],
+     [
+      "Explaining the assumption about the website and app",
+      "State dependencies as \"X before Y because\": database → modules → unit test → integration → deploy"
+     ],
+     [
+      "Thinking about shadowing the junior",
+      "Make it **targeted and costed**: e.g. code review 1 hour every 2 days = about 20 hours × £95 = £1,900"
+     ],
+     [
+      "",
+      "\"Request another developer\" - the team is fixed. Mitigate with what you have"
+     ],
+     [
+      "",
+      "\"Fast and smooth\" - give numbers. And it is spelled **Rationale**"
+     ],
+     [
+      "",
+      "Add a **Risks** section: new employee, major faults, back-up choice (NAS onsite vs cloud), tight deadline"
+     ]
+    ]
+   }
+  ],
+  "traps": [
+   "Hardware testing at the END of the plan holds up deployment. Put it straight after the server is installed.",
+   "UAT and staff training at the same time - train after UAT, because UAT can find faults that change the system.",
+   "Major faults: plan for the maximum the booklet says (e.g. 3 × 24 = 72 hours), not a part of it."
+  ],
+  "check": "Without notes: say who you would give the database, the UI, the server, UAT and training to, and one reason from the profile for each.",
+  "see": "",
+  "qs": [
+   {
+    "n": 395,
+    "marks": 3,
+    "cmd": "Decide",
+    "q": "The database engineer is away in weeks 2 and 3. Say what they do in week 1, what the rest of the team does in weeks 2 and 3, and the impact on the end date.",
+    "a": "Week 1: design the tables and agree the data structure / start the core database (1); weeks 2 to 3: others build the UI, app and other modules against the agreed design with test data, with a named SQL-skilled cover person (1); impact: the absence stays off the critical path so the end date does not move, or say exactly how many days it adds (1)."
+   },
+   {
+    "n": 396,
+    "marks": 2,
+    "cmd": "Justify",
+    "q": "Who should train the client staff - the senior engineer (£95/h) or the junior (£32/h, strong communication skills)? 28 hours. Justify with the profile and the cost.",
+    "a": "The junior - her profile says she explains technical ideas to non-technical people (1); 28 × 32 = £896 instead of £2,660, saving £1,764 and freeing the senior for testing (1)."
+   },
+   {
+    "n": 397,
+    "marks": 3,
+    "cmd": "Rewrite",
+    "q": "Rewrite this so it would score: \"The project went £50,643 over budget but after that the company makes a stable and increasing profit.\"",
+    "a": "Calls it a project-year loss, not over budget (1); compares each year with the no-project profit (1); says when it pays back and what it earns after (1)."
+   }
+  ]
  }
 ];
