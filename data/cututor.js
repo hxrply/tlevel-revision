@@ -2430,5 +2430,721 @@ window.TLDATA.catchup.tutor = [
     "a": "Calls it a project-year loss, not over budget (1); compares each year with the no-project profit (1); says when it pays back and what it earns after (1)."
    }
   ]
+ },
+ {
+  "day": "T14",
+  "tutor": true,
+  "plan": "Claude tutor · 16 Nov · cheat sheet",
+  "title": "Cheat sheet - ESP Task 1: planning a project",
+  "area": "ESP Task 1",
+  "mins": 10,
+  "why": "A one-page sheet to read before the task: how to split the time, what order to work in, how to lay the answer out, and the checklist. No questions. Task 1 is 3 hours and 18 marks: Gantt 3, costs 3, staff allocation 3, rationale 9.",
+  "core": [
+   {
+    "h": "Split the 3 hours",
+    "cols": [
+     "Time",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "0:00 - 0:15",
+      "Read everything. Highlight the deadline, absences, fault rules, hours per day, and every person’s skills and rate"
+     ],
+     [
+      "0:15 - 1:30",
+      "Gantt chart"
+     ],
+     [
+      "1:30 - 2:00",
+      "Costs and the three-year forecast"
+     ],
+     [
+      "2:00 - 2:50",
+      "Rationale"
+     ],
+     [
+      "2:50 - 3:00",
+      "Names copied from the booklet, nothing before its prerequisite, nobody double-booked, files saved with the right names"
+     ]
+    ]
+   },
+   {
+    "h": "Gantt - the order to place things",
+    "b": [
+     "**Hours ÷ 7, round up** = days. Rounding up is your contingency - say so.",
+     "**Shade absences first**, before you place any task.",
+     "**Database first** - every module depends on it.",
+     "**Start developing in week 1.** Developers code on their own machines; the new server is only needed for **deploy** and **hardware testing**.",
+     "**Network engineer track:** infrastructure → server → **hardware testing straight after** → ONE back-up option.",
+     "**Every module:** develop → unit test → fix minor faults → integration test (once 2+ modules are done) → deploy.",
+     "**Major faults** at integration and deploy - plan the maximum the booklet says.",
+     "**The end:** website and app → UAT → **then** staff training.",
+     "**Check:** everyone busy, nobody double-booked, deadline met or the exact overrun stated."
+    ]
+   },
+   {
+    "h": "Who does what",
+    "cols": [
+     "Task words",
+     "Give it to"
+    ],
+    "rows": [
+     [
+      "database, back-end",
+      "Database engineer"
+     ],
+     [
+      "infrastructure, server, hardware, NAS / cloud back-up, deploy",
+      "Network engineer"
+     ],
+     [
+      "UI, app, website",
+      "Whoever has app / front-end experience"
+     ],
+     [
+      "test plan, integration, major faults, code review",
+      "Senior"
+     ],
+     [
+      "UAT, training staff",
+      "Best communicator - often the cheaper junior"
+     ],
+     [
+      "a module in a domain someone has built before",
+      "That person"
+     ]
+    ],
+    "b": [
+     "Then check: **available? cheapest who fits? anyone idle? risky** (new or junior on a critical task = a short, costed review checkpoint)."
+    ]
+   },
+   {
+    "h": "Cost sheet layout",
+    "cols": [
+     "Row",
+     "Project year",
+     "Years 1 - 3"
+    ],
+    "rows": [
+     [
+      "Income",
+      "current",
+      "× each rise in turn (compound)"
+     ],
+     [
+      "Current costs",
+      "✓",
+      "✓"
+     ],
+     [
+      "One-off costs (fee, hardware, server, chosen back-up)",
+      "✓",
+      ""
+     ],
+     [
+      "Staff = each person’s hours × rate",
+      "✓",
+      ""
+     ],
+     [
+      "Project manager = working days × day rate",
+      "✓",
+      ""
+     ],
+     [
+      "Ongoing costs (hosting, maintenance, cloud back-up)",
+      "from go-live",
+      "✓ every year"
+     ],
+     [
+      "**Profit**",
+      "=",
+      "="
+     ],
+     [
+      "**Profit doing nothing** (income - current costs)",
+      "=",
+      "="
+     ],
+     [
+      "**Difference** and **running total**",
+      "=",
+      "="
+     ]
+    ],
+    "b": [
+     "**Cell references, never typed numbers** (=D7+B17, not =SUM(77852+17600)).",
+     "Write your assumptions in a note: compounding, when ongoing costs start, which back-up and why."
+    ]
+   },
+   {
+    "h": "Rationale - the layout",
+    "cols": [
+     "Heading",
+     "What goes in it"
+    ],
+    "rows": [
+     [
+      "1. Overview",
+      "Deadline met? End week, or exactly how late and the one cause. The approach (e.g. agile / iterative)"
+     ],
+     [
+      "2. Order and timing",
+      "The dependency chain as \"X before Y because\". How absences were worked round, with the impact in days"
+     ],
+     [
+      "3. Staff",
+      "One paragraph per person: each task + a reason from their profile + cost of anything unusual (shadowing)"
+     ],
+     [
+      "4. Benefits and risks",
+      "At least three risks, each with a mitigation: new employee, major faults, back-up choice, tight deadline"
+     ],
+     [
+      "5. Costs and affordability",
+      "Total project cost, profit each year vs doing nothing, when it pays back, the option you rejected and why"
+     ]
+    ]
+   },
+   {
+    "h": "Every paragraph, the same four beats",
+    "code": [
+     "DECISION   I scheduled the database first ...",
+     "REASON     because every other module reads from it (scenario evidence).",
+     "IMPACT     It takes 14 days, so the other modules ... / it costs £...",
+     "RISK       The risk is ..., so I have ... (mitigation)."
+    ],
+    "b": [
+     "Add **\"I considered ... but ...\"** wherever you chose between options - weighing options is what \"perceptive\" means.",
+     "Never: \"a bit longer\", \"fast and smooth\", \"over budget\" (there is no budget), \"request another developer\" (the team is fixed)."
+    ]
+   }
+  ],
+  "traps": [],
+  "check": "Before you hand in: deadline stated, every task has a person, ongoing costs in every year, profit compared with doing nothing, three risks with mitigations.",
+  "see": "",
+  "qs": []
+ },
+ {
+  "day": "T15",
+  "tutor": true,
+  "plan": "Claude tutor · 16 Nov · cheat sheet",
+  "title": "Cheat sheet - ESP Task 2: identifying and fixing defects",
+  "area": "ESP Task 2",
+  "mins": 10,
+  "why": "A one-page sheet to read before the task: how to split the time, what order to work in, how to lay the answer out, and the checklist. No questions. Task 2 is 3 hours and 21 marks: use of testing 9, testing process 3, the working solution 9. The top band is won by the QUALITY of your tests and log, not the number of bugs.",
+  "core": [
+   {
+    "h": "Split the 3 hours",
+    "cols": [
+     "Time",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "0:00 - 0:20",
+      "Read the requirements. Turn every one into test ideas BEFORE touching the code"
+     ],
+     [
+      "0:20 - 0:40",
+      "Run it with normal data. Note what breaks. Read tracebacks bottom-up"
+     ],
+     [
+      "0:40 - 2:30",
+      "Test → log → fix ONE thing → re-test → log the re-test. Repeat"
+     ],
+     [
+      "2:30 - 2:50",
+      "Re-run the earlier tests (regression) - did a fix break anything?"
+     ],
+     [
+      "2:50 - 3:00",
+      "Run the clean file from fresh. Save with the right names"
+     ]
+    ]
+   },
+   {
+    "h": "Turn each requirement into tests",
+    "cols": [
+     "Requirement",
+     "Normal",
+     "Boundary (both sides, with decimals)",
+     "Erroneous"
+    ],
+    "rows": [
+     [
+      "Weight up to and including 5 kg",
+      "3",
+      "4.9 · 5.0 · 5.1",
+      "five · -2 · blank"
+     ],
+     [
+      "Age 16 to 25 allowed",
+      "20",
+      "15 · 16 · 25 · 26",
+      "abc · 2.5 · blank"
+     ],
+     [
+      "Menu 1 to 4",
+      "2",
+      "0 · 1 · 4 · 5",
+      "x · 1.5"
+     ]
+    ],
+    "b": [
+     "Test the parts that LOOK right too - especially calculations with different combinations of inputs."
+    ]
+   },
+   {
+    "h": "One test log row - every column filled",
+    "cols": [
+     "No.",
+     "Purpose",
+     "Test data",
+     "Type",
+     "Expected",
+     "Actual",
+     "Result",
+     "Action"
+    ],
+    "rows": [
+     [
+      "1",
+      "Lightest band at its upper limit",
+      "5.0",
+      "Boundary",
+      "£3.50",
+      "£5.20",
+      "Fail",
+      "Line 41 used < 5; changed to <= 5. Re-test as 1.1"
+     ],
+     [
+      "1.1",
+      "Re-test of 1",
+      "5.0",
+      "Boundary",
+      "£3.50",
+      "£3.50",
+      "Pass",
+      "-"
+     ],
+     [
+      "3",
+      "Text instead of a number",
+      "five",
+      "Erroneous",
+      "Message, asks again",
+      "ValueError crash",
+      "Fail",
+      "Wrapped input in a validation loop. Re-test as 3.1"
+     ]
+    ],
+    "b": [
+     "**Expected** is exact (\"£3.50\", \"message, asks again\") - never \"it works\".",
+     "**Action** names the line, the change and the re-test number.",
+     "Valid data at the edge = **boundary / extreme**. Invalid data = **erroneous**. Do not mix them up."
+    ]
+   },
+   {
+    "h": "Bugs to hunt for first",
+    "cols": [
+     "Look for",
+     "Type",
+     "Fix"
+    ],
+    "rows": [
+     [
+      "input() compared with a number",
+      "Runtime",
+      "int() / float() round the input"
+     ],
+     [
+      "< where the requirement says \"up to and including\"",
+      "Logic",
+      "<="
+     ],
+     [
+      "A typed limit (12) instead of len(list)",
+      "Logic",
+      "len()"
+     ],
+     [
+      "!= \"y\" or != \"n\" (always true)",
+      "Logic",
+      "not in (\"y\", \"n\")"
+     ],
+     [
+      "a + b * c where (a + b) * c was meant",
+      "Logic",
+      "brackets"
+     ],
+     [
+      "IF that only asks once",
+      "Logic",
+      "while loop until valid"
+     ],
+     [
+      "Dividing by len() of an empty list",
+      "Runtime",
+      "check it is not empty first"
+     ],
+     [
+      "Missing colon, bracket, bad indent",
+      "Syntax",
+      "fix the line"
+     ]
+    ],
+    "b": [
+     "Syntax = will not run. Runtime = runs, then crashes. Logic = runs, wrong answer.",
+     "Fixing small things you found by testing (an unused import, a wrong message) earns credit too."
+    ]
+   }
+  ],
+  "traps": [],
+  "check": "Before you hand in: every requirement tested; normal, boundary and erroneous used; every Fail has a cause, a fix and its own re-test row; earlier tests re-run; code runs from a fresh file.",
+  "see": "",
+  "qs": []
+ },
+ {
+  "day": "T16",
+  "tutor": true,
+  "plan": "Claude tutor · 16 Nov · cheat sheet",
+  "title": "Cheat sheet - ESP Task 3: designing a solution",
+  "area": "ESP Task 3",
+  "mins": 10,
+  "why": "A one-page sheet to read before the task: how to split the time, what order to work in, how to lay the answer out, and the checklist. No questions. Task 3 is 2 hours 30 and 18 marks: decomposition 9, logic and conventions 6, communication 3.",
+  "core": [
+   {
+    "h": "Split the 2 hours 30",
+    "cols": [
+     "Time",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "0:00 - 0:20",
+      "Read the brief. Write one line per CSV column: type, and whether you COUNT, SUM or AVERAGE it"
+     ],
+     [
+      "0:20 - 0:40",
+      "Decomposition: list every named function with its parameters and what it returns"
+     ],
+     [
+      "0:40 - 2:10",
+      "Pseudocode (or flowchart) for each function, then Main"
+     ],
+     [
+      "2:10 - 2:30",
+      "Check: every loop ends, every input validated, no-data case handled, one consistent style"
+     ]
+    ]
+   },
+   {
+    "h": "Lay the answer out in this order",
+    "b": [
+     "**1. Data notes** - each column: type, and what you do with it. Text that repeats is **counted**, never summed.",
+     "**2. Decomposition tree** - Main at the top, named functions under it, sub-functions under those. Mark which are **reused** with a parameter.",
+     "**3. Each function** - a # comment saying what it does, its inputs and what it returns, then the pseudocode.",
+     "**4. Main** - load the file, stop with a message if there is no data, then the menu loop that ends on Exit."
+    ]
+   },
+   {
+    "h": "Decomposition tree example",
+    "code": [
+     "Main",
+     " ├─ LoadRecords (FileName)          returns a list, copes with no data",
+     " ├─ GetMenuChoice ()                validated 1 to 4",
+     " ├─ ShowTotals (Records)",
+     " │    └─ CountMatches (Records, Column, Value)    reused",
+     " └─ ShowSiteSummary (Records)",
+     "      ├─ GetSiteChoice (Records)   validated against the real list",
+     "      └─ CountMatches (Records, Column, Value)"
+    ]
+   },
+   {
+    "h": "The two patterns you will use every time",
+    "code": [
+     "REPEAT",
+     "    RECEIVE Choice FROM (INTEGER) KEYBOARD",
+     "    IF Choice < 1 OR Choice > 4 THEN",
+     "        SEND \"Choose a number from 1 to 4\" TO DISPLAY",
+     "    END IF",
+     "UNTIL Choice >= 1 AND Choice <= 4",
+     "",
+     "FUNCTION CountMatches (Records, Column, Value)",
+     "BEGIN FUNCTION",
+     "    SET Count TO 0",
+     "    FOR EACH Record FROM Records DO",
+     "        IF Record [Column] = Value THEN",
+     "            SET Count TO Count + 1",
+     "        END IF",
+     "    END FOREACH",
+     "    RETURN Count",
+     "END FUNCTION"
+    ]
+   },
+   {
+    "h": "Conventions that earn the marks",
+    "b": [
+     "Keywords in **CAPITALS**, **indentation** shows what is inside what, **meaningful names**, **one style only** throughout.",
+     "Flowcharts: diamond = decision (Yes and No out), parallelogram = input/output, double-sided rectangle = **call another function** (that is how a flowchart shows decomposition).",
+     "Communication: use technical words correctly - parameter, return value, validation, iteration, selection."
+    ]
+   }
+  ],
+  "traps": [
+   "Summing a text column - it must be counted.",
+   "SET Count TO 0 inside the loop - it resets every time.",
+   "A plain IF for validation - it only asks once. Use a loop.",
+   "No RETURN at the end of a function, or RETURN inside the loop.",
+   "Copying near-identical algorithms for each category instead of one function with a parameter."
+  ],
+  "check": "Before you hand in: every column understood, functions named with parameters, reuse shown, every input validated, every loop can end, no-data case designed, one consistent style.",
+  "see": "",
+  "qs": []
+ },
+ {
+  "day": "T17",
+  "tutor": true,
+  "plan": "Claude tutor · 16 Nov · cheat sheet",
+  "title": "Cheat sheet - ESP Task 4a: developing the solution",
+  "area": "ESP Task 4a",
+  "mins": 10,
+  "why": "A one-page sheet to read before the task: how to split the time, what order to work in, how to lay the answer out, and the checklist. No questions. Task 4a is 4 hours and 34 marks: functionality 6, logic 3, robustness 3, security 6, code organisation 8, user experience 8. Organisation and UX are 16 marks of habits.",
+  "core": [
+   {
+    "h": "Split the 4 hours",
+    "cols": [
+     "Time",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "0:00 - 0:20",
+      "Read the brief, run the given code, list every requirement as a menu option"
+     ],
+     [
+      "0:20 - 0:50",
+      "Skeleton: load function, input helper, menu, main - runs and exits cleanly"
+     ],
+     [
+      "0:50 - 3:00",
+      "One requirement at a time: write it, run it, check the numbers by hand, move on"
+     ],
+     [
+      "3:00 - 3:30",
+      "Robustness: try bad input everywhere, missing file, empty filter result"
+     ],
+     [
+      "3:30 - 4:00",
+      "Docstrings, comments, names, graph labels, output sentences. Run from a fresh file"
+     ]
+    ]
+   },
+   {
+    "h": "File layout, top to bottom",
+    "code": [
+     "\"\"\"What the program does and for whom.\"\"\"",
+     "import pandas as pd",
+     "import matplotlib.pyplot as plt",
+     "",
+     "DATA_FILE = \"data.csv\"              # constants in CAPITALS",
+     "",
+     "def load_data(path):                # try/except, returns None on failure",
+     "def get_whole_number(prompt, lo, hi):   # loops until valid",
+     "def report_xxx(data):               # one function per requirement",
+     "def draw_bar(series, title, x, y):  # one reusable chart function",
+     "def main():                         # load, menu loop, Goodbye",
+     "",
+     "if __name__ == \"__main__\":",
+     "    main()"
+    ]
+   },
+   {
+    "h": "Each strand = a habit",
+    "cols": [
+     "Strand",
+     "Marks",
+     "What to do"
+    ],
+    "rows": [
+     [
+      "Functionality",
+      "6",
+      "Every requirement has a menu option that gives output; given code is used"
+     ],
+     [
+      "Logic",
+      "3",
+      "Correct results - count text, sum/average numbers; check one by hand"
+     ],
+     [
+      "Robustness",
+      "3",
+      "Validation loops on every input; empty results and missing file handled"
+     ],
+     [
+      "Security",
+      "6",
+      "**No globals** - pass data in, return it out; data frames made inside functions; try/except so no raw traceback, path or data is shown. **No login**"
+     ],
+     [
+      "Organisation",
+      "8",
+      "Functions with docstrings, clear names, constants in capitals, comments on the WHY"
+     ],
+     [
+      "User experience",
+      "8",
+      "Clear prompts, helpful error messages, sorted labelled tables, graphs with title + both axis labels, a sentence explaining each output"
+     ]
+    ]
+   },
+   {
+    "h": "pandas quick lookup",
+    "cols": [
+     "Need",
+     "Code"
+    ],
+    "rows": [
+     [
+      "Count a text column",
+      "`df[\"Class\"].value_counts()`"
+     ],
+     [
+      "Keep some rows",
+      "`north = df[df[\"Region\"] == \"North\"]`"
+     ],
+     [
+      "Average per group",
+      "`df.groupby(\"Site\")[\"Cost\"].mean().round(2)`"
+     ],
+     [
+      "% of Yes",
+      "`(df[\"Attended\"] == \"Yes\").mean() * 100`"
+     ],
+     [
+      "Dates",
+      "`pd.to_datetime(df[\"Date\"], dayfirst=True)`"
+     ],
+     [
+      "Nothing found?",
+      "`if result.empty:`"
+     ]
+    ]
+   }
+  ],
+  "traps": [
+   "Building a login - no security marks and it eats time.",
+   "One global data frame that every function changes.",
+   "Graphs with no title or axis labels; numbers printed with no sentence.",
+   "Only checking that input is a number, not that it is in range."
+  ],
+  "check": "Before you hand in: given code used, every requirement has output, no globals, every input validated, no tracebacks shown, docstrings and comments, labelled graphs, runs from a fresh file.",
+  "see": "",
+  "qs": []
+ },
+ {
+  "day": "T18",
+  "tutor": true,
+  "plan": "Claude tutor · 16 Nov · cheat sheet",
+  "title": "Cheat sheet - ESP Task 4b: reflective evaluation",
+  "area": "ESP Task 4b",
+  "mins": 10,
+  "why": "A one-page sheet to read before the task: how to split the time, what order to work in, how to lay the answer out, and the checklist. No questions. Task 4b is 9 marks: review of outcomes 6, future developments 3. Go by the time printed on your booklet (your college ran it as 1 hour 30).",
+  "core": [
+   {
+    "h": "Split the time (for 1 hour 30)",
+    "cols": [
+     "Time",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "0:00 - 0:10",
+      "List every requirement from the brief, and what each type of user needs"
+     ],
+     [
+      "0:10 - 1:00",
+      "Judge each requirement (the four beats below)"
+     ],
+     [
+      "1:00 - 1:20",
+      "Two or three future developments"
+     ],
+     [
+      "1:20 - 1:30",
+      "Check every requirement has a verdict and evidence"
+     ]
+    ]
+   },
+   {
+    "h": "Lay the answer out in this order",
+    "cols": [
+     "Heading",
+     "What goes in it"
+    ],
+    "rows": [
+     [
+      "1. Introduction",
+      "Two lines: what the program does and who uses it"
+     ],
+     [
+      "2. One section per requirement",
+      "The four beats below"
+     ],
+     [
+      "3. Meeting the users’ needs",
+      "Usability: prompts, error messages, clear outputs - judged for the actual user (e.g. a manager with no coding knowledge)"
+     ],
+     [
+      "4. Future developments",
+      "Two or three, each specific, justified and linked to the scenario"
+     ],
+     [
+      "5. Conclusion",
+      "Overall verdict: how many requirements fully / partly met, and the most important next step"
+     ]
+    ]
+   },
+   {
+    "h": "Every requirement, the same four beats",
+    "code": [
+     "REQUIREMENT   The brief asked for the attendance rate of each class.",
+     "VERDICT       My report_attendance() function meets this FULLY / PARTLY.",
+     "EVIDENCE      It averages the Attended column per class, giving a %,",
+     "              sorted lowest first, with a labelled bar chart.",
+     "WHY           A % lets a manager compare big and small classes fairly.",
+     "LIMITATION    It covers all dates together, so it cannot show trends."
+    ],
+    "b": [
+     "Name the **function** or the **output** every time - that is your evidence.",
+     "A limitation leads straight into a future development."
+    ]
+   },
+   {
+    "h": "Future developments that score",
+    "code": [
+     "WHAT     Break attendance down by month",
+     "WHY      The brief says the company wants to spot trends; now it",
+     "         only shows an overall rate",
+     "BENEFIT  The manager could see whether a timetable change worked",
+     "HOW      Group by month using to_period(\"M\")"
+    ],
+    "b": [
+     "Include improvements to parts that **already work**, not only things you did not finish.",
+     "**Never personal** - \"manage my time better\" is not a development of the program."
+    ]
+   }
+  ],
+  "traps": [
+   "Describing what you built step by step - evaluate it against the requirements instead.",
+   "\"It works\" with no evidence.",
+   "\"Add more features\" - say which feature, for whom, and what decision it enables."
+  ],
+  "check": "Before you hand in: every requirement judged fully / partly / not met, each backed by a named function or output, user needs discussed, two or more specific justified developments, nothing about effort or time management.",
+  "see": "",
+  "qs": []
  }
 ];
