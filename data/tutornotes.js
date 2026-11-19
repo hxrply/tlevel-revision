@@ -1472,6 +1472,24 @@ window.TLDATA.tutorNotes = {
           answer: 'total = price should be total = price * quantity - logic error.',
           got: '0/1', cost: 'Work it out by hand: 3 x 10.00 = 30.00. The program shows 10.0, so look at the line that makes total: total = price forgets the quantity. Fix: total = price * quantity. No crash, wrong answer, so LOGIC.' }
       ]
+    },
+
+    {
+      day: 'T23', date: '19 Nov', topic: 'Claude tutor - harder bug finding (Example 1 so far)', score: '0/3',
+      questions: [
+        { n: 445, marks: 1, cmd: 'State', q: 'Example 1. Which line did it crash on?',
+          how: 'The bottom File line.',
+          answer: 'Line 8.',
+          got: '0/1', cost: 'You said 12. Line 12 is in the middle of the trail - where main() CALLED get_cost(). The crash is always the BOTTOM File line: line 8. See T24.' },
+        { n: 446, marks: 1, cmd: 'Explain', q: 'Example 1. Which line actually has the bug, and why?',
+          how: 'Where was qty made?',
+          answer: 'Line 5 - return qty hands back the text "3".',
+          got: '0/1', cost: 'Line 8 is where it CRASHED (the answer to 445). The bug is where the bad value was MADE: line 5 returns the text from input(). See T24 step by step.' },
+        { n: 447, marks: 1, cmd: 'Write', q: 'Example 1. Write the fixed line.',
+          how: 'Turn it into a number before handing it back.',
+          answer: 'return int(qty)',
+          got: '0/1', cost: 'return int(qty) - turn the text into a number where it is made, so everything after it gets a number.' }
+      ]
     }
 
   ]

@@ -4322,5 +4322,117 @@ window.TLDATA.catchup.tutor = [
     "a": "Always test with two or more different values, not just one (1)."
    }
   ]
+ },
+ {
+  "day": "T24",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "T23 Example 1 walked through - where it crashed vs where the bug is",
+  "area": "ESP Task 2",
+  "mins": 10,
+  "why": "You answered 445 with line 12 and 446 with line 8 - one step off each time. This walks through Example 1 slowly, then gives you a small one to try the same steps on.",
+  "core": [
+   {
+    "h": "Like a game",
+    "p": "You die to a boss because the shop sold you a wooden sword. You DIED at the boss (the crash line). The MISTAKE was at the shop (the bug line). Fixing the boss fight does nothing - you go back to the shop."
+   },
+   {
+    "h": "Example 1, step by step",
+    "cols": [
+     "Step",
+     "What you do",
+     "In Example 1"
+    ],
+    "rows": [
+     [
+      "1",
+      "Read the LAST line in plain English",
+      "TypeError: cannot multiply sequence by float = you tried to multiply TEXT by a decimal number"
+     ],
+     [
+      "2",
+      "Find the File line just above it - the crash line",
+      "line 8: return qty * 12.50 - so 445 is **line 8**, not 12"
+     ],
+     [
+      "3",
+      "Which value on that line is wrong?",
+      "12.50 is a number, so qty must be the text"
+     ],
+     [
+      "4",
+      "Where did that value come from? Follow it back",
+      "line 12 passes qty in, line 11 got it from get_quantity()"
+     ],
+     [
+      "5",
+      "Find where it was made",
+      "line 2: input() gives the text \"3\". Line 3 only CHECKS it is digits - it is still text. Line 5 hands back the text - so 446 is **line 5**"
+     ],
+     [
+      "6",
+      "Fix it where it was made",
+      "return int(qty) - so 447"
+     ]
+    ]
+   },
+   {
+    "h": "Why line 12 is not the crash line",
+    "p": "Line 12 is in the middle of the trail. It is where main() CALLED get_cost(). The crash happened inside get_cost, on line 8 - always the bottom File line."
+   },
+   {
+    "h": "Mini practice - adult.py (you type 20)",
+    "code": [
+     "1  def get_age():",
+     "2      age = input(\"Age: \")",
+     "3      return age",
+     "4  ",
+     "5  def is_adult(age):",
+     "6      return age >= 18",
+     "7  ",
+     "8  print(is_adult(get_age()))"
+    ]
+   },
+   {
+    "h": "Mini practice - the error message",
+    "code": [
+     "Traceback (most recent call last):",
+     "  File \"adult.py\", line 8, in <module>",
+     "    print(is_adult(get_age()))",
+     "  File \"adult.py\", line 6, in is_adult",
+     "    return age >= 18",
+     "TypeError: '>=' not supported between instances of 'str' and 'int'"
+    ]
+   }
+  ],
+  "traps": [
+   "The middle File lines are the trail, not the crash.",
+   "Checking a value (isdigit, try int()) does NOT change it - it is still text until you use int()."
+  ],
+  "check": "Crash line = the bottom File line. Bug line = where the bad value was made.",
+  "see": "",
+  "qs": [
+   {
+    "n": 459,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Mini practice. Which line did it crash on?",
+    "a": "Line 6 - the bottom File line (1)."
+   },
+   {
+    "n": 460,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Mini practice. Which line has the bug?",
+    "a": "Line 3 - return age hands back the text from input() (1)."
+   },
+   {
+    "n": 461,
+    "marks": 1,
+    "cmd": "Write",
+    "q": "Mini practice. Write the fixed line.",
+    "a": "return int(age) (1)."
+   }
+  ]
  }
 ];
