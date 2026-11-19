@@ -5059,5 +5059,96 @@ window.TLDATA.catchup.tutor = [
     "a": "12.50 x 3 = 37.50, 20% = 7.50, 37.50 - 7.50 = 30.00 (1)."
    }
   ]
+ },
+ {
+  "day": "T29",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "Task 2 debugging in 10 steps - short tips",
+  "area": "ESP Task 2",
+  "mins": 5,
+  "why": "Short tips only, in the order you do them tomorrow. Everything else from tonight (T19 to T28) fits inside these steps.",
+  "core": [
+   {
+    "h": "The steps",
+    "cols": [
+     "Step",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "1. Read the requirements",
+      "Underline every number, limit and word like or more, over, under."
+     ],
+     [
+      "2. Build the test plan",
+      "For each requirement: normal, boundary (on and just outside), erroneous (text, decimal, blank, two bad in a row). Expected from the requirements, worked out by hand."
+     ],
+     [
+      "3. Run it",
+      "Normal data first. Will not start = syntax - log it as test 1."
+     ],
+     [
+      "4. Crash? Read the error bottom-up",
+      "Last line = error name. Bottom File line = crash line."
+     ],
+     [
+      "5. Follow the value back",
+      "Where was the bad value made? Fix it there, not where it crashed."
+     ],
+     [
+      "6. Log the Fail before fixing",
+      "Actual = exactly what happened. Result = Fail."
+     ],
+     [
+      "7. Fix ONE thing",
+      "Action = line number, what changed, re-test number."
+     ],
+     [
+      "8. Re-test straight away",
+      "Same data, new row (4.1). Still wrong? Fail, fix again, 4.2."
+     ],
+     [
+      "9. Work through every row of the plan",
+      "No crash is not a pass - compare every output with Expected, including 2 dp and labels."
+     ],
+     [
+      "10. Finish",
+      "Regression row: re-run every test on the final code. Fresh run, save, check every Fail has a re-test."
+     ]
+    ]
+   },
+   {
+    "h": "Quick checks when stuck",
+    "b": [
+     "Last line - main() spelt right?",
+     "Every def / if / while / for has a colon. Every ( has a ).",
+     "Lists start as [] not ().",
+     "Validation returns int() / float(), not the text.",
+     "Menu choices compared with \"1\" not 1.",
+     "Totals: total = total + x, set to 0 ABOVE the loop.",
+     "Re-asking: while, not if - input() inside the loop.",
+     "Range checks use or. y/n checks use not in.",
+     "range(1, 5) runs 4 times.",
+     "Money printed with :.2f."
+    ]
+   },
+   {
+    "h": "Remember",
+    "b": [
+     "A crash is runtime. No crash but wrong answer is logic. Will not start is syntax.",
+     "Stuck on one bug for over 15 minutes? Log it as a Fail, move on, come back.",
+     "The marks are for the log - a bug you fixed but never logged earns nothing."
+    ]
+   }
+  ],
+  "traps": [
+   "Fixing several things at once.",
+   "Writing Expected from what the program shows.",
+   "No regression row."
+  ],
+  "check": "Say the 10 steps in order.",
+  "see": "",
+  "qs": []
  }
 ];
