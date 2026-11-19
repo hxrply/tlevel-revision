@@ -4753,5 +4753,194 @@ window.TLDATA.catchup.tutor = [
     ]
    }
   ]
+ },
+ {
+  "day": "T27",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "Setting up the test log before you look at the code",
+  "area": "ESP Task 2",
+  "mins": 10,
+  "why": "You already list the requirements first - that is the right start. This is what to add so the log is a full test PLAN before you run anything: exact data, exact expected results worked out by hand, several rows per requirement, and the rows people forget.",
+  "core": [
+   {
+    "h": "The columns",
+    "cols": [
+     "Column",
+     "Fill in BEFORE running?",
+     "What goes in it"
+    ],
+    "rows": [
+     [
+      "No.",
+      "Yes",
+      "1, 2, 3... Re-tests go straight underneath as 1.1, 1.2"
+     ],
+     [
+      "Requirement",
+      "Yes",
+      "R2 - so the examiner sees every requirement is covered"
+     ],
+     [
+      "Purpose",
+      "Yes",
+      "Lower limit of the age range"
+     ],
+     [
+      "Test data",
+      "Yes",
+      "The exact value: 16"
+     ],
+     [
+      "Type",
+      "Yes",
+      "Normal / Boundary / Erroneous"
+     ],
+     [
+      "Expected",
+      "Yes",
+      "Exactly what the screen should do - worked out by hand"
+     ],
+     [
+      "Actual",
+      "No",
+      "What really happened - copy it"
+     ],
+     [
+      "Result",
+      "No",
+      "Pass / Fail"
+     ],
+     [
+      "Action",
+      "No",
+      "Line, what changed, re-test number"
+     ]
+    ]
+   },
+   {
+    "h": "One requirement becomes several rows (R2: age 16 to 80)",
+    "cols": [
+     "No.",
+     "Req",
+     "Purpose",
+     "Test data",
+     "Type",
+     "Expected"
+    ],
+    "rows": [
+     [
+      "4",
+      "R2",
+      "Typical age",
+      "40",
+      "Normal",
+      "Accepted, asks for months"
+     ],
+     [
+      "5",
+      "R2",
+      "Lower limit",
+      "16",
+      "Boundary",
+      "Accepted, asks for months"
+     ],
+     [
+      "6",
+      "R2",
+      "Just below lower limit",
+      "15",
+      "Boundary",
+      "Message \"must be 16 to 80\", asks again"
+     ],
+     [
+      "7",
+      "R2",
+      "Upper limit",
+      "80",
+      "Boundary",
+      "Accepted, asks for months"
+     ],
+     [
+      "8",
+      "R2",
+      "Just above upper limit",
+      "81",
+      "Boundary",
+      "Message \"must be 16 to 80\", asks again"
+     ],
+     [
+      "9",
+      "R2",
+      "Decimal",
+      "30.5",
+      "Erroneous",
+      "Message \"must be a whole number\", asks again"
+     ],
+     [
+      "10",
+      "R2",
+      "Text",
+      "abc",
+      "Erroneous",
+      "Message \"must be a whole number\", asks again"
+     ],
+     [
+      "11",
+      "R2",
+      "Blank",
+      "(Enter)",
+      "Erroneous",
+      "Message, asks again"
+     ],
+     [
+      "12",
+      "R2",
+      "Two bad entries in a row",
+      "abc then 15",
+      "Erroneous",
+      "Message both times, still asking"
+     ]
+    ]
+   },
+   {
+    "h": "Rows people forget - add these too",
+    "b": [
+     "**Row 1: run the program with normal data** all the way through. If it will not even start, log that as a Fail (SyntaxError, line N) - it counts.",
+     "**Calculations: 2 or 3 different combinations**, with the working in Expected: 30 x 6 = 180 - 10% = 162.00. One calculation test is never enough.",
+     "**Every boundary inside a calculation too**, not just the input limits: 5 months (no discount) and 6 months (discount).",
+     "**Two bad entries in a row** for every validation - catches the if-instead-of-while bug.",
+     "**More than one record** - enter 2 or 3 members, check the count and average.",
+     "**The way out** - y, n and a wrong letter at \"Another?\". Menu options 1, 2 and an invalid one.",
+     "**Output format** - 2 decimal places, the right labels, everything the requirement says to show.",
+     "**Last row: regression** - re-ran tests 1 to N on the final code, all pass."
+    ]
+   },
+   {
+    "h": "Tips",
+    "b": [
+     "If the booklet gives you a test log template, use ITS columns - add a Requirement column only if there is room.",
+     "Write the Expected column from the REQUIREMENTS, never from what the code does.",
+     "Leave Actual, Result and Action empty until you run each test.",
+     "Insert re-test rows straight under the test they belong to, so 4, 4.1, 4.2 stay together."
+    ]
+   }
+  ],
+  "traps": [
+   "Expected copied from what the program does - then every test passes and finds nothing.",
+   "Only one row per requirement.",
+   "No row for a program that would not start."
+  ],
+  "check": "Without looking: the eight rows people forget.",
+  "see": "",
+  "qs": [
+   {
+    "n": 465,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Gym warm-up R4: months must be a whole number from 1 to 12. Write the test plan rows (No., Purpose, Test data, Type, Expected) before running anything.",
+    "a": "Normal 6 accepted (1); boundaries 0 rejected, 1 accepted, 12 accepted, 13 rejected (1); erroneous abc / 2.5 / blank rejected with a message and asked again, and two bad entries in a row (1)."
+   }
+  ]
  }
 ];
