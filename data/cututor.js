@@ -4434,5 +4434,129 @@ window.TLDATA.catchup.tutor = [
     "a": "return int(age) (1)."
    }
   ]
+ },
+ {
+  "day": "T25",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "The fixes that keep coming up in past Task 2 papers",
+  "area": "ESP Task 2",
+  "mins": 10,
+  "why": "Taken from five real Task 2 non-working programs on your PC: KRJ Retail (2021), Versere Cars (2024), Bote Parcels (2025), the DSD sample (2025) and PawsPlus. The same dozen bugs come up again and again. Read this the night before, not a full paper. The examples below are my own, not the paper code.",
+  "core": [
+   {
+    "h": "Ranked by how often they came up",
+    "cols": [
+     "Bug",
+     "What it looks like",
+     "Fix",
+     "Seen in"
+    ],
+    "rows": [
+     [
+      "**Misspelt name** - NameError",
+      "the last line calls man() instead of main(); calc_totol(); a file opened as one name and written as another",
+      "Make the spelling match the def exactly",
+      "4 of 5 papers - man() was the LAST LINE in two of them"
+     ],
+     [
+      "**Checked, then returned as text**",
+      "try: float(x) ... return x - then x > 0 crashes with TypeError",
+      "return float(x) / return int(x)",
+      "DSD sample, Bote, your warm-up"
+     ],
+     [
+      "**Text compared with a number**",
+      "if choice == 1: when choice came from input() - never True, loops forever",
+      "if choice == \"1\":",
+      "PawsPlus"
+     ],
+     [
+      "**Condition the wrong way round**",
+      "== where it should be != · \"n\" where it should be \"y\" · while valid == True when valid starts False (loop never runs)",
+      "Flip it - test both answers",
+      "KRJ, Versere, PawsPlus"
+     ],
+     [
+      "**Wrong boundary**",
+      "> 12 when there are 13 options · len > 10 when it must be exactly 10 · <= where it should be >= · gaps between bands (5 to 6 belongs nowhere)",
+      "Match the requirement word for word; test both sides of every limit",
+      "KRJ, DSD sample, Bote"
+     ],
+     [
+      "**Total replaced, not added**",
+      "total = i inside the loop · total = total instead of total = subtotal",
+      "total = total + i",
+      "Versere, KRJ, Bote"
+     ],
+     [
+      "**() instead of []**",
+      "items = () then items.append(x) - AttributeError",
+      "items = []",
+      "Versere, Bote"
+     ],
+     [
+      "**Missing colon or bracket** - SyntaxError",
+      "def get_id() with no colon · a print missing its last )",
+      "Add it - count the brackets",
+      "KRJ, DSD sample"
+     ],
+     [
+      "**Loop runs the wrong number of times**",
+      "range(1, 5) for 5 years - only 4",
+      "range(5) or range(1, 6)",
+      "DSD sample"
+     ],
+     [
+      "**and / or mixed up**",
+      "a or b != c - both branches end up doing the same thing",
+      "Read it out loud against the requirement",
+      "Bote"
+     ],
+     [
+      "**Function called wrongly**",
+      "a function needs 3 values but is given 2 (TypeError: missing argument) · range(my_list) instead of range(len(my_list))",
+      "Match the call to the def",
+      "PawsPlus"
+     ],
+     [
+      "**Output wrong**",
+      "money with no :.2f · a label printed with no value after it",
+      "{:.2f} or f\"{x:.2f}\"; print every value the requirement lists",
+      "DSD sample, Versere, Bote"
+     ],
+     [
+      "**Wrong list position**",
+      "item[1] when the name is item[0]",
+      "Check what is stored at each position",
+      "KRJ"
+     ]
+    ]
+   },
+   {
+    "h": "First 10 minutes - where to look",
+    "b": [
+     "The **last line** - is main() spelt right?",
+     "The **top** - imports spelt right (datetime)?",
+     "Every **def / if / while / for** line ends with a colon.",
+     "Every **list** starts as [] not ().",
+     "Every **validation function** returns int(...) / float(...), not the raw input.",
+     "Every **input compared with a number** is converted first.",
+     "Every **total** in a loop is total = total + ...",
+     "Every **money print** has :.2f."
+    ]
+   },
+   {
+    "h": "Still prove it",
+    "p": "Spotting these by eye is fine - but each one still needs a test that shows it failing (a Fail row), the fix in the Action column, and a re-test row. The marks are for the test log, not for spotting."
+   }
+  ],
+  "traps": [
+   "Fixing a bug you only spotted by eye without a Fail row first.",
+   "Assuming a calculation is fine because it looks fine - test it with two or three different values."
+  ],
+  "check": "Without looking: name five of the thirteen bug types.",
+  "see": "",
+  "qs": []
  }
 ];
