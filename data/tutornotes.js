@@ -1493,7 +1493,7 @@ window.TLDATA.tutorNotes = {
     },
 
     {
-      day: 'T23', date: '19 Nov', topic: 'Claude tutor - harder bug finding (Examples 1 to 3)', score: '4/9',
+      day: 'T23', date: '19 Nov', topic: 'Claude tutor - harder bug finding (Examples 1 to 4)', score: '5/12',
       questions: [
         { n: 445, marks: 1, cmd: 'State', q: 'Example 1. Which line did it crash on?',
           how: 'The bottom File line.',
@@ -1526,7 +1526,19 @@ window.TLDATA.tutorNotes = {
         { n: 452, marks: 1, cmd: 'State', q: 'Example 3. You fix line 2 only. Re-test 1.1 still shows Average: 10.0. Result, and next row?',
           how: 'Did it match the expected?',
           answer: 'Fail - then fix line 7 and re-test as 1.2.',
-          got: '0/1', cost: 'Result is FAIL (10.0 is not the expected 20.0). Action: Line 7: total = s changed to total = total + s. Re-test as 1.2. A re-test that fails gets its own next number - 1.1, then 1.2.' }
+          got: '0/1', cost: 'Result is FAIL (10.0 is not the expected 20.0). Action: Line 7: total = s changed to total = total + s. Re-test as 1.2. A re-test that fails gets its own next number - 1.1, then 1.2.' },
+        { n: 453, marks: 1, cmd: 'State', q: 'Example 4 has two errors. Which one is the real crash?',
+          how: 'Read from the bottom.',
+          answer: 'The bottom one - NameError on line 4.',
+          got: '1/1', cost: 'Line 4 is right. But you swapped the names: line 4 is the NameError, the first one (line 2) is the ValueError from int("abc"). The except was MEANT to catch the ValueError - the NameError inside the except is what actually crashed it.' },
+        { n: 454, marks: 1, cmd: 'Explain', q: 'Example 4. Why is age not defined?',
+          how: 'Which runs first - int(...) or age = ?',
+          answer: 'int("abc") crashed first, so age = never happened.',
+          got: '0/1', cost: 'It is the other way round. Python runs the RIGHT side first: input(), then int(), and only THEN stores the result in age. int("abc") crashed, so nothing was ever stored - age does not exist. Like a vending machine: a fake coin is rejected, so nothing drops into the tray.' },
+        { n: 455, marks: 1, cmd: 'Write', q: 'Example 4. How would you fix line 4?',
+          how: 'Do not use age at all in the message.',
+          answer: 'print("Sorry, that is not a number") - or save the input in another variable first and use that.',
+          got: '0/1', cost: 'Two problems: it still uses age, which does not exist, and there is no + between the pieces, so it is a syntax error. Simplest fix: print("Sorry, that is not a number"). Tip: print with COMMAS - print("Sorry", text, "is not a number") - works with any type and never needs +.' }
       ]
     }
 
