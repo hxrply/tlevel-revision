@@ -1490,6 +1490,24 @@ window.TLDATA.tutorNotes = {
           answer: 'return int(qty)',
           got: '0/1', cost: 'return int(qty) - turn the text into a number where it is made, so everything after it gets a number.' }
       ]
+    },
+
+    {
+      day: 'T24', date: '19 Nov', topic: 'Claude tutor - crash line vs bug line', score: '3/3',
+      questions: [
+        { n: 459, marks: 1, cmd: 'State', q: 'Mini practice. Which line did it crash on?',
+          how: 'The bottom File line.',
+          answer: 'Line 6.',
+          got: '1/1', cost: 'Right - and you used the error message to say why (text compared with a number). That is exactly how to read it.' },
+        { n: 460, marks: 1, cmd: 'State', q: 'Mini practice. Which line has the bug?',
+          how: 'Where was the bad value made?',
+          answer: 'Line 3 (return age) - or line 2, where input() makes the text.',
+          got: '1/1', cost: 'Right - line 2 is where the text is made, so converting it there works. Line 3 would also do. You followed the value back - that is the step you missed in Example 1.' },
+        { n: 461, marks: 1, cmd: 'Write', q: 'Mini practice. Write the fixed line.',
+          how: 'Count the brackets.',
+          answer: 'age = int(input("Age: "))',
+          got: '1/1', cost: 'Right idea - but you wrote age = int(input("Age: ") with ONE closing bracket. That is a syntax error and the program would not start. Every ( needs a ): int( and input( need TWO at the end.' }
+      ]
     }
 
   ]
