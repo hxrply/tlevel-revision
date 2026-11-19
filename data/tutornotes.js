@@ -1493,7 +1493,7 @@ window.TLDATA.tutorNotes = {
     },
 
     {
-      day: 'T23', date: '19 Nov', topic: 'Claude tutor - harder bug finding (Examples 1 and 2)', score: '2/5',
+      day: 'T23', date: '19 Nov', topic: 'Claude tutor - harder bug finding (Examples 1 to 3)', score: '4/9',
       questions: [
         { n: 445, marks: 1, cmd: 'State', q: 'Example 1. Which line did it crash on?',
           how: 'The bottom File line.',
@@ -1514,7 +1514,19 @@ window.TLDATA.tutorNotes = {
         { n: 449, marks: 1, cmd: 'State', q: 'Example 2. Syntax, runtime or logic error?',
           how: 'Did it crash?',
           answer: 'Logic.',
-          got: '1/1', cost: 'Right - no crash, wrong answer. You only catch this by working out the expected 6 by hand first.' }
+          got: '1/1', cost: 'Right - no crash, wrong answer. You only catch this by working out the expected 6 by hand first.' },
+        { n: 450, marks: 1, cmd: 'State', q: 'Example 3. How many times does range(1, 3) loop?',
+          how: 'range stops BEFORE the second number.',
+          answer: 'Twice - 1 and 2.',
+          got: '1/1', cost: 'Right.' },
+        { n: 451, marks: 2, cmd: 'Identify', q: 'Example 3. Name BOTH broken lines and the fix for each.',
+          how: 'Trace total by hand.',
+          answer: 'Line 2: range(1, 3) to range(1, 4) or range(3); line 7: total = s to total = total + s.',
+          got: '1/2', cost: 'Line 2 fix is right - range(1, 4) works (so does range(3)). But for the second one, the average is not calculated properly is the SYMPTOM, not the bug. Name the line and the change: line 7, total = s REPLACES the total each time, so it ends as just the last score. Fix: total = total + s.' },
+        { n: 452, marks: 1, cmd: 'State', q: 'Example 3. You fix line 2 only. Re-test 1.1 still shows Average: 10.0. Result, and next row?',
+          how: 'Did it match the expected?',
+          answer: 'Fail - then fix line 7 and re-test as 1.2.',
+          got: '0/1', cost: 'Result is FAIL (10.0 is not the expected 20.0). Action: Line 7: total = s changed to total = total + s. Re-test as 1.2. A re-test that fails gets its own next number - 1.1, then 1.2.' }
       ]
     }
 
