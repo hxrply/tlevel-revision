@@ -4053,5 +4053,274 @@ window.TLDATA.catchup.tutor = [
     "a": "Message says must be 18 to 65, and it asks for the age again (1)."
    }
   ]
+ },
+ {
+  "day": "T23",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "Harder bug finding - long error messages, the crash line vs the bug line, two broken lines",
+  "area": "ESP Task 2",
+  "mins": 25,
+  "why": "You said the error message sometimes shows two or more lines and it confuses you. That happens because a traceback lists every function call on the way to the crash, and because the line that crashes is often NOT the line with the bug. Every example here was run in Python 3.11 and the error messages are copied exactly.",
+  "core": [
+   {
+    "h": "How to read a long traceback",
+    "b": [
+     "Read it **from the bottom up**.",
+     "**Last line** = the error name and what went wrong (TypeError: ...).",
+     "The **File ... line N** just above it = the line that crashed. The code is printed under it.",
+     "The File lines further UP are the trail of calls that got there: main() called get_cost(), and get_cost crashed. Like a quest log - the bottom entry is where you died, the ones above are how you got there.",
+     "The ^^^^ and ~~~^~~~ marks just point at the part of the line that failed.",
+     "If you see **During handling of the above exception, another exception occurred**, there are TWO errors. The **bottom one** is the real crash."
+    ]
+   },
+   {
+    "h": "The crash line is not always the bug line",
+    "p": "The crash line is where Python NOTICED the problem. The bug is where the bad value was MADE. Ask: where did this value come from? Then follow it back up the code. In the gym warm-up, age crashed in get_monthly_price - but the bug was get_age returning text."
+   },
+   {
+    "h": "Example 1 - tickets.py (you type 3)",
+    "code": [
+     "1  def get_quantity():",
+     "2      qty = input(\"How many tickets? \")",
+     "3      while not qty.isdigit():",
+     "4          qty = input(\"Whole number please: \")",
+     "5      return qty",
+     "6  ",
+     "7  def get_cost(qty):",
+     "8      return qty * 12.50",
+     "9  ",
+     "10 def main():",
+     "11     qty = get_quantity()",
+     "12     cost = get_cost(qty)",
+     "13     print(f\"Cost: {cost:.2f}\")",
+     "14 ",
+     "15 main()"
+    ]
+   },
+   {
+    "h": "Example 1 - the error message",
+    "code": [
+     "Traceback (most recent call last):",
+     "  File \"tickets.py\", line 15, in <module>",
+     "    main()",
+     "  File \"tickets.py\", line 12, in main",
+     "    cost = get_cost(qty)",
+     "           ^^^^^^^^^^^^^",
+     "  File \"tickets.py\", line 8, in get_cost",
+     "    return qty * 12.50",
+     "           ~~~~^~~~~~~",
+     "TypeError: can't multiply sequence by non-int of type 'float'"
+    ]
+   },
+   {
+    "h": "Example 2 - the same program, but line 8 is return qty * 2 and line 13 is print(f\"Cost: {cost}\")",
+    "p": "You type 3. There is NO crash. It shows: Cost: 33"
+   },
+   {
+    "h": "Example 3 - scores.py. Requirement: enter 3 scores, show the average",
+    "code": [
+     "1  scores = []",
+     "2  for i in range(1, 3):",
+     "3      score = int(input(\"Score: \"))",
+     "4      scores.append(score)",
+     "5  total = 0",
+     "6  for s in scores:",
+     "7      total = s",
+     "8  print(\"Average:\", total / len(scores))"
+    ]
+   },
+   {
+    "h": "Example 3 - what happens",
+    "p": "You plan to type 10, 20, 30. It only asks twice (you type 10 and 20), then shows Average: 10.0. Expected: asks three times, Average: 20.0"
+   },
+   {
+    "h": "Example 4 - age.py (you type abc)",
+    "code": [
+     "1  try:",
+     "2      age = int(input(\"Age: \"))",
+     "3  except ValueError:",
+     "4      print(\"Sorry \" + age + \" is not a number\")"
+    ]
+   },
+   {
+    "h": "Example 4 - the error message",
+    "code": [
+     "Traceback (most recent call last):",
+     "  File \"age.py\", line 2, in <module>",
+     "    age = int(input(\"Age: \"))",
+     "ValueError: invalid literal for int() with base 10: 'abc'",
+     "",
+     "During handling of the above exception, another exception occurred:",
+     "",
+     "Traceback (most recent call last):",
+     "  File \"age.py\", line 4, in <module>",
+     "    print(\"Sorry \" + age + \" is not a number\")",
+     "NameError: name 'age' is not defined"
+    ]
+   },
+   {
+    "h": "Example 5 - members.py. Requirement: enter costs until n, show the average",
+    "code": [
+     "1  another = \"y\"",
+     "2  while another == \"y\":",
+     "3      count = 0",
+     "4      total = 0",
+     "5      cost = float(input(\"Cost: \"))",
+     "6      total = total + cost",
+     "7      count = count + 1",
+     "8      another = input(\"Another? \")",
+     "9  print(\"Average:\", total / count)"
+    ]
+   },
+   {
+    "h": "Example 5 - what happens",
+    "p": "One member, 10: shows Average: 10.0 (looks right). Two members, 10 then 20: shows Average: 20.0. Expected 15.0"
+   },
+   {
+    "h": "Two broken lines - log it like this (Example 3)",
+    "cols": [
+     "No.",
+     "Test data",
+     "Expected",
+     "Actual",
+     "Result",
+     "Action"
+    ],
+    "rows": [
+     [
+      "1",
+      "10, 20, 30",
+      "Asks 3 times, Average: 20.0",
+      "Asks twice, Average: 10.0",
+      "Fail",
+      "Line 2: range(1, 3) changed to range(3). Re-test as 1.1"
+     ],
+     [
+      "1.1",
+      "10, 20, 30",
+      "Asks 3 times, Average: 20.0",
+      "Asks 3 times, Average: 10.0",
+      "Fail",
+      "Line 7: total = s changed to total = total + s. Re-test as 1.2"
+     ],
+     [
+      "1.2",
+      "10, 20, 30",
+      "Asks 3 times, Average: 20.0",
+      "Asks 3 times, Average: 20.0",
+      "Pass",
+      ""
+     ]
+    ]
+   }
+  ],
+  "traps": [
+   "Fixing the crash line when the bug is further up - follow the value back to where it was made.",
+   "Two errors in one message - the bottom one is the real crash.",
+   "Testing a total or average with only ONE value - resets and wrong counts only show with two or more."
+  ],
+  "check": "Without looking: which end of a traceback do you read first, and what does the line just above the error name tell you?",
+  "see": "",
+  "qs": [
+   {
+    "n": 445,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Example 1. Which line number did the program crash on?",
+    "a": "Line 8 - the bottom File line (1)."
+   },
+   {
+    "n": 446,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "Example 1. Which line actually has the bug, and why?",
+    "a": "Line 5 - return qty returns the text \"3\", so line 8 multiplies text by 12.50 (1)."
+   },
+   {
+    "n": 447,
+    "marks": 1,
+    "cmd": "Write",
+    "q": "Example 1. Write the fixed line.",
+    "a": "return int(qty) (1)."
+   },
+   {
+    "n": 448,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "Example 2. Why does 3 tickets at 2 each show Cost: 33?",
+    "a": "qty is the text \"3\", and text * 2 repeats it - \"3\" twice is \"33\" (1)."
+   },
+   {
+    "n": 449,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Example 2. Syntax, runtime or logic error?",
+    "a": "Logic - no crash, wrong answer (1)."
+   },
+   {
+    "n": 450,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Example 3. How many times does range(1, 3) loop?",
+    "a": "Twice - 1 and 2; it stops BEFORE 3 (1)."
+   },
+   {
+    "n": 451,
+    "marks": 2,
+    "cmd": "Identify",
+    "q": "Example 3. Name BOTH broken lines and the fix for each.",
+    "a": "Line 2: range(1, 3) to range(3) (1); line 7: total = s to total = total + s (1)."
+   },
+   {
+    "n": 452,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Example 3. You fix line 2 only. Re-test 1.1 shows Average: 10.0. What do you log, and what is the next row?",
+    "a": "Fail, then fix line 7 and re-test as 1.2 (1)."
+   },
+   {
+    "n": 453,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Example 4 has two errors. Which one is the real crash?",
+    "a": "The bottom one - NameError on line 4 (1)."
+   },
+   {
+    "n": 454,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "Example 4. Why is age not defined?",
+    "a": "int(\"abc\") crashed, so age = ... never finished and age was never set (1)."
+   },
+   {
+    "n": 455,
+    "marks": 1,
+    "cmd": "Write",
+    "q": "Example 4. How would you fix line 4?",
+    "a": "Do not use age in the message - print(\"Sorry, that is not a number\"), or save the input in another variable first and use that (1)."
+   },
+   {
+    "n": 456,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "Example 5. Why does one member (10) look right?",
+    "a": "With one member, resetting count and total makes no difference - 10 / 1 is still 10 (1)."
+   },
+   {
+    "n": 457,
+    "marks": 2,
+    "cmd": "Identify",
+    "q": "Example 5. Which two lines are broken and what is the fix?",
+    "a": "Lines 3 and 4 reset count and total every time round (1); move them above the while on line 2 (1)."
+   },
+   {
+    "n": 458,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Example 5. What does this teach you about test data for totals and averages?",
+    "a": "Always test with two or more different values, not just one (1)."
+   }
+  ]
  }
 ];
