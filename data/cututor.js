@@ -3559,6 +3559,7 @@ window.TLDATA.catchup.tutor = [
     "q": "What error do you get here when no scores have been entered?",
     "a": "ZeroDivisionError - count is 0 (1).",
     "code": [
+     "total = 50",
      "count = 0",
      "average = total / count"
     ]
@@ -3628,6 +3629,256 @@ window.TLDATA.catchup.tutor = [
     "cmd": "Define",
     "q": "What is regression testing, in one line?",
     "a": "Re-running the earlier tests after the fixes to check nothing else has broken (1)."
+   }
+  ]
+ },
+ {
+  "day": "T21",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "Task 2 quick-fire round 2 - error types explained, text vs numbers, re-test numbers",
+  "area": "ESP Task 2",
+  "mins": 15,
+  "why": "Round 1 (T20) scored 8/15. The marks lost were all on three things: which error type is which, what Python does with text and numbers, and how re-test rows are numbered. This explains each one, then asks short questions on them.",
+  "core": [
+   {
+    "h": "The three error types - think of a video game",
+    "cols": [
+     "Type",
+     "In a game",
+     "In Python",
+     "Example"
+    ],
+    "rows": [
+     [
+      "**Syntax**",
+      "The game will not even launch",
+      "Python refuses to start the program",
+      "if age > 18  (missing colon) · print(\"Hi\"  (missing bracket)"
+     ],
+     [
+      "**Runtime**",
+      "The game launches, then crashes when you walk into one room",
+      "It starts, then crashes with a red traceback when it reaches a bad line or gets bad data",
+      "int(\"abc\") ValueError · total / 0 ZeroDivisionError · a typo like scroe NameError"
+     ],
+     [
+      "**Logic**",
+      "The game runs fine but your health goes UP when you get hit",
+      "It runs to the end with no crash - but the answer is wrong",
+      "> instead of >= · 20% instead of 10% · total reset inside the loop"
+     ]
+    ]
+   },
+   {
+    "h": "The one question to ask",
+    "p": "Did it start? No = **syntax**. Started, then crashed = **runtime**. Never crashed, but the answer is wrong = **logic**. A typo in a variable name (NameError) is runtime: Python only finds it when it reaches that line."
+   },
+   {
+    "h": "Text and numbers",
+    "cols": [
+     "Code",
+     "What you get",
+     "Why"
+    ],
+    "rows": [
+     [
+      "input(\"Age: \")",
+      "\"30\" - text",
+      "input() ALWAYS gives text, even if you type digits"
+     ],
+     [
+      "int(\"30\")",
+      "30 - a number",
+      "int() turns text that looks like a whole number into a number"
+     ],
+     [
+      "int(\"7.5\") / int(\"abc\")",
+      "ValueError crash",
+      "Not a whole number - int() never rounds"
+     ],
+     [
+      "\"5\" + \"5\"",
+      "\"55\"",
+      "+ on two pieces of text JOINS them"
+     ],
+     [
+      "5 + 5",
+      "10",
+      "+ on two numbers ADDS them"
+     ],
+     [
+      "\"Total: \" + 45.0",
+      "TypeError crash",
+      "Text + number: Python does not know whether to join or add"
+     ],
+     [
+      "\"30\" >= 18",
+      "TypeError crash",
+      "You cannot compare text with a number"
+     ]
+    ]
+   },
+   {
+    "h": "The fix for text + number",
+    "code": [
+     "print(\"Total: \" + str(total))      # turn the number into text",
+     "print(f\"Total: {total:.2f}\")       # f-string - also gives 2 decimal places"
+    ]
+   },
+   {
+    "h": "Re-test numbering",
+    "cols": [
+     "No.",
+     "Result",
+     "Action"
+    ],
+    "rows": [
+     [
+      "4",
+      "Fail",
+      "Line 30: > changed to >=. Re-test as 4.1"
+     ],
+     [
+      "4.1",
+      "Fail",
+      "Still wrong - line 31: 10 changed to 0.1. Re-test as 4.2"
+     ],
+     [
+      "4.2",
+      "Pass",
+      ""
+     ],
+     [
+      "5",
+      "...",
+      "the next new test carries on from 5"
+     ]
+    ]
+   },
+   {
+    "h": "Boundary vs erroneous",
+    "p": "Rule 0 to 100. **Boundary** = on and just outside each limit: -1, 0, 100, 101. **Erroneous** = the wrong kind of data: a, blank, 7.5 for a whole number. **Normal** = a typical value: 50. Write erroneous, not invalid, in the Type column."
+   }
+  ],
+  "traps": [
+   "NameError is runtime, not logic - it crashes.",
+   "Crashing on bad input is runtime, not syntax - the program had already started.",
+   "The boundary test needs the value just OUTSIDE the limit as well as the limit itself."
+  ],
+  "check": "Without looking: one example each of a syntax, runtime and logic error, and what \"5\" + \"5\" gives.",
+  "see": "",
+  "qs": [
+   {
+    "n": 419,
+    "marks": 1,
+    "cmd": "State",
+    "q": "The program starts, you enter some data, then it crashes. Syntax, runtime or logic?",
+    "a": "Runtime (1)."
+   },
+   {
+    "n": 420,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Syntax, runtime or logic?",
+    "a": "Syntax - missing bracket, it will not start (1).",
+    "code": [
+     "print(\"Hello\""
+    ]
+   },
+   {
+    "n": 421,
+    "marks": 1,
+    "cmd": "State",
+    "q": "The program runs to the end. The total shows 150 but should be 162. Syntax, runtime or logic?",
+    "a": "Logic (1)."
+   },
+   {
+    "n": 422,
+    "marks": 1,
+    "cmd": "State",
+    "q": "A NameError crash because of a typo. Syntax, runtime or logic?",
+    "a": "Runtime - it crashes when Python reaches that line (1)."
+   },
+   {
+    "n": 423,
+    "marks": 1,
+    "cmd": "Give",
+    "q": "Age must be 18 to 65. Give the four boundary test values.",
+    "a": "17, 18, 65, 66 (1)."
+   },
+   {
+    "n": 424,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Same rule, 18 to 65. Is 66 boundary or erroneous test data?",
+    "a": "Boundary - just outside the upper limit (1)."
+   },
+   {
+    "n": 425,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Does input() give back a number or text?",
+    "a": "Text - always (1)."
+   },
+   {
+    "n": 426,
+    "marks": 1,
+    "cmd": "State",
+    "q": "What does int(\"12\") give? And int(\"twelve\")?",
+    "a": "12 as a number; int(\"twelve\") crashes with ValueError (1)."
+   },
+   {
+    "n": 427,
+    "marks": 1,
+    "cmd": "State",
+    "q": "What does \"5\" + \"5\" give? And 5 + 5?",
+    "a": "\"55\" (joins text) and 10 (adds numbers) (1)."
+   },
+   {
+    "n": 428,
+    "marks": 1,
+    "cmd": "Identify",
+    "q": "Which error does this give?",
+    "a": "TypeError - text + number (1).",
+    "code": [
+     "score = 10",
+     "print(\"Score: \" + score)"
+    ]
+   },
+   {
+    "n": 429,
+    "marks": 1,
+    "cmd": "Write",
+    "q": "Rewrite the print in 428 so it shows Score: 10.",
+    "a": "print(\"Score: \" + str(score)) or print(f\"Score: {score}\") (1)."
+   },
+   {
+    "n": 430,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Test 7 failed. You fixed it, but re-test 7.1 also failed. You fix it again. What is the next row number?",
+    "a": "7.2 (1)."
+   },
+   {
+    "n": 431,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Name the three things in the Action column of a Fail row.",
+    "a": "Where (line number), what you changed, and the re-test number (1)."
+   },
+   {
+    "n": 432,
+    "marks": 1,
+    "cmd": "Identify",
+    "q": "The total for 3 items at 10.00 shows 10.0. Find the bug and the type of error.",
+    "a": "total = price, not price * quantity - logic error (1).",
+    "code": [
+     "price = 10.00",
+     "quantity = 3",
+     "total = price",
+     "print(total)"
+    ]
    }
   ]
  }
