@@ -3146,5 +3146,283 @@ window.TLDATA.catchup.tutor = [
   "check": "Before you hand in: every requirement judged fully / partly / not met, each backed by a named function or output, user needs discussed, two or more specific justified developments, nothing about effort or time management.",
   "see": "",
   "qs": []
+ },
+ {
+  "day": "T19",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "ESP Task 2 tomorrow - the process, your weak spots and a 40-minute warm-up",
+  "area": "ESP Task 2",
+  "mins": 45,
+  "why": "Task 2 is 3 hours and 21 marks: use of testing 9, testing process 3, working solution 9. Band 3 is won by the QUALITY of your tests and your log - not by spotting bugs by eye. Tonight: read this, do the short warm-up below (not a full paper), then sleep. The cheat sheet is T15.",
+  "core": [
+   {
+    "h": "Tomorrow - split the 3 hours",
+    "cols": [
+     "Time",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "0:00 - 0:20",
+      "Read the requirements. For EACH one write the test data: normal, boundary (both sides, decimals too) and erroneous. This is your test plan"
+     ],
+     [
+      "0:20 - 0:35",
+      "Run the program with normal data. Read any traceback from the bottom: last line = error type, line number = where"
+     ],
+     [
+      "0:35 - 2:30",
+      "Loop: test → log the row → fix ONE thing → re-test → log the re-test (1.1)"
+     ],
+     [
+      "2:30 - 2:50",
+      "Regression: re-run your earlier tests on the final code and log it"
+     ],
+     [
+      "2:50 - 3:00",
+      "Run the final file fresh. Save with the right names. Every Fail has a re-test row?"
+     ]
+    ]
+   },
+   {
+    "h": "Your weak spots - fix these and the marks follow",
+    "cols": [
+     "You did",
+     "Do this instead"
+    ],
+    "rows": [
+     [
+      "Test data like \"a boundary age\"",
+      "The **exact value**: 25, and 26, and 25.5"
+     ],
+     [
+      "Expected: \"it works\" / \"accepted\"",
+      "Exactly what the screen should do: \"25 accepted, asks for matches played\" or \"Message: must be 16 to 25, asks again\""
+     ],
+     [
+      "Mixed up syntax and runtime",
+      "Will not run at all = **syntax**. Runs, then crashes = **runtime**. Runs, wrong answer = **logic**"
+     ],
+     [
+      "Fixed validation with an IF",
+      "An IF only asks again ONCE - the fix is a **loop** that only exits on valid input"
+     ],
+     [
+      "Spotting a bug by reading, then fixing it",
+      "Fine to spot it - but **prove it with a test first** (Fail row), then fix, then re-test (Pass row)"
+     ]
+    ]
+   },
+   {
+    "h": "Phrases for the log",
+    "cols": [
+     "Column",
+     "Write it like this"
+    ],
+    "rows": [
+     [
+      "Purpose",
+      "Upper limit of the age range · Text instead of a number · Discount at exactly 6 months"
+     ],
+     [
+      "Type",
+      "Normal · Boundary · Erroneous (invalid data is erroneous, NOT extreme)"
+     ],
+     [
+      "Expected",
+      "162.00 shown · Message \"must be 1 to 12\", asks again · Program ends and shows the summary"
+     ],
+     [
+      "Actual",
+      "Copy what really happened: 180.00 shown · ValueError crash · loops forever"
+     ],
+     [
+      "Action",
+      "**Line 86: `> 6` changed to `>= 6`. Re-test as 9.1** - where, what changed, re-test number"
+     ]
+    ]
+   },
+   {
+    "h": "Where bugs hide in Pearson-style code",
+    "b": [
+     "`try: int(x)` then `return x` - it checked the number but **returned the text**.",
+     "A check that is **the wrong way round** - e.g. a name check using `.isdigit()` instead of `.isalpha()`.",
+     "`< 25` / `>= 25` where the requirement says **25 is allowed** - test 24, 25, 26.",
+     "An error message that says one thing while the condition checks another (message says minimum 1, code allows 0).",
+     "`!= \"y\" or != \"n\"` - always True. `and` / `not in` is the fix.",
+     "Output not matching the requirement - 2 decimal places, the right wording, the right order.",
+     "Totals or counters reset inside a loop; dividing by a count that can be 0."
+    ]
+   },
+   {
+    "h": "The warm-up program - test it like tomorrow",
+    "p": "Copy this into a .py file (or open Task2_Warmup_Gym_NonWorkingCode.py in your esp revision folder). Write your test data for R1 to R8 FIRST, then run it and log as you go. There are 7 defects. Some lines that look wrong are fine. Answer the questions below as you go - they walk you through it.",
+    "code": [
+     "#  REQUIREMENTS - what the program SHOULD do:",
+     "#   R1  Ask for the member's name. It must not be blank.",
+     "#   R2  Ask for the member's age. Whole numbers from 16 to 80 only. Keep asking until valid.",
+     "#   R3  Monthly price: under 18 = 15.00, 18 to 64 = 30.00, 65 and over = 20.00",
+     "#   R4  Ask how many months they are joining for. Whole numbers from 1 to 12 only. Keep asking until valid.",
+     "#   R5  Joining for 6 months or more gets 10% off the total.",
+     "#   R6  Show the member's name and total to 2 decimal places, e.g.  Sam: 162.00",
+     "#   R7  Ask \"Another member? (y/n)\". Only y or n are accepted. Repeat for each member.",
+     "#   R8  At the end, show how many members were entered and the average total to 2 decimal places.",
+     "#",
+     "#gets the member's name and checks it is not blank",
+     "def get_name():",
+     "    valid = False",
+     "",
+     "    while valid == False:",
+     "        name = input(\"Member name: \")",
+     "        if name.strip() == \"\":",
+     "            print(\"Sorry, the name cannot be blank.\")",
+     "        else:",
+     "            valid = True",
+     "",
+     "    return name",
+     "",
+     "",
+     "#gets and validates the age of the member",
+     "def get_age():",
+     "    valid = False",
+     "",
+     "    while valid == False:",
+     "        age = input(\"Enter the member's age: \")",
+     "",
+     "        try:",
+     "            int(age)",
+     "        except:",
+     "            print(\"Sorry, the age must be a whole number.\")",
+     "        else:",
+     "            if int(age) < 16 or int(age) > 80:",
+     "                print(\"Sorry, members must be aged 16 to 80.\")",
+     "            else:",
+     "                return age",
+     "",
+     "",
+     "#works out the monthly price from the age",
+     "def get_monthly_price(age):",
+     "    if age < 18:",
+     "        price = 15.00",
+     "    elif age < 64:",
+     "        price = 30.00",
+     "    else:",
+     "        price = 20.00",
+     "",
+     "    return price",
+     "",
+     "",
+     "#gets and validates the number of months",
+     "def get_months():",
+     "    months = input(\"How many months are they joining for? \")",
+     "",
+     "    try:",
+     "        int(months)",
+     "    except:",
+     "        print(\"Sorry, the number of months must be a whole number.\")",
+     "        months = input(\"How many months are they joining for? \")",
+     "",
+     "    if int(months) < 1 or int(months) >= 12:",
+     "        print(\"Sorry, it must be 1 to 12 months.\")",
+     "        months = input(\"How many months are they joining for? \")",
+     "",
+     "    return int(months)",
+     "",
+     "",
+     "#works out the total cost, with the discount for longer memberships",
+     "def get_total(price, months):",
+     "    total = price * months",
+     "",
+     "    if months > 6:",
+     "        total = total - total * 10 / 100",
+     "",
+     "    return total",
+     "",
+     "",
+     "#asks whether there is another member to enter",
+     "def get_another():",
+     "    another = input(\"Another member? (y/n): \").lower()",
+     "",
+     "    while another != \"y\" or another != \"n\":",
+     "        print(\"Please type y or n.\")",
+     "        another = input(\"Another member? (y/n): \").lower()",
+     "",
+     "    return another",
+     "",
+     "",
+     "def main():",
+     "    totals = []",
+     "    another = \"y\"",
+     "",
+     "    while another == \"y\":",
+     "        name = get_name()",
+     "        age = get_age()",
+     "        price = get_monthly_price(age)",
+     "        months = get_months()",
+     "        total = get_total(price, months)",
+     "        totals.append(total)",
+     "        print(name + \": \" + str(round(total, 2)))",
+     "        another = get_another()",
+     "",
+     "    print(\"Members entered:\", len(totals))",
+     "    print(\"Average total:\", round(sum(totals) / len(totals), 2))",
+     "",
+     "",
+     "main()"
+    ]
+   }
+  ],
+  "traps": [
+   "Fixing several things at once - you cannot then say which fix worked. One fix, one re-test row.",
+   "Only testing the bits that look broken - calculations that look right still need two or three different combinations.",
+   "Forgetting the regression row at the end: re-run the earlier tests on the final code."
+  ],
+  "check": "For any rule \"X to Y allowed\": the six test values are below X, X, a decimal near X, Y, a decimal near Y, above Y - plus text and blank.",
+  "see": "",
+  "qs": [
+   {
+    "n": 398,
+    "marks": 3,
+    "cmd": "Give",
+    "q": "Warm-up R2 and R3. Give the test data that checks every boundary of the age range AND the price bands, and say the expected result for each.",
+    "a": "15 rejected, 16 accepted, 80 accepted, 81 rejected (1); 17 gives 15.00 and 18 gives 30.00 (1); 64 gives 30.00 and 65 gives 20.00 (1)."
+   },
+   {
+    "n": 399,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Run the warm-up with normal data (Sam, 30). Write the full test log row for what happens: purpose, test data, type, expected, actual, result, action.",
+    "a": "Normal member test, Sam / 30 / 3 months, Normal (1); expected Sam: 90.00, actual TypeError crash, Fail (1); action: get_age returns the text, changed return age to return int(age), re-test as 1.1 (1)."
+   },
+   {
+    "n": 400,
+    "marks": 2,
+    "cmd": "Identify",
+    "q": "After that fix, a 64-year-old joining for 6 months is shown 120.0. Expected is 162.00. Identify the TWO defects that cause this and the type of each.",
+    "a": "age < 64 puts 64 in the 20.00 band - logic / boundary (1); months > 6 gives no discount at exactly 6 - logic / boundary (1)."
+   },
+   {
+    "n": 401,
+    "marks": 2,
+    "cmd": "Explain",
+    "q": "In get_months, typing ten and then x crashes the program. Explain why, and how to fix it.",
+    "a": "It only re-asks once with an IF / except, so the second bad value goes straight to int() and crashes (1); fix with a while loop that keeps asking until a valid whole number from 1 to 12 is entered (1)."
+   },
+   {
+    "n": 402,
+    "marks": 2,
+    "cmd": "Explain",
+    "q": "Typing n at \"Another member?\" never ends the program. Explain why and give the fix.",
+    "a": "another != \"y\" or another != \"n\" is always True - any letter is not one of them (1); use another not in (\"y\", \"n\") or and instead of or (1)."
+   },
+   {
+    "n": 403,
+    "marks": 3,
+    "cmd": "Write",
+    "q": "Write the Fail row AND its re-test row for 12 months being rejected.",
+    "a": "Upper limit of months, 12, Boundary, expected accepted, actual \"must be 1 to 12\", Fail (1); action names the line and the change >= 12 to > 12 with re-test as N.1 (1); re-test row N.1 with 12, expected accepted, actual accepted, Pass (1)."
+   }
+  ]
  }
 ];
