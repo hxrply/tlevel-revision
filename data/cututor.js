@@ -4942,5 +4942,122 @@ window.TLDATA.catchup.tutor = [
     "a": "Normal 6 accepted (1); boundaries 0 rejected, 1 accepted, 12 accepted, 13 rejected (1); erroneous abc / 2.5 / blank rejected with a message and asked again, and two bad entries in a row (1)."
    }
   ]
+ },
+ {
+  "day": "T28",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "How to know what is meant to come out - writing the Expected column",
+  "area": "ESP Task 2",
+  "mins": 10,
+  "why": "Every expected result comes from the REQUIREMENTS and the scenario (prices, rates, rules) - never from the code. Like a game wiki: the wiki says what should happen, the game is what actually happens, and a bug is where they disagree.",
+  "core": [
+   {
+    "h": "Where each expected result comes from",
+    "cols": [
+     "Kind of test",
+     "Expected comes from",
+     "Write it like"
+    ],
+    "rows": [
+     [
+      "Valid input",
+      "The requirement says it is allowed",
+      "16 accepted, asks for months"
+     ],
+     [
+      "Invalid input",
+      "The requirement says it is not allowed",
+      "Error message shown, asks for the age again"
+     ],
+     [
+      "Calculation",
+      "The rule + prices in the brief - work it out by hand",
+      "30 x 6 = 180, 10% off = 162.00"
+     ],
+     [
+      "Output",
+      "What the requirement says to show, and how",
+      "Sam: 162.00 (name and total to 2 dp)"
+     ],
+     [
+      "Loop / menu",
+      "What the requirement says happens next",
+      "n ends and shows the summary"
+     ]
+    ]
+   },
+   {
+    "h": "Word clues for boundaries",
+    "cols": [
+     "Requirement says",
+     "Means",
+     "At exactly 6"
+    ],
+    "rows": [
+     [
+      "6 or more / at least 6",
+      ">= 6",
+      "Included"
+     ],
+     [
+      "more than 6 / over 6",
+      "> 6",
+      "NOT included"
+     ],
+     [
+      "under 6 / less than 6",
+      "< 6",
+      "NOT included"
+     ],
+     [
+      "up to 6 / 6 or less / no more than 6",
+      "<= 6",
+      "Included"
+     ],
+     [
+      "between 1 and 6 / 1 to 6",
+      "1 and 6 both allowed (usually)",
+      "Included - write it as an assumption if unsure"
+     ]
+    ]
+   },
+   {
+    "h": "Working out a calculation by hand",
+    "p": "Requirement: 18 to 64 pay 30.00 a month; 6 months or more gets 10% off; show the total to 2 dp. Age 30, 6 months: 30.00 x 6 = 180.00. 10% of 180 = 18. 180 - 18 = **162.00**. Age 30, 5 months: 30.00 x 5 = **150.00** (no discount). Use the calculator - but never the program you are testing."
+   },
+   {
+    "h": "Rules",
+    "b": [
+     "**The requirement always wins.** Comments, messages and variable names in the code can be wrong - a message saying 1 to 10 when the requirement says 1 to 12 is a bug.",
+     "If the requirement does not give the exact wording of a message, write: error message shown, asks again.",
+     "If a requirement is unclear, choose the sensible reading and write it as an **assumption** in the log - e.g. assumed between 1 and 12 includes 1 and 12.",
+     "Write Expected BEFORE you run the test, so the program cannot influence it."
+    ]
+   }
+  ],
+  "traps": [
+   "Writing the Expected from what the program shows - then every test passes.",
+   "Treating over 65 as including 65.",
+   "Doing the calculation with the program you are testing."
+  ],
+  "check": "Without looking: what do or more, over, under and up to mean at the exact number?",
+  "see": "",
+  "qs": [
+   {
+    "n": 466,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Requirement: over 65s pay 20.00. Is a 65-year-old in that band?",
+    "a": "No - over means more than, so 65 is not included (1)."
+   },
+   {
+    "n": 467,
+    "marks": 1,
+    "cmd": "Calculate",
+    "q": "Tickets are 12.50 each. Buying 3 or more gets 20% off. What is the expected total for 3 tickets?",
+    "a": "12.50 x 3 = 37.50, 20% = 7.50, 37.50 - 7.50 = 30.00 (1)."
+   }
+  ]
  }
 ];
