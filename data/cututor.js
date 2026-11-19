@@ -3424,5 +3424,211 @@ window.TLDATA.catchup.tutor = [
     "a": "Upper limit of months, 12, Boundary, expected accepted, actual \"must be 1 to 12\", Fail (1); action names the line and the change >= 12 to > 12 with re-test as N.1 (1); re-test row N.1 with 12, expected accepted, actual accepted, Pass (1)."
    }
   ]
+ },
+ {
+  "day": "T20",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "Task 2 quick-fire - spot the bug, name the error, pick the test data",
+  "area": "ESP Task 2",
+  "mins": 15,
+  "why": "Short questions for the night before Task 2, asked in chat. Each one is a single thing you need to know tomorrow: what kind of error it is, what Python calls it, the exact test values, and the bug patterns Pearson likes to hide.",
+  "core": [
+   {
+    "h": "Python error names you will see tomorrow",
+    "cols": [
+     "Last line of the traceback",
+     "What it usually means"
+    ],
+    "rows": [
+     [
+      "SyntaxError / IndentationError",
+      "The code will not run at all - a missing colon, bracket, quote or a bad indent. **Syntax** error"
+     ],
+     [
+      "ValueError",
+      "int() or float() was given text it cannot turn into a number, e.g. int(\"abc\") or int(\"7.5\")"
+     ],
+     [
+      "TypeError",
+      "Mixing types - comparing text with a number (\"30\" < 18) or \"Total: \" + 45.0"
+     ],
+     [
+      "NameError",
+      "A variable or function name that does not exist - usually a typo or used before it is set"
+     ],
+     [
+      "ZeroDivisionError",
+      "Dividing by a count or total that is 0"
+     ],
+     [
+      "IndexError",
+      "A list position that does not exist - e.g. item [5] in a list of 5"
+     ]
+    ]
+   },
+   {
+    "h": "The three error types",
+    "cols": [
+     "Type",
+     "How you know"
+    ],
+    "rows": [
+     [
+      "Syntax",
+      "Will not start at all"
+     ],
+     [
+      "Runtime",
+      "Starts, then crashes with a traceback"
+     ],
+     [
+      "Logic",
+      "Runs to the end but gives the wrong answer"
+     ]
+    ]
+   }
+  ],
+  "traps": [
+   "int(\"7.5\") does NOT give 7 - it is a ValueError. 7.5 is a good erroneous test for a whole-number input.",
+   "input() always gives text. Compare it with a number and you get a TypeError.",
+   "A crash you get by typing bad data is a runtime error, not a syntax error."
+  ],
+  "check": "Without looking: name the error for int(\"abc\"), \"30\" < 18, total / 0 and a misspelt variable.",
+  "see": "",
+  "qs": [
+   {
+    "n": 404,
+    "marks": 1,
+    "cmd": "State",
+    "q": "The program will not even start. The message says SyntaxError: expected ':'. Syntax, runtime or logic error?",
+    "a": "Syntax (1)."
+   },
+   {
+    "n": 405,
+    "marks": 1,
+    "cmd": "State",
+    "q": "You type abc for the age and the program crashes with a ValueError. Syntax, runtime or logic error?",
+    "a": "Runtime - it ran, then crashed (1)."
+   },
+   {
+    "n": 406,
+    "marks": 1,
+    "cmd": "State",
+    "q": "The program runs to the end but a 10% discount comes out as 20%. Syntax, runtime or logic error?",
+    "a": "Logic - it runs but the answer is wrong (1)."
+   },
+   {
+    "n": 407,
+    "marks": 1,
+    "cmd": "Give",
+    "q": "A score must be 0 to 100. Give the four boundary test values.",
+    "a": "-1, 0, 100, 101 - both sides of each end (1). Decimals like 0.5 or 99.5 are a bonus."
+   },
+   {
+    "n": 408,
+    "marks": 1,
+    "cmd": "State",
+    "q": "The age must be 16 to 80. What type of test data is twenty (typed as a word)?",
+    "a": "Erroneous (1)."
+   },
+   {
+    "n": 409,
+    "marks": 1,
+    "cmd": "Identify",
+    "q": "Requirement: 50 or more is a pass. Find the bug.",
+    "a": "> should be >= - a score of exactly 50 fails (1).",
+    "code": [
+     "if score > 50:",
+     "    print(\"Pass\")",
+     "else:",
+     "    print(\"Fail\")"
+    ]
+   },
+   {
+    "n": 410,
+    "marks": 1,
+    "cmd": "State",
+    "q": "What happens when Python runs int(\"7.5\")?",
+    "a": "ValueError crash - int() cannot convert text with a decimal point (1)."
+   },
+   {
+    "n": 411,
+    "marks": 1,
+    "cmd": "Identify",
+    "q": "What error do you get here when no scores have been entered?",
+    "a": "ZeroDivisionError - count is 0 (1).",
+    "code": [
+     "count = 0",
+     "average = total / count"
+    ]
+   },
+   {
+    "n": 412,
+    "marks": 1,
+    "cmd": "Identify",
+    "q": "total is 45.0. What error does this line give, and what is the fix?",
+    "a": "TypeError - you cannot join text and a number; use str(total) or f\"Total: {total}\" (1).",
+    "code": [
+     "print(\"Total: \" + total)"
+    ]
+   },
+   {
+    "n": 413,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "The last line of the traceback is NameError: name 'scroe' is not defined. What is the cause?",
+    "a": "A typo - scroe instead of score, so Python does not know the name (1)."
+   },
+   {
+    "n": 414,
+    "marks": 1,
+    "cmd": "Identify",
+    "q": "Find the bug. What error does it give when you type 30?",
+    "a": "input() gives text, so \"30\" >= 18 is a TypeError; fix with int(input(...)) (1).",
+    "code": [
+     "age = input(\"Age: \")",
+     "if age >= 18:",
+     "    print(\"Adult\")"
+    ]
+   },
+   {
+    "n": 415,
+    "marks": 1,
+    "cmd": "Identify",
+    "q": "The total is always just the last score. Find the bug.",
+    "a": "total = 0 is inside the loop so it resets every time; move it above the for (1).",
+    "code": [
+     "for score in scores:",
+     "    total = 0",
+     "    total = total + score"
+    ]
+   },
+   {
+    "n": 416,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "What happens when this runs, whatever the user types?",
+    "a": "It never ends - any answer is not a or not b, so or is always True; use and / not in (\"a\", \"b\") (1).",
+    "code": [
+     "while choice != \"a\" or choice != \"b\":",
+     "    choice = input(\"a or b: \")"
+    ]
+   },
+   {
+    "n": 417,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Test 4 failed and you fixed it. What number do you give the re-test row?",
+    "a": "4.1 (1)."
+   },
+   {
+    "n": 418,
+    "marks": 1,
+    "cmd": "Define",
+    "q": "What is regression testing, in one line?",
+    "a": "Re-running the earlier tests after the fixes to check nothing else has broken (1)."
+   }
+  ]
  }
 ];
