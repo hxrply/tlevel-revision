@@ -4558,5 +4558,200 @@ window.TLDATA.catchup.tutor = [
   "check": "Without looking: name five of the thirteen bug types.",
   "see": "",
   "qs": []
+ },
+ {
+  "day": "T26",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "Fixing while loops, for loops and validation",
+  "area": "ESP Task 2",
+  "mins": 15,
+  "why": "You asked how to fix while loops, for loops and validation. These are the bugs each one gets in Task 2 code, how to spot them, and a validation pattern that works every time. The template was run in Python 3.11 with abc, 7.5, blank, 15, 81 then 80 - it rejected all the bad ones and returned 80 as a number.",
+  "core": [
+   {
+    "h": "While loop bugs",
+    "cols": [
+     "Symptom",
+     "Cause",
+     "Fix"
+    ],
+    "rows": [
+     [
+      "Never runs - skips straight past",
+      "The start value makes the condition False: valid = False then while valid == True",
+      "Make them match: while valid == False"
+     ],
+     [
+      "Never ends - prints the message forever",
+      "The input() is OUTSIDE the loop, so the value never changes",
+      "Move the input() inside the loop"
+     ],
+     [
+      "Never ends - even with a good answer",
+      "Nothing sets valid = True / or with != (always True)",
+      "Set valid = True on the good path · use not in (\"y\", \"n\")"
+     ],
+     [
+      "Only asks again once",
+      "An if instead of a while",
+      "Change if to while"
+     ],
+     [
+      "Count or total wrong after the 2nd go",
+      "count = 0 / total = 0 INSIDE the loop",
+      "Move them above the while"
+     ]
+    ]
+   },
+   {
+    "h": "For loop bugs",
+    "cols": [
+     "Symptom",
+     "Cause",
+     "Fix"
+    ],
+    "rows": [
+     [
+      "Runs one time too few",
+      "range(1, 5) stops BEFORE 5 - only 4 times",
+      "range(5) for 0 to 4, or range(1, 6) for 1 to 5"
+     ],
+     [
+      "TypeError: list object cannot be interpreted as an integer",
+      "range(my_list)",
+      "range(len(my_list)) or for item in my_list"
+     ],
+     [
+      "Total is only the last value",
+      "total = item",
+      "total = total + item"
+     ],
+     [
+      "Stops after the first item",
+      "return or print indented INSIDE the loop",
+      "Move it back one indent, under the for"
+     ],
+     [
+      "Item numbers start at 0",
+      "Printing i straight from range()",
+      "Print i + 1"
+     ]
+    ]
+   },
+   {
+    "h": "The validation pattern that works every time",
+    "code": [
+     "def get_age():",
+     "    valid = False",
+     "    while valid == False:",
+     "        age = input(\"Enter age: \")      # input INSIDE the loop",
+     "        try:",
+     "            age = int(age)              # 1. right type?",
+     "        except ValueError:",
+     "            print(\"Must be a whole number\")",
+     "        else:",
+     "            if age < 16 or age > 80:    # 2. in range? or, not and",
+     "                print(\"Must be 16 to 80\")",
+     "            else:",
+     "                valid = True            # 3. the only way out",
+     "    return age                          # 4. a number, not text"
+    ]
+   },
+   {
+    "h": "Check every validation function for these 5 things",
+    "b": [
+     "**A loop**, not an if - it must keep asking.",
+     "**input() inside** the loop.",
+     "**Type check first** (try int / float) - then the range check.",
+     "**Both limits match the requirement** - 16 to 80 means < 16 or > 80 is rejected. or, not and.",
+     "**Returns the converted value** - int(age), not the text."
+    ]
+   },
+   {
+    "h": "Other checks you will see",
+    "cols": [
+     "Rule",
+     "Code"
+    ],
+    "rows": [
+     [
+      "Not blank",
+      "if name.strip() == \"\":"
+     ],
+     [
+      "Exactly 6 characters",
+      "if len(card) != 6:"
+     ],
+     [
+      "Digits only (no minus, no decimal point)",
+      "if not card.isdigit():"
+     ],
+     [
+      "Letters only",
+      "if not name.isalpha():"
+     ],
+     [
+      "Menu choice",
+      "while choice not in (\"1\", \"2\"):  - text, in quotes"
+     ],
+     [
+      "y or n",
+      "while answer not in (\"y\", \"n\"):"
+     ]
+    ]
+   },
+   {
+    "h": "Test data for any validation",
+    "p": "Normal (40) · both boundaries and just outside them (15, 16, 80, 81) · a decimal (7.5) · text (abc) · blank (just press Enter). Then type a bad value TWICE in a row - that catches the if-instead-of-while bug."
+   }
+  ],
+  "traps": [
+   "valid = True missing - the loop never ends even with a good answer.",
+   "and instead of or for an outside-the-range check - an age cannot be under 16 AND over 80, so it never rejects.",
+   "Comparing a menu choice with 1 instead of \"1\"."
+  ],
+  "check": "Without looking: the five things to check in every validation function.",
+  "see": "",
+  "qs": [
+   {
+    "n": 462,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "You type abc. It prints Numbers only forever. Why, and the fix?",
+    "a": "input() is outside the loop so age never changes; move it inside (1).",
+    "code": [
+     "age = input(\"Age: \")",
+     "while not age.isdigit():",
+     "    print(\"Numbers only\")"
+    ]
+   },
+   {
+    "n": 463,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "It only ever adds up the first price. Why?",
+    "a": "return is inside the for loop, so it returns after the first item; move it back one indent (1).",
+    "code": [
+     "def total_of(prices):",
+     "    total = 0",
+     "    for p in prices:",
+     "        total = total + p",
+     "        return total"
+    ]
+   },
+   {
+    "n": 464,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "You type 2 and it says Please type 1 or 2. Why?",
+    "a": "choice is text from input(), so it never equals the number 2; use \"1\" and \"2\" (1).",
+    "code": [
+     "choice = input(\"1 or 2: \")",
+     "while choice != 1 and choice != 2:",
+     "    print(\"Please type 1 or 2\")",
+     "    choice = input(\"1 or 2: \")"
+    ]
+   }
+  ]
  }
 ];
