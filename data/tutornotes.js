@@ -1475,24 +1475,6 @@ window.TLDATA.tutorNotes = {
     },
 
     {
-      day: 'T23', date: '19 Nov', topic: 'Claude tutor - harder bug finding (Example 1 so far)', score: '0/3',
-      questions: [
-        { n: 445, marks: 1, cmd: 'State', q: 'Example 1. Which line did it crash on?',
-          how: 'The bottom File line.',
-          answer: 'Line 8.',
-          got: '0/1', cost: 'You said 12. Line 12 is in the middle of the trail - where main() CALLED get_cost(). The crash is always the BOTTOM File line: line 8. See T24.' },
-        { n: 446, marks: 1, cmd: 'Explain', q: 'Example 1. Which line actually has the bug, and why?',
-          how: 'Where was qty made?',
-          answer: 'Line 5 - return qty hands back the text "3".',
-          got: '0/1', cost: 'Line 8 is where it CRASHED (the answer to 445). The bug is where the bad value was MADE: line 5 returns the text from input(). See T24 step by step.' },
-        { n: 447, marks: 1, cmd: 'Write', q: 'Example 1. Write the fixed line.',
-          how: 'Turn it into a number before handing it back.',
-          answer: 'return int(qty)',
-          got: '0/1', cost: 'return int(qty) - turn the text into a number where it is made, so everything after it gets a number.' }
-      ]
-    },
-
-    {
       day: 'T24', date: '19 Nov', topic: 'Claude tutor - crash line vs bug line', score: '3/3',
       questions: [
         { n: 459, marks: 1, cmd: 'State', q: 'Mini practice. Which line did it crash on?',
@@ -1507,6 +1489,32 @@ window.TLDATA.tutorNotes = {
           how: 'Count the brackets.',
           answer: 'age = int(input("Age: "))',
           got: '1/1', cost: 'Right idea - but you wrote age = int(input("Age: ") with ONE closing bracket. That is a syntax error and the program would not start. Every ( needs a ): int( and input( need TWO at the end.' }
+      ]
+    },
+
+    {
+      day: 'T23', date: '19 Nov', topic: 'Claude tutor - harder bug finding (Examples 1 and 2)', score: '2/5',
+      questions: [
+        { n: 445, marks: 1, cmd: 'State', q: 'Example 1. Which line did it crash on?',
+          how: 'The bottom File line.',
+          answer: 'Line 8.',
+          got: '0/1', cost: 'You said 12. Line 12 is in the middle of the trail - where main() CALLED get_cost(). The crash is always the BOTTOM File line: line 8. See T24.' },
+        { n: 446, marks: 1, cmd: 'Explain', q: 'Example 1. Which line actually has the bug, and why?',
+          how: 'Where was qty made?',
+          answer: 'Line 5 - return qty hands back the text "3".',
+          got: '0/1', cost: 'Line 8 is where it CRASHED (the answer to 445). The bug is where the bad value was MADE: line 5 returns the text from input(). See T24 step by step.' },
+        { n: 447, marks: 1, cmd: 'Write', q: 'Example 1. Write the fixed line.',
+          how: 'Turn it into a number before handing it back.',
+          answer: 'return int(qty)',
+          got: '0/1', cost: 'return int(qty) - turn the text into a number where it is made, so everything after it gets a number.' },
+        { n: 448, marks: 1, cmd: 'Explain', q: 'Example 2. Why does 3 tickets at 2 each show Cost: 33?',
+          how: 'Text times a number.',
+          answer: 'qty is the text "3", and text * 2 repeats it.',
+          got: '1/1', cost: 'Right - "3" * 2 repeats the text to make "33". Same bug as Example 1 (line 5 returns text), but this time Python does not crash.' },
+        { n: 449, marks: 1, cmd: 'State', q: 'Example 2. Syntax, runtime or logic error?',
+          how: 'Did it crash?',
+          answer: 'Logic.',
+          got: '1/1', cost: 'Right - no crash, wrong answer. You only catch this by working out the expected 6 by hand first.' }
       ]
     }
 
