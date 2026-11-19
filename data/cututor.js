@@ -3881,5 +3881,177 @@ window.TLDATA.catchup.tutor = [
     ]
    }
   ]
+ },
+ {
+  "day": "T22",
+  "tutor": true,
+  "plan": "Claude tutor · 19 Nov",
+  "title": "Task 2 quick-fire round 3 - crash means runtime, the Action column, loops not IFs",
+  "area": "ESP Task 2",
+  "mins": 15,
+  "why": "Round 2 (T21) scored 8/14. The ones still dropping: calling a crash a logic error, calling a just-outside value erroneous, and the Action column. This round repeats those and adds the last few things Task 2 needs: reading the error line number, and fixing validation that only asks once.",
+  "core": [
+   {
+    "h": "The rule that fixes most of your lost marks",
+    "p": "**If it crashes, it is runtime.** Every Python error name you see in red - NameError, TypeError, ValueError, ZeroDivisionError - is a runtime crash. **Logic** is only ever: no crash, wrong answer."
+   },
+   {
+    "h": "Normal, boundary or erroneous - rule 18 to 65",
+    "cols": [
+     "Value",
+     "Type",
+     "Why"
+    ],
+    "rows": [
+     [
+      "40",
+      "Normal",
+      "A typical value in the middle"
+     ],
+     [
+      "17, 18, 65, 66",
+      "Boundary",
+      "ON each limit and JUST outside it"
+     ],
+     [
+      "abc, blank, 7.5",
+      "Erroneous",
+      "The wrong kind of data"
+     ]
+    ]
+   },
+   {
+    "h": "The Action column",
+    "p": "**Where** + **what changed** + **re-test number**: Line 30: `>` changed to `>=`. Re-test as 4.1"
+   },
+   {
+    "h": "How to find a logic bug",
+    "b": [
+     "Work out the right answer **by hand** first: 3 x 10.00 = 30.00 - that is your Expected.",
+     "Run it and copy what it shows into Actual: 10.0.",
+     "Different? Find the line that makes that value (total = ...) and check it against the requirement."
+    ]
+   },
+   {
+    "h": "Fixing text + number",
+    "code": [
+     "print(\"Score: \" + str(score))   # + joins, str() turns 10 into text",
+     "print(f\"Score: {score}\")        # or an f-string"
+    ]
+   }
+  ],
+  "traps": [
+   "A crash is never a logic error.",
+   "A value one past the limit (66) is boundary, not erroneous.",
+   "print(\"Score: \" score) with no + is a syntax error."
+  ],
+  "check": "Say out loud: crash = ?, no crash but wrong = ?, will not start = ?. Then the three parts of an Action.",
+  "see": "",
+  "qs": [
+   {
+    "n": 433,
+    "marks": 1,
+    "cmd": "State",
+    "q": "The program crashes with a TypeError. Syntax, runtime or logic?",
+    "a": "Runtime - it crashed (1)."
+   },
+   {
+    "n": 434,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Rule 18 to 65. Classify each value: 17, abc, 40.",
+    "a": "17 boundary, abc erroneous, 40 normal (1)."
+   },
+   {
+    "n": 435,
+    "marks": 1,
+    "cmd": "Write",
+    "q": "Test 3 failed. Line 12 had price * 0.2 and it should be price * 0.1. Write the Action.",
+    "a": "Line 12: 0.2 changed to 0.1. Re-test as 3.1 (1)."
+   },
+   {
+    "n": 436,
+    "marks": 1,
+    "cmd": "Identify",
+    "q": "It should take 10 off the total. Find the bug and the error type.",
+    "a": "+ should be - ; logic error - no crash, wrong answer (1).",
+    "code": [
+     "discount = 10",
+     "total = 50",
+     "total = total + discount"
+    ]
+   },
+   {
+    "n": 437,
+    "marks": 1,
+    "cmd": "State",
+    "q": "The error says File \"gym.py\", line 42 ... ValueError. Which line do you look at first?",
+    "a": "Line 42 (1)."
+   },
+   {
+    "n": 438,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "The user types 10, then 10 again. What happens?",
+    "a": "The second 10 is accepted - the IF only asks again once (1).",
+    "code": [
+     "age = int(input(\"Age: \"))",
+     "if age < 18:",
+     "    age = int(input(\"Too young, try again: \"))"
+    ]
+   },
+   {
+    "n": 439,
+    "marks": 1,
+    "cmd": "State",
+    "q": "In 438, which one word replaces if to fix it?",
+    "a": "while (1)."
+   },
+   {
+    "n": 440,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "This should reject ages outside 18 to 65. What is wrong?",
+    "a": "An age cannot be under 18 AND over 65, so it is never True; use or (1).",
+    "code": [
+     "if age < 18 and age > 65:",
+     "    print(\"Must be 18 to 65\")"
+    ]
+   },
+   {
+    "n": 441,
+    "marks": 1,
+    "cmd": "Write",
+    "q": "total = 7.5. Write the print that shows 7.50.",
+    "a": "print(f\"{total:.2f}\") (1)."
+   },
+   {
+    "n": 442,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "What does the except part do here?",
+    "a": "If the input is not a whole number it shows the message instead of crashing (1).",
+    "code": [
+     "try:",
+     "    int(age)",
+     "except ValueError:",
+     "    print(\"Must be a whole number\")"
+    ]
+   },
+   {
+    "n": 443,
+    "marks": 1,
+    "cmd": "State",
+    "q": "You spot a bug just by reading the code. What must you do BEFORE fixing it?",
+    "a": "Run a test that shows it failing and log it as a Fail row (1)."
+   },
+   {
+    "n": 444,
+    "marks": 1,
+    "cmd": "Write",
+    "q": "Rule 18 to 65. Write the Expected column for test data 17.",
+    "a": "Message says must be 18 to 65, and it asks for the age again (1)."
+   }
+  ]
  }
 ];
