@@ -5929,5 +5929,70 @@ window.TLDATA.catchup.tutor = [
   "check": "Without looking: the 7 functions and what each one gives back.",
   "see": "",
   "qs": []
+ },
+ {
+  "day": "T35",
+  "tutor": true,
+  "plan": "Claude tutor · 22 Nov",
+  "title": "Get the data, then check it - two separate functions",
+  "area": "ESP Task 3",
+  "mins": 4,
+  "why": "Yes - split it. One function reads the CSV, another cleans it. Each one does one job, which is exactly what the decomposition marks reward. It also fixes what lost marks in May, where \"make sure data is clean\" was one box.",
+  "core": [
+   {
+    "h": "How they connect in main",
+    "code": [
+     "raw_rows = load_data(\"sales.csv\")",
+     "data = clean_data(raw_rows)",
+     "... menu uses data from here on ..."
+    ]
+   },
+   {
+    "h": "load_data(file_name) - only reads",
+    "b": [
+     "Does the file exist? No - output \"File not found\" and stop.",
+     "Open the file. FOR EACH row - add it to raw_rows. Close the file.",
+     "**Return raw_rows.** It does not check anything."
+    ]
+   },
+   {
+    "h": "clean_data(raw_rows) - only checks",
+    "b": [
+     "FOR EACH row in raw_rows:",
+     "Is any value blank? Yes - skip this row.",
+     "Is sales a number? No - skip this row.",
+     "Convert sales from text to a number, then add the row to clean_rows.",
+     "**Return clean_rows.**"
+    ]
+   },
+   {
+    "h": "Two kinds of checking - do not mix them up",
+    "cols": [
+     "Function",
+     "Checks",
+     "If it is wrong"
+    ],
+    "rows": [
+     [
+      "clean_data",
+      "The CSV data",
+      "Skip the row (the user cannot fix it)"
+     ],
+     [
+      "get_valid_number",
+      "What the user types",
+      "Show a message and ask again"
+     ]
+    ]
+   }
+  ],
+  "traps": [
+   "Drawing clean_data as one box that says \"check the data\".",
+   "Opening the CSV again inside clean_data.",
+   "Asking the user to re-enter a bad CSV row."
+  ],
+  "check": "Without looking: what load_data returns, what clean_data returns, and the two checks inside clean_data.",
+  "see": "",
+  "qs": []
  }
 ];
