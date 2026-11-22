@@ -5858,5 +5858,76 @@ window.TLDATA.catchup.tutor = [
   "check": "Without looking: the five functions every Task 3 has, whatever the scenario.",
   "see": "",
   "qs": []
+ },
+ {
+  "day": "T34",
+  "tutor": true,
+  "plan": "Claude tutor · 22 Nov",
+  "title": "Task 3 in short - the whole plan on one page",
+  "area": "ESP Task 3",
+  "mins": 3,
+  "why": "Everything from T30 to T33 squeezed onto one page. Read this last thing before you go in.",
+  "core": [
+   {
+    "h": "The plan",
+    "cols": [
+     "Time",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "0:00 - 0:15",
+      "Read the brief. Open the CSV: every column, what type it is, first and last row. Underline what the user wants to see (total / trend of X)"
+     ],
+     [
+      "0:15 - 0:30",
+      "Overview page: list your functions - name, what it does, takes in, gives back"
+     ],
+     [
+      "0:30 - 2:00",
+      "One flowchart per function. main first, then load_data, get_valid_number, the scenario ones, then the outputs and the graph"
+     ],
+     [
+      "2:00 - 2:20",
+      "Check it with a real row from the CSV - would it give the right answer?"
+     ],
+     [
+      "2:20 - 2:30",
+      "Save as PDF with the right file name"
+     ]
+    ]
+   },
+   {
+    "h": "The 7 functions (rename them for the scenario)",
+    "b": [
+     "**main** - load_data once, then loop: show numbered menu, get_valid_number(1, N), call one subroutine per option, back to the menu. Last option = Exit.",
+     "**load_data(file_name)** - file missing? show an error. FOR EACH row: convert text to numbers, skip blanks. Return data.",
+     "**get_valid_number(prompt, minimum, maximum)** - whole number? in range? Each No = message + ask again. Return the number.",
+     "**choose_X(data)** - numbered list built FROM the data, not typed in.",
+     "**calculate(data, choice)** - the total / trend. Latest value = last row.",
+     "**show_results** - a sentence + a table, money to 2 dp.",
+     "**show_graph** - line for a trend, bar to compare. Title + both axis labels."
+    ]
+   },
+   {
+    "h": "Every box",
+    "b": [
+     "Plain English is fine - just be exact: real values, real messages, 2 dp.",
+     "Same variable names everywhere. One action per box.",
+     "Every diamond is a yes/no question with both arrows labelled.",
+     "Every subroutine box gets its own flowchart. Every loop has a way out."
+    ]
+   }
+  ],
+  "traps": [
+   "No graph.",
+   "No validation.",
+   "No Exit option.",
+   "Reading the CSV in more than one function.",
+   "A function named on the overview page but never drawn."
+  ],
+  "check": "Without looking: the 7 functions and what each one gives back.",
+  "see": "",
+  "qs": []
  }
 ];
