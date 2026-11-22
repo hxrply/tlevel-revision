@@ -494,6 +494,20 @@
     m[465] = 'esp/t2';
     m[466] = 'esp/t2';
     m[467] = 'esp/t2';
+    m[468] = 'esp/t3';
+    m[469] = 'esp/t3';
+    m[470] = 'esp/t3';
+    m[471] = 'esp/t3';
+    m[472] = 'esp/t3';
+    m[473] = 'esp/t3';
+    m[474] = 'esp/t3';
+    m[475] = 'esp/t3';
+    m[476] = 'esp/t3';
+    m[477] = 'esp/t3';
+    m[478] = 'esp/t3';
+    m[479] = 'esp/t3';
+    m[480] = 'esp/t3';
+    m[481] = 'esp/t3';
     return m;
   })();
 
@@ -911,6 +925,7 @@
           c.rows.forEach(function (r) { out.push('  ' + plain(r.join(' | '))); });
         }
         (c.code || []).forEach(function (line) { out.push('    ' + line); });
+        if (c.img) out.push('  [Diagram: ' + plain(c.alt || c.h) + ']');
         (c.b || []).forEach(function (b) { out.push('  * ' + plain(b)); });
       });
       if (d.traps.length) {
@@ -1103,6 +1118,7 @@
         }).join('') + '</tbody></table>';
     }
     if (c.code) h += '<pre><code>' + esc(c.code.join(String.fromCharCode(10))) + '</code></pre>';
+    if (c.img) h += '<img class="cu-img" src="' + esc(c.img) + '" alt="' + esc(c.alt || '') + '" loading="lazy">';
     if (c.b) h += '<ul class="clean">' + c.b.map(function (b) { return '<li>' + fmt(b) + '</li>'; }).join('') + '</ul>';
     return h + '</div>';
   }

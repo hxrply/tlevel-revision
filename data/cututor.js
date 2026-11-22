@@ -5623,5 +5623,152 @@ window.TLDATA.catchup.tutor = [
   "check": "Without looking: what three kinds of output does every Task 3 need?",
   "see": "",
   "qs": []
+ },
+ {
+  "day": "T32",
+  "tutor": true,
+  "plan": "Claude tutor · 22 Nov",
+  "title": "Task 3 flowchart structures as pictures - and a quick test",
+  "area": "ESP Task 3",
+  "mins": 15,
+  "why": "The structures from T30 drawn as real flowcharts, then 14 short questions. Every Task 3 design is built from these five pictures.",
+  "core": [
+   {
+    "h": "The symbols",
+    "img": "img/task3/symbols.svg",
+    "alt": "Terminator, process, input/output, decision, subroutine and data symbols"
+   },
+   {
+    "h": "Sequence and selection",
+    "img": "img/task3/sequence-selection.svg",
+    "alt": "Sequence: start, input, process, output, end. Selection: a decision with Yes and No paths joining at End",
+    "p": "Selection: both paths come back together. Every diamond has a Yes and a No."
+   },
+   {
+    "h": "Loops",
+    "img": "img/task3/loops.svg",
+    "alt": "While loop checking before the body; repeat until loop checking after the body",
+    "p": "WHILE checks first, so it can run 0 times. REPEAT UNTIL checks after, so it always runs once. A loop is just a diamond with an arrow going back UP."
+   },
+   {
+    "h": "Validation",
+    "img": "img/task3/validation.svg",
+    "alt": "Input choice, check whole number, check 1 to 4, error messages loop back up to the input",
+    "p": "Type check first, then range check. Every No shows a message and goes back up to ask again. Only valid input reaches Return."
+   },
+   {
+    "h": "Main menu",
+    "img": "img/task3/menu.svg",
+    "alt": "Load data once, show menu, get a valid choice, call a subroutine per option, loop back until Exit",
+    "p": "Data loaded once. Every option is a subroutine that loops back to the menu. The last option is Exit."
+   }
+  ],
+  "traps": [
+   "A diamond with only one labelled arrow.",
+   "A subroutine box that is never drawn out.",
+   "A loop with no way out."
+  ],
+  "check": "Draw the validation flowchart from memory.",
+  "see": "",
+  "qs": [
+   {
+    "n": 468,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Which flowchart symbol is used for an input or an output?",
+    "a": "Parallelogram (1)."
+   },
+   {
+    "n": 469,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Which symbol shows a decision, and what must its two arrows have?",
+    "a": "Diamond; both arrows labelled Yes and No (1)."
+   },
+   {
+    "n": 470,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Which symbol calls a subroutine, and what must you do after using it?",
+    "a": "Rectangle with double sides; draw that subroutine as its own flowchart (1)."
+   },
+   {
+    "n": 471,
+    "marks": 1,
+    "cmd": "State",
+    "q": "How do you show a loop in a flowchart?",
+    "a": "A decision diamond with an arrow going back up to an earlier step (1)."
+   },
+   {
+    "n": 472,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Give one difference between WHILE and REPEAT UNTIL.",
+    "a": "WHILE checks before so can run 0 times; REPEAT checks after so always runs once (1)."
+   },
+   {
+    "n": 473,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Which loop do you use to go through every row of the CSV?",
+    "a": "FOR EACH (1)."
+   },
+   {
+    "n": 474,
+    "marks": 1,
+    "cmd": "State",
+    "q": "A menu choice must be 1 to 4. Name the two validation checks, in order.",
+    "a": "Type check (is it a whole number) then range check (1 to 4) (1)."
+   },
+   {
+    "n": 475,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "Why do numbers read from the CSV need converting?",
+    "a": "Everything in a CSV is text - convert to INTEGER / REAL before calculating (1)."
+   },
+   {
+    "n": 476,
+    "marks": 1,
+    "cmd": "State",
+    "q": "What three kinds of output does every Task 3 requirement ask for?",
+    "a": "Textual, numerical and graphical (1)."
+   },
+   {
+    "n": 477,
+    "marks": 1,
+    "cmd": "State",
+    "q": "Which graph for a trend over time, and which for comparing categories?",
+    "a": "Line graph for a trend; bar chart to compare (1)."
+   },
+   {
+    "n": 478,
+    "marks": 1,
+    "cmd": "Explain",
+    "q": "Why load the CSV once in main instead of in every subroutine?",
+    "a": "More efficient - pass the data in as a parameter (logic and efficiency marks) (1)."
+   },
+   {
+    "n": 479,
+    "marks": 1,
+    "cmd": "State",
+    "q": "What should the design do if the CSV file is missing?",
+    "a": "Show an error message instead of crashing (1)."
+   },
+   {
+    "n": 480,
+    "marks": 1,
+    "cmd": "State",
+    "q": "What option must every main menu have?",
+    "a": "Exit / Quit (1)."
+   },
+   {
+    "n": 481,
+    "marks": 1,
+    "cmd": "Write",
+    "q": "Write the pseudocode condition that rejects a choice outside 1 to 4.",
+    "a": "IF choice < 1 OR choice > 4 THEN (1)."
+   }
+  ]
  }
 ];
