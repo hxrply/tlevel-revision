@@ -5150,5 +5150,478 @@ window.TLDATA.catchup.tutor = [
   "check": "Say the 10 steps in order.",
   "see": "",
   "qs": []
+ },
+ {
+  "day": "T30",
+  "tutor": true,
+  "plan": "Claude tutor · 22 Nov",
+  "title": "ESP Task 3 tomorrow - flowchart symbols, structures, validation and the modules every paper needs",
+  "area": "ESP Task 3",
+  "mins": 30,
+  "why": "Task 3 is 2h30. You design the solution as flowcharts OR pseudocode - no code. Marks: decomposition 9 (inputs, processes and outputs all covered in detail), logic and conventions 6 (it would work, efficiently, with consistent symbols and names), communication 3 (clear enough for someone else to build it). Every past paper has the same shape: a CSV file + \"let users see the total / trend of X\" + easy to use + text, numbers AND a graph. So the same modules come up every time.",
+  "core": [
+   {
+    "h": "Every past Task 3 is the same shape",
+    "cols": [
+     "Paper",
+     "Users must be able to see",
+     "CSV"
+    ],
+    "rows": [
+     [
+      "DSD sample 2025",
+      "convert an amount between currencies using the latest rate",
+      "Date + one column per rate"
+     ],
+     [
+      "Recoats 2024",
+      "total income from different sources",
+      "Day + one column per source"
+     ],
+     [
+      "Versere 2024",
+      "total sales from different car models over time",
+      "Date, Model, Value, Salesperson"
+     ],
+     [
+      "Bote 2025",
+      "total number of each type of issue",
+      "Issue type, How resolved, Parcels, Days"
+     ],
+     [
+      "Tramsere 2025",
+      "pick a genre and see the trend of streams over time",
+      "Week, Day, Genre, Website, App"
+     ]
+    ]
+   },
+   {
+    "h": "Flowchart symbols",
+    "cols": [
+     "Symbol",
+     "Shape",
+     "Use it for"
+    ],
+    "rows": [
+     [
+      "Terminator",
+      "Rounded / oval",
+      "Start, End, Return - one per algorithm"
+     ],
+     [
+      "Process",
+      "Rectangle",
+      "SET total TO total + streams · a calculation"
+     ],
+     [
+      "Input / output",
+      "Parallelogram",
+      "Input menu choice · Output \"Total: 30.00\" · show the graph"
+     ],
+     [
+      "Decision",
+      "Diamond",
+      "A question with **Yes and No** arrows - both labelled"
+     ],
+     [
+      "Subroutine",
+      "Rectangle with double sides",
+      "Calls another algorithm: get_valid_number(1, 4) - then draw that one separately"
+     ],
+     [
+      "Data / file",
+      "Cylinder (stored data) or document shape",
+      "Read Task3_data.csv"
+     ],
+     [
+      "Flow line",
+      "Arrow",
+      "Every box has an arrow in and out; loops are an arrow going back UP"
+     ]
+    ]
+   },
+   {
+    "h": "The structures - in pseudocode",
+    "code": [
+     "SEQUENCE    SET total TO price * quantity",
+     "            SEND total TO DISPLAY",
+     "",
+     "SELECTION   IF choice = 1 THEN",
+     "                show_totals(data)",
+     "            ELSE IF choice = 2 THEN",
+     "                show_trend(data)",
+     "            ELSE",
+     "                SEND \"Goodbye\" TO DISPLAY",
+     "            END IF",
+     "",
+     "WHILE       WHILE choice <> 4              (checks BEFORE - may run 0 times)",
+     "                ...",
+     "            END WHILE",
+     "",
+     "REPEAT      REPEAT                         (checks AFTER - always runs once)",
+     "                ...",
+     "            UNTIL answer = \"n\"",
+     "",
+     "FOR         FOR week FROM 1 TO 8           (a known number of times)",
+     "                ...",
+     "            END FOR",
+     "",
+     "FOR EACH    FOR EACH row IN data           (every row of the CSV)",
+     "                ...",
+     "            END FOR EACH"
+    ]
+   },
+   {
+    "h": "In a flowchart",
+    "b": [
+     "**Selection** = a diamond with Yes and No going different ways, then joining back up.",
+     "**A loop** = a diamond whose arrow goes BACK UP to an earlier box. No other loop symbol is needed.",
+     "**A counting loop** = set count to 1 → do the work → add 1 → diamond: count > 8? No = back up, Yes = carry on."
+    ]
+   },
+   {
+    "h": "Validation - the checks",
+    "cols": [
+     "Check",
+     "Example"
+    ],
+    "rows": [
+     [
+      "Type",
+      "Is the menu choice a whole number? Is the amount a number?"
+     ],
+     [
+      "Range",
+      "Is it 1 to 4? Is the amount above 0?"
+     ],
+     [
+      "Presence",
+      "Did they type anything at all?"
+     ],
+     [
+      "Lookup",
+      "Is the genre / model they typed in the data? (better: show a numbered list and let them pick)"
+     ],
+     [
+      "Length / format",
+      "Is the date dd/mm/yyyy? Is the ID 6 characters?"
+     ],
+     [
+      "File",
+      "Does the CSV exist? Is it empty? - output an error message instead of crashing"
+     ]
+    ]
+   },
+   {
+    "h": "Validation - the flowchart (type check, then range check, loop back up)",
+    "code": [
+     "            ( Start )",
+     "                |",
+     "  +-----> / Input menu choice /",
+     "  |             |",
+     "  |      < Is it a whole number? > --No--> / Output \"Please enter a number\" / --+",
+     "  |             | Yes                                                           |",
+     "  |      < Is it 1 to 4? > --------No--> / Output \"Choose 1 to 4\" / -------------+",
+     "  |             | Yes                                                           |",
+     "  |      ( Return choice )                                                      |",
+     "  +-----------------------------------------------------------------------------+"
+    ]
+   },
+   {
+    "h": "Validation - the same in pseudocode, written ONCE and reused",
+    "code": [
+     "FUNCTION get_valid_number(prompt, minimum, maximum)",
+     "    SET valid TO FALSE",
+     "    WHILE valid = FALSE",
+     "        SEND prompt TO DISPLAY",
+     "        RECEIVE user_input FROM KEYBOARD",
+     "        IF user_input IS NOT A WHOLE NUMBER THEN",
+     "            SEND \"Please enter a number\" TO DISPLAY",
+     "        ELSE IF user_input < minimum OR user_input > maximum THEN",
+     "            SEND \"Please enter a number from \" + minimum + \" to \" + maximum TO DISPLAY",
+     "        ELSE",
+     "            SET valid TO TRUE",
+     "        END IF",
+     "    END WHILE",
+     "    RETURN INTEGER(user_input)",
+     "END FUNCTION",
+     "",
+     "# reused everywhere - menu: get_valid_number(\"Choose 1 to 4\", 1, 4)",
+     "#                    week: get_valid_number(\"Which week? 1 to 8\", 1, 8)"
+    ]
+   },
+   {
+    "h": "The modules every Task 3 needs (your decomposition)",
+    "cols": [
+     "Module",
+     "What it does",
+     "Details markers look for"
+    ],
+    "rows": [
+     [
+      "main",
+      "Load the data once, then loop the menu until Exit",
+      "Exit option; loops back after each choice"
+     ],
+     [
+      "load_data",
+      "Open the CSV, read the header row, read every row into a list / table, close it",
+      "Convert numbers from text to INTEGER / REAL; dates from text to dates; error message if the file is missing"
+     ],
+     [
+      "show_menu + get_valid_number",
+      "Numbered options - user types a number, not a name",
+      "Type and range check, loop until valid"
+     ],
+     [
+      "choose_item",
+      "Show a numbered list of the categories FROM the data (genres, models, sources)",
+      "Built from the data, not typed in by hand"
+     ],
+     [
+      "filter",
+      "Keep only the rows for the chosen category / dates",
+      "What if no rows match - message"
+     ],
+     [
+      "calculate",
+      "Total, count, average, highest, lowest, latest, % change",
+      "Start totals at 0 before the loop; avoid dividing by 0"
+     ],
+     [
+      "show_text",
+      "A sentence that explains the result",
+      "Rock had 12,450 streams in week 3, up 8% on week 2"
+     ],
+     [
+      "show_numbers",
+      "A table, rounded sensibly",
+      "Money to 2 dp; rates to fewer decimals than the CSV"
+     ],
+     [
+      "show_graph",
+      "Bar chart to compare categories, line graph for a trend over time, pie for share of a total",
+      "Title, axis labels, units, legend"
+     ]
+    ]
+   },
+   {
+    "h": "Your May flowchart - what to do differently",
+    "b": [
+     "**No graph anywhere** - the requirement says graphical output. Always have a show_graph module.",
+     "**No validation** - the menu choice and the amount were never type or range checked, and a wrong choice looped back with no message.",
+     "**No Exit option** on the main menu.",
+     "**\"Make sure data is clean\" was one box** - break it down: convert rates from text to numbers, convert dates, skip blank rows.",
+     "**The CSV was opened in four different functions** - load it ONCE in main and pass the data in as a parameter.",
+     "**Some subroutines were never drawn out** (is_choice, change_rate) - every subroutine box needs its own algorithm.",
+     "**Names changed** (convertcurrency, Conversion, comparison) - pick one style (snake_case) and keep it.",
+     "**Outputs were vague** (\"Display change\") - say exactly what is shown and how it is rounded."
+    ]
+   },
+   {
+    "h": "Conventions that get the 6 marks",
+    "b": [
+     "Pseudocode: KEYWORDS IN CAPITALS, indent inside every IF / WHILE / FOR, close every block (END IF, END WHILE).",
+     "One style of name everywhere: total_streams, get_valid_number().",
+     "Flowcharts: one Start and one End per algorithm, every diamond has labelled Yes and No, arrows show direction.",
+     "Pass data in as parameters and RETURN results - do not read the CSV again inside every module.",
+     "A short note on each algorithm saying what it is for - that is the communication mark."
+    ]
+   },
+   {
+    "h": "Plan the 2h30",
+    "cols": [
+     "Time",
+     "Do this"
+    ],
+    "rows": [
+     [
+      "0:00 - 0:15",
+      "Read the brief and open the CSV. Note every column, its type, the first and last row"
+     ],
+     [
+      "0:15 - 0:30",
+      "Top-level design: main + the list of modules (the table above)"
+     ],
+     [
+      "0:30 - 2:00",
+      "One algorithm per module - validation, load, filter, calculate, output, graph"
+     ],
+     [
+      "2:00 - 2:20",
+      "Walk through it with a real row from the CSV - would it give the right answer?"
+     ],
+     [
+      "2:20 - 2:30",
+      "Save as PDF with the right file name"
+     ]
+    ]
+   }
+  ],
+  "traps": [
+   "No graph - the requirement always asks for graphical output.",
+   "Typing the category names into the algorithm instead of building the list from the data.",
+   "Forgetting that everything in a CSV is text until you convert it.",
+   "A decision diamond with only one arrow labelled."
+  ],
+  "check": "Without looking: the 7 flowchart symbols, the 6 validation checks and the 9 modules.",
+  "see": "",
+  "qs": []
+ },
+ {
+  "day": "T31",
+  "tutor": true,
+  "plan": "Claude tutor · 22 Nov",
+  "title": "A complete Task 3 design, worked through - Pulse Gym class bookings",
+  "area": "ESP Task 3",
+  "mins": 20,
+  "why": "An original scenario in exactly the same shape as the past papers, designed the way the mark scheme wants: main menu with Exit, data loaded ONCE and converted to numbers, a reusable validation function, the category list built from the data, a check before dividing, and text + table + graph. Swap the names for tomorrow's scenario and the structure still works.",
+  "core": [
+   {
+    "h": "The design",
+    "code": [
+     "# Pulse Gym - class bookings. CSV columns: Week, Day, Class, Bookings (8 weeks)",
+     "# Requirement: users pick a class and see the trend in bookings over time",
+     "",
+     "FUNCTION main()",
+     "    SET data TO load_data(\"Task3_data.csv\")",
+     "    IF data IS EMPTY THEN",
+     "        SEND \"The data file could not be read\" TO DISPLAY",
+     "        STOP",
+     "    END IF",
+     "    SET choice TO 0",
+     "    WHILE choice <> 3",
+     "        SEND \"1. See bookings for one class\" TO DISPLAY",
+     "        SEND \"2. Compare all classes\" TO DISPLAY",
+     "        SEND \"3. Exit\" TO DISPLAY",
+     "        SET choice TO get_valid_number(\"Choose 1 to 3: \", 1, 3)",
+     "        IF choice = 1 THEN",
+     "            SET class_name TO choose_class(data)",
+     "            SET weekly TO totals_by_week(data, class_name)",
+     "            show_trend(class_name, weekly)",
+     "        ELSE IF choice = 2 THEN",
+     "            show_comparison(data)",
+     "        END IF",
+     "    END WHILE",
+     "    SEND \"Goodbye\" TO DISPLAY",
+     "END FUNCTION",
+     "",
+     "FUNCTION load_data(file_name)",
+     "    SET data TO empty list",
+     "    IF file_name DOES NOT EXIST THEN",
+     "        RETURN data",
+     "    END IF",
+     "    OPEN file_name FOR READING",
+     "    SKIP the header row",
+     "    FOR EACH line IN file_name",
+     "        SPLIT line AT \",\" INTO week, day, class_name, bookings",
+     "        ADD [INTEGER(week), day, class_name, INTEGER(bookings)] TO data",
+     "    END FOR EACH",
+     "    CLOSE file_name",
+     "    RETURN data",
+     "END FUNCTION",
+     "",
+     "FUNCTION choose_class(data)",
+     "    SET classes TO empty list",
+     "    FOR EACH row IN data",
+     "        IF row.class_name NOT IN classes THEN",
+     "            ADD row.class_name TO classes",
+     "        END IF",
+     "    END FOR EACH",
+     "    FOR position FROM 1 TO LENGTH(classes)",
+     "        SEND position + \". \" + classes[position] TO DISPLAY",
+     "    END FOR",
+     "    SET pick TO get_valid_number(\"Choose a class: \", 1, LENGTH(classes))",
+     "    RETURN classes[pick]",
+     "END FUNCTION",
+     "",
+     "FUNCTION totals_by_week(data, class_name)",
+     "    SET weekly TO list of 8 zeros",
+     "    FOR EACH row IN data",
+     "        IF row.class_name = class_name THEN",
+     "            SET weekly[row.week] TO weekly[row.week] + row.bookings",
+     "        END IF",
+     "    END FOR EACH",
+     "    RETURN weekly",
+     "END FUNCTION",
+     "",
+     "FUNCTION show_trend(class_name, weekly)",
+     "    SEND \"Week | Bookings\" TO DISPLAY                 # numerical output - a table",
+     "    FOR week FROM 1 TO 8",
+     "        SEND week + \" | \" + weekly[week] TO DISPLAY",
+     "    END FOR",
+     "    SET busiest TO the week with the highest value in weekly",
+     "    IF weekly[1] > 0 THEN",
+     "        SET change TO (weekly[8] - weekly[1]) / weekly[1] * 100",
+     "        SEND class_name + \" bookings changed by \" + ROUND(change, 1) + \"% from week 1 to week 8\" TO DISPLAY",
+     "    END IF",
+     "    SEND \"Busiest week: \" + busiest TO DISPLAY        # textual output - a sentence",
+     "    DRAW LINE GRAPH of weekly                          # graphical output",
+     "        title \"Weekly bookings - \" + class_name, x axis \"Week\", y axis \"Bookings\"",
+     "END FUNCTION",
+     "",
+     "# show_comparison works the same way: total per class -> table -> BAR CHART",
+     "# get_valid_number is the reusable validation function from T30"
+    ]
+   },
+   {
+    "h": "Why each part scores",
+    "cols": [
+     "Part",
+     "Mark it earns"
+    ],
+    "rows": [
+     [
+      "A main menu that loops until Exit",
+      "Easy to use; clear structure (logic)"
+     ],
+     [
+      "load_data converts week and bookings with INTEGER()",
+      "Shows you know a CSV is all text (decomposition, scenario-specific)"
+     ],
+     [
+      "Data loaded once, passed in as a parameter",
+      "Efficient (logic band 3)"
+     ],
+     [
+      "One get_valid_number used three times",
+      "Reusable component - the mark scheme asks for this"
+     ],
+     [
+      "Class list built from the data, shown as numbers",
+      "Easy to use; no typing errors"
+     ],
+     [
+      "IF weekly[1] > 0 before dividing",
+      "What happens if no result can be worked out"
+     ],
+     [
+      "A sentence + a table + a labelled line graph",
+      "Textual, numerical AND graphical output"
+     ],
+     [
+      "Comments saying what each output is for",
+      "Communication"
+     ]
+    ]
+   },
+   {
+    "h": "Turning it into a flowchart",
+    "b": [
+     "Each FUNCTION = its own flowchart with Start and End (or Return).",
+     "SET lines = process rectangles. SEND / RECEIVE = parallelograms. IF / WHILE = diamonds.",
+     "Calls like choose_class(data) = subroutine boxes (double sides) - then draw that one separately.",
+     "OPEN / read the CSV = the data (cylinder) symbol."
+    ]
+   }
+  ],
+  "traps": [
+   "Forgetting the Exit option.",
+   "Hard-coding the class names.",
+   "Dividing without checking for 0."
+  ],
+  "check": "Without looking: what three kinds of output does every Task 3 need?",
+  "see": "",
+  "qs": []
  }
 ];
