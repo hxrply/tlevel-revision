@@ -5770,5 +5770,93 @@ window.TLDATA.catchup.tutor = [
     "a": "IF choice < 1 OR choice > 4 THEN (1)."
    }
   ]
+ },
+ {
+  "day": "T33",
+  "tutor": true,
+  "plan": "Claude tutor · 22 Nov",
+  "title": "Start Task 3 by listing your functions first - then fill each one in",
+  "area": "ESP Task 3",
+  "mins": 5,
+  "why": "Your idea - write the sections first, each titled with its name in the start oval, then fill them in - is exactly right. It is called top-down design, and it is what the decomposition marks (9) are for. These are the details that make it score.",
+  "core": [
+   {
+    "h": "Step 1 (about 15 minutes): one overview page",
+    "cols": [
+     "Function",
+     "What it does",
+     "Takes in",
+     "Gives back"
+    ],
+    "rows": [
+     [
+      "main",
+      "Loads the data once, runs the menu until Exit",
+      "-",
+      "-"
+     ],
+     [
+      "load_data",
+      "Reads the CSV, converts text to numbers / dates",
+      "file name",
+      "data"
+     ],
+     [
+      "get_valid_number",
+      "Asks until the input is a whole number in range",
+      "prompt, min, max",
+      "number"
+     ],
+     [
+      "choose_model",
+      "Shows a numbered list of models from the data",
+      "data",
+      "model"
+     ],
+     [
+      "total_by_month",
+      "Adds up the sales for the chosen model",
+      "data, model",
+      "totals"
+     ],
+     [
+      "show_results",
+      "Sentence + table, money to 2 dp",
+      "model, totals",
+      "-"
+     ],
+     [
+      "show_graph",
+      "Line or bar chart with title, axis labels",
+      "model, totals",
+      "-"
+     ]
+    ]
+   },
+   {
+    "h": "Step 2: one flowchart per function",
+    "b": [
+     "Start oval = the function name with its inputs: **load_data(file_name)**. End oval = **Return data** (or End for main).",
+     "Use the **exact same name** in main's subroutine box and in that function's start oval.",
+     "Do **main first** - it shows how everything connects. Then load_data, then validation, then the scenario ones, then the outputs and the graph.",
+     "Every title on the overview page must get a full flowchart - an empty heading scores nothing."
+    ]
+   },
+   {
+    "h": "Naming",
+    "b": [
+     "Verb + noun, snake_case: get_valid_number, load_data, show_graph.",
+     "Name them after tomorrow's scenario, not the example (choose_genre, choose_model, choose_issue_type...)."
+    ]
+   }
+  ],
+  "traps": [
+   "Listing ten tiny functions and running out of time to draw them.",
+   "A name in main that does not match the start oval of the function.",
+   "Leaving the graph function until last and never drawing it."
+  ],
+  "check": "Without looking: the five functions every Task 3 has, whatever the scenario.",
+  "see": "",
+  "qs": []
  }
 ];
