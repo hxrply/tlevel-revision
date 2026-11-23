@@ -6072,5 +6072,48 @@ window.TLDATA.catchup.tutor = [
   "check": "Draw get_valid_number and clean_data from memory.",
   "see": "",
   "qs": []
+ },
+ {
+  "day": "T37",
+  "tutor": true,
+  "plan": "Claude tutor · 23 Nov",
+  "title": "Task 3 - the tips that matter most",
+  "area": "ESP Task 3",
+  "mins": 2,
+  "why": "Short tips to read the night before and again just before you start.",
+  "core": [
+   {
+    "h": "Before you draw",
+    "b": [
+     "**Open the CSV first.** Write down the column names and use those exact names in your boxes.",
+     "**Underline every \"the user wants to see...\" in the brief.** Each one becomes a menu option. Tick them off at the end.",
+     "**Overview page first, then main.** Then every other function."
+    ]
+   },
+   {
+    "h": "While you draw",
+    "b": [
+     "**Draw every function simply before perfecting any one.** A missing function scores nothing.",
+     "**Every diamond: Yes AND No.** Every loop: a way out. Menu: an Exit option.",
+     "**Every user input goes through get_valid_number.** Draw it once, reuse it.",
+     "**Load the CSV once,** then convert text to numbers and skip blank rows.",
+     "**No vague boxes.** \"Process the data\" scores nothing - say exactly what happens.",
+     "**Three outputs:** a sentence, numbers to 2 dp, and a graph with a title and both axes labelled.",
+     "**Plain English is fine** - just be exact and keep the same names throughout."
+    ]
+   },
+   {
+    "h": "At the end",
+    "b": [
+     "**At 2:00 stop adding and start checking** - use the 8-point checklist in T36.",
+     "**Add one line under each flowchart** saying what it does (communication marks).",
+     "**Save as you go,** then save as a PDF with the right file name."
+    ]
+   }
+  ],
+  "traps": [],
+  "check": "Without looking: the three kinds of output and the three things every diamond, loop and menu need.",
+  "see": "",
+  "qs": []
  }
 ];
