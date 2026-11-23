@@ -5994,5 +5994,83 @@ window.TLDATA.catchup.tutor = [
   "check": "Without looking: what load_data returns, what clean_data returns, and the two checks inside clean_data.",
   "see": "",
   "qs": []
+ },
+ {
+  "day": "T36",
+  "tutor": true,
+  "plan": "Claude tutor · 23 Nov",
+  "title": "Task 3 templates - one picture per function",
+  "area": "ESP Task 3",
+  "mins": 10,
+  "why": "Every Task 3 uses these same flowcharts. Anything in [brackets] changes to match the CSV you are given - everything else stays the same.",
+  "core": [
+   {
+    "h": "All the functions",
+    "img": "img/task3/01-overview.png",
+    "alt": "main calls each function; each one gives something back"
+   },
+   {
+    "h": "main - the menu",
+    "img": "img/task3/02-main.png",
+    "alt": "Load and clean once, numbered menu, get_valid_number, one subroutine per option, loop back until Exit"
+   },
+   {
+    "h": "load_data - only reads",
+    "img": "img/task3/03-load-data.png",
+    "alt": "File exists check, read every row into raw_rows, close, return raw_rows"
+   },
+   {
+    "h": "clean_data - only checks",
+    "img": "img/task3/04-clean-data.png",
+    "alt": "Skip blank rows and non-numbers, convert text to numbers, return clean_rows"
+   },
+   {
+    "h": "get_valid_number - every user input",
+    "img": "img/task3/05-get-valid-number.png",
+    "alt": "Whole number check then range check, each No shows a message and asks again"
+   },
+   {
+    "h": "choose_item - list built from the data",
+    "img": "img/task3/06-choose-item.png",
+    "alt": "Collect each item once, output them numbered, get a valid choice, return the item"
+   },
+   {
+    "h": "calculate_total - add up and average",
+    "img": "img/task3/07-calculate-total.png",
+    "alt": "Loop through matching rows adding to total and count, then average without dividing by zero"
+   },
+   {
+    "h": "find_highest - best month",
+    "img": "img/task3/08-find-highest.png",
+    "alt": "Start with the first row, replace highest whenever a bigger value is found"
+   },
+   {
+    "h": "calculate_change - the trend",
+    "img": "img/task3/09-calculate-change.png",
+    "alt": "First row, last row (latest), change, percent change without dividing by zero"
+   },
+   {
+    "h": "show_results - text and numbers",
+    "img": "img/task3/10-show-results.png",
+    "alt": "Sentence with values to 2 dp, then a table of the rows"
+   },
+   {
+    "h": "show_graph - the graph",
+    "img": "img/task3/11-show-graph.png",
+    "alt": "Line for a trend, bar to compare, title, both axis labels, display"
+   },
+   {
+    "h": "Before you save - check all 8",
+    "img": "img/task3/12-checklist.png",
+    "alt": "Eight checks before saving the PDF"
+   }
+  ],
+  "traps": [
+   "Leaving [brackets] in - swap them for the real column names.",
+   "Drawing a function on the overview but not as its own flowchart."
+  ],
+  "check": "Draw get_valid_number and clean_data from memory.",
+  "see": "",
+  "qs": []
  }
 ];
