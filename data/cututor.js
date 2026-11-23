@@ -6115,5 +6115,148 @@ window.TLDATA.catchup.tutor = [
   "check": "Without looking: the three kinds of output and the three things every diamond, loop and menu need.",
   "see": "",
   "qs": []
+ },
+ {
+  "day": "T38",
+  "tutor": true,
+  "plan": "Claude tutor · 23 Nov",
+  "title": "Task 3 - the full guide, and what to do if you forget a function",
+  "area": "ESP Task 3",
+  "mins": 15,
+  "why": "Everything you need for Task 3 in one place, with a worked example and a plan for when your mind goes blank.",
+  "core": [
+   {
+    "h": "1. What you are marked on",
+    "cols": [
+     "Marks",
+     "For",
+     "How to get them"
+    ],
+    "rows": [
+     [
+      "9",
+      "Decomposition",
+      "Split it into functions. Cover every input, process and output in detail"
+     ],
+     [
+      "6",
+      "Logic and conventions",
+      "It would actually work. Same symbols and names all the way through"
+     ],
+     [
+      "3",
+      "Communication",
+      "Clear enough that someone else could build it. One line under each flowchart saying what it does"
+     ]
+    ]
+   },
+   {
+    "h": "2. Turn the brief into your plan",
+    "b": [
+     "Open the CSV. Write down the column names. These replace every [bracket] in the templates.",
+     "Underline each \"the user wants to see...\" line. Each one = a menu option.",
+     "Pick your functions from the T36 list. Only draw find_highest or calculate_change if the brief asks for \"best\" or \"trend\"."
+    ]
+   },
+   {
+    "h": "3. Worked example (made-up brief)",
+    "p": "A bike hire company has bike_hires.csv with columns Month, Station, Hires. Staff want to see the total hires for a station, how hires change over the year, and the busiest month.",
+    "cols": [
+     "Template says",
+     "You write"
+    ],
+    "rows": [
+     [
+      "[sales.csv]",
+      "bike_hires.csv"
+     ],
+     [
+      "[sales]",
+      "hires"
+     ],
+     [
+      "[model] / item",
+      "station"
+     ],
+     [
+      "[month]",
+      "month"
+     ],
+     [
+      "Menu",
+      "1 Total hires for a station, 2 Trend for a station, 3 Busiest month, 4 Exit"
+     ],
+     [
+      "get_valid_number(1, [3])",
+      "get_valid_number(1, 4)"
+     ],
+     [
+      "choose_item",
+      "choose_station"
+     ],
+     [
+      "Graph",
+      "Line graph, title \"Hires per month at \" + station, x = Month, y = Hires"
+     ]
+    ]
+   },
+   {
+    "h": "4. Every function is one of 3 patterns - A: ask until it is OK",
+    "img": "img/task3/13-pattern-a.png",
+    "alt": "Pattern A: ask the user, is it OK, if not say what is wrong and ask again, then return the answer",
+    "p": "Pattern A - ask until it is OK. Every input from the user."
+   },
+   {
+    "h": "B: go through every row",
+    "img": "img/task3/14-pattern-b.png",
+    "alt": "Pattern B: set up, any rows left, does this row matter, do the job, loop back, then return the result",
+    "p": "Pattern B - go through every row. Load, clean, choose, total, highest."
+   },
+   {
+    "h": "C: steps in order",
+    "img": "img/task3/15-pattern-c.png",
+    "alt": "Pattern C: output a sentence, output the numbers, draw the graph, end",
+    "p": "Pattern C - steps in order. show_results and show_graph."
+   },
+   {
+    "h": "5. If you forget how a function works",
+    "b": [
+     "**Yes - write it in plain English.** A simple, correct flowchart in plain English scores. A blank page scores nothing.",
+     "**Ask 3 questions:** What goes in? (the start oval) What happens to each row? (the middle) What comes out? (Return)",
+     "**Pick the pattern** - asking the user = A, going through the rows = B, showing things = C. Copy that shape.",
+     "**Draw the shell first** - start oval, the loop, Return - then fill in the middle.",
+     "**Still stuck?** Write a short note under it saying what it does. That still earns communication marks."
+    ]
+   },
+   {
+    "h": "Example: forgot find_highest? Plain English is fine",
+    "code": [
+     "Start: find_highest(data)",
+     "Set highest to the hires in the first row",
+     "Any rows left?            No  -> Return highest",
+     "   Yes: Is this row bigger than highest?",
+     "        Yes: set highest to this row",
+     "        go back to \"Any rows left?\""
+    ]
+   },
+   {
+    "h": "6. The rules that never change",
+    "b": [
+     "Every diamond is a yes/no question with Yes AND No labelled.",
+     "Every loop has a way out. The menu has Exit.",
+     "Same names everywhere. One action per box.",
+     "CSV loaded once. Text converted to numbers. Blank rows skipped.",
+     "Text + numbers to 2 dp + a graph with a title and both axis labels."
+    ]
+   }
+  ],
+  "traps": [
+   "Spending 40 minutes perfecting one function and never drawing the graph.",
+   "Leaving a function blank because you forgot the exact steps - write it in plain English instead.",
+   "Leaving [brackets] in."
+  ],
+  "check": "Without looking: the 3 patterns and which functions use each one.",
+  "see": "",
+  "qs": []
  }
 ];
